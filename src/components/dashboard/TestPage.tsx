@@ -6,7 +6,7 @@ import { BaseModal } from '../common/modals/BaseModal';
 
 // TODO: 배포 이후 삭제
 // 인풋 테스트 페이지
-export default function InputTest() {
+export default function TestPage() {
   const [isOpen, setIsOpen] = useState(false);
   console.log('Modal isOpen:', isOpen); // 디버깅용
   const [error, setError] = useState(false);

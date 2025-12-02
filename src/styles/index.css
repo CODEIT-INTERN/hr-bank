@@ -23,7 +23,8 @@
 }
 
 :root {
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: "Pretendard", -apple-system, "Segoe UI", Roboto, Arial,
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
 

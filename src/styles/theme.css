@@ -1,11 +1,11 @@
 @theme {
   /* FONT FAMILY */
-  --font-body: var(--font-inter, 'Inter'), -apple-system, 'Segoe UI', Roboto,
+  --font-body: var(--font-inter, "Inter"), -apple-system, "Segoe UI", Roboto,
     Arial, sans-serif;
-  --font-display: var(--font-inter, 'Inter'), -apple-system, 'Segoe UI', Roboto,
+  --font-display: var(--font-inter, "Inter"), -apple-system, "Segoe UI", Roboto,
     Arial, sans-serif;
-  --font-mono: ui-monospace, 'Roboto Mono', SFMono-Regular, Menlo, Monaco,
-    Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --font-mono: ui-monospace, "Roboto Mono", SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
 
   /* FONT SIZE */
   --text-xs: calc(var(--spacing) * 3);
@@ -139,7 +139,19 @@
   --color-alpha-white: rgb(255 255 255);
   --color-alpha-black: rgb(0 0 0);
 
-  --color-brand-25: rgb(252 250 255);
+  /* 커스텀 색상 추가 */
+  --color-brand-25: rgba(246, 248, 254, 1);
+  --color-brand-50: rgba(239, 242, 254, 1);
+  --color-brand-100: rgba(225, 231, 254, 1);
+  --color-brand-200: rgba(201, 210, 252, 1);
+  --color-brand-300: rgba(168, 180, 249, 1);
+  --color-brand-400: rgba(133, 140, 244, 1);
+  --color-brand-500: rgba(95, 93, 249, 1);
+  --color-brand-600: rgba(87, 75, 224, 1);
+  --color-brand-700: rgba(75, 60, 198, 1);
+  --color-brand-800: rgba(61, 51, 160, 1);
+  --color-brand-900: rgba(53, 48, 127, 1);
+  /* --color-brand-25: rgb(252 250 255);
   --color-brand-50: rgb(249 245 255);
   --color-brand-100: rgb(244 235 255);
   --color-brand-200: rgb(233 215 254);
@@ -150,7 +162,7 @@
   --color-brand-700: rgb(105 65 198);
   --color-brand-800: rgb(83 56 158);
   --color-brand-900: rgb(66 48 125);
-  --color-brand-950: rgb(44 28 95);
+  --color-brand-950: rgb(44 28 95); */
 
   --color-error-25: rgb(255 251 250);
   --color-error-50: rgb(254 243 242);
@@ -760,7 +772,7 @@
   --color-bg-warning-secondary: var(--color-warning-100);
   --color-bg-success-primary: var(--color-success-50);
   --color-bg-success-secondary: var(--color-success-100);
-  --color-bg-brand-solid: var(--color-brand-600);
+  --color-bg-brand-solid: var(--color-brand-500);
   --color-bg-secondary-solid: var(--color-gray-600);
   --color-bg-error-solid: var(--color-error-600);
   --color-bg-warning-solid: var(--color-warning-600);
@@ -769,7 +781,7 @@
   --color-bg-primary_hover: var(--color-gray-50);
   --color-bg-disabled: var(--color-gray-100);
   --color-bg-active: var(--color-gray-50);
-  --color-bg-brand-solid_hover: var(--color-brand-700);
+  --color-bg-brand-solid_hover: var(--color-brand-600);
   --color-bg-error-primary: var(--color-error-50);
   --color-bg-brand-secondary: var(--color-brand-100);
   --color-bg-secondary: var(--color-gray-50);
@@ -843,6 +855,7 @@
   --background-color-error-primary: var(--color-bg-error-primary);
   --background-color-error-secondary: var(--color-bg-error-secondary);
   --background-color-error-solid: var(--color-bg-error-solid);
+  --background-color-error-solid_hover: var(--color-error-700);
   --background-color-warning-primary: var(--color-bg-warning-primary);
   --background-color-warning-secondary: var(--color-bg-warning-secondary);
   --background-color-warning-solid: var(--color-bg-warning-solid);

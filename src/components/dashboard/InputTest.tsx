@@ -2,10 +2,13 @@ import { useState } from 'react';
 import { Input } from '../common/input/input';
 import { SearchLg } from '@untitledui/icons';
 import { TextArea } from '../common/input/text-area';
+import { BaseModal } from '../common/modals/BaseModal';
 
 // TODO: 배포 이후 삭제
 // 인풋 테스트 페이지
 export default function InputTest() {
+  const [isOpen, setIsOpen] = useState(false);
+  console.log('Modal isOpen:', isOpen); // 디버깅용
   const [error, setError] = useState(false);
   const [emailHint, setEmailHint] = useState('');
   const [textAreaHint, setTextAreaHint] = useState('');
@@ -30,9 +33,10 @@ export default function InputTest() {
         isRequired
         icon={SearchLg}
       />
-      <button className="bg-red-500 text-white" onClick={onButtonToggle}>
+      <button className="bg-red-500 text-white p-2" onClick={onButtonToggle}>
         Error Toggle
       </button>
+
       <Input
         wrapperClassName="w-80"
         label="Email"
@@ -56,6 +60,20 @@ export default function InputTest() {
         hint={textAreaHint}
         rows={5}
       />
+      <button
+        className="bg-blue-500 text-white p-2"
+        onClick={() => setIsOpen(true)}
+      >
+        Open Modal
+      </button>
+
+      <BaseModal
+        isOpen={isOpen}
+        onOpenChange={setIsOpen}
+        title="새 항목 만들기"
+      >
+        modal
+      </BaseModal>
     </div>
   );
 }

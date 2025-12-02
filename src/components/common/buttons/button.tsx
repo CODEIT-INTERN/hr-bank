@@ -91,8 +91,6 @@ export interface CommonProps {
   color?: keyof typeof styles.colors;
   /** Icon component or element to show before the text */
   iconLeading?: FC<{ className?: string }> | ReactNode;
-  /** Icon component or element to show after the text */
-  iconTrailing?: FC<{ className?: string }> | ReactNode;
   /** Removes horizontal padding from the text content */
   noTextPadding?: boolean;
   /** When true, keeps the text visible during loading state */
@@ -122,7 +120,6 @@ export const Button = ({
   className,
   noTextPadding,
   iconLeading: IconLeading,
-  iconTrailing: IconTrailing,
   isDisabled: disabled,
   isLoading: loading,
   showTextWhileLoading,
@@ -221,12 +218,6 @@ export const Button = ({
         >
           {children}
         </span>
-      )}
-
-      {/* Trailing icon */}
-      {isValidElement(IconTrailing) && IconTrailing}
-      {isReactComponent(IconTrailing) && (
-        <IconTrailing data-icon="trailing" className={styles.common.icon} />
       )}
     </Component>
   );

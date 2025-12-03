@@ -1,5 +1,5 @@
 import { ChevronDown, Check } from "@untitledui/icons";
-import { Dropdown } from "./Dropdown";
+import { Dropdown } from "./dropdown";
 import { useState } from "react";
 import { Button } from "../buttons/Button";
 

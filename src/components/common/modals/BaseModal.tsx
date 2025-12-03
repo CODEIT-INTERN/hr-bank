@@ -82,7 +82,7 @@ export function BaseModal({
             <div className="mt-4 space-y-4">{children}</div>
 
             {footer && (
-              <div className="mt-6">
+              <div className="mt-6 w-full">
                 <div className="flex gap-3">{footer}</div>
               </div>
             )}

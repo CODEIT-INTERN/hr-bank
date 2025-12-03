@@ -16,8 +16,8 @@ import {
   Input as AriaInput,
   TextField as AriaTextField,
 } from "react-aria-components";
-import { HintText } from "@/components/common/input/hint-text";
-import { Label } from "@/components/common/input/label";
+import { HintText } from "@/components/common/input/HintText";
+import { Label } from "@/components/common/input/Label";
 import { cx, sortCx } from "@/utils/cx";
 
 export interface InputBaseProps extends TextFieldProps {

@@ -6,7 +6,7 @@ import {
   Users01,
 } from "@untitledui/icons";
 import type { FC } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 interface NavigationItem {
   label: string;
@@ -47,9 +47,15 @@ export default function Navigation() {
     <aside className="flex min-w-70 flex-col border-r border-gray-200 bg-white p-4">
       {/* 브랜드 영역 */}
       <div className="mt-6 mb-8 flex items-center gap-3 px-2">
-        <a href="/dashboard" aria-label="홈">
-          <img src="/logo.ico" alt="HR Bank" width={40} height={40} />
-        </a>
+        <Link to="/" aria-label="홈">
+          <img
+            src="/logo.ico"
+            alt="HR Bank"
+            width={40}
+            height={40}
+            aria-hidden
+          />
+        </Link>
         <div className="flex flex-col">
           <span className="text-xl font-bold leading-none text-gray-900">
             HR Bank

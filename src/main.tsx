@@ -6,11 +6,13 @@ import Dashboard from "@/pages/Dashboard.tsx";
 import Department from "@/pages/Department.tsx";
 import Employee from "@/pages/Employee.tsx";
 import Backup from "@/pages/Backup.tsx";
+import History from "@/pages/History";
+import Layout from "./components/layout/Layout";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: <Navigation />, // 모든 페이지에 공통으로 적용될 레이아웃 (Navbar, Footer 등)
+    element: <Layout />, // 모든 페이지에 공통으로 적용될 레이아웃
     // errorElement: <ErrorPage />,
     children: [
       {
@@ -18,15 +20,19 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "department",
+        path: "departments",
         element: <Department />,
       },
       {
-        path: "employee",
+        path: "employees",
         element: <Employee />,
       },
       {
-        path: "backup",
+        path: "histories",
+        element: <History />,
+      },
+      {
+        path: "backups",
         element: <Backup />,
       },
       {

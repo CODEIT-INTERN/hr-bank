@@ -1,27 +1,27 @@
-import { useState } from 'react';
-import { Input } from '../common/input/input';
-import { SearchLg } from '@untitledui/icons';
-import { TextArea } from '../common/input/text-area';
-import { BaseModal } from '../common/modals/BaseModal';
+import { useState } from "react";
+import { Input } from "../common/input/input";
+import { SearchLg } from "@untitledui/icons";
+import { TextArea } from "../common/input/text-area";
+import { BaseModal } from "../common/modals/BaseModal";
 
 // TODO: 배포 이후 삭제
 // 인풋 테스트 페이지
 export default function TestPage() {
   const [isOpen, setIsOpen] = useState(false);
-  console.log('Modal isOpen:', isOpen); // 디버깅용
+  console.log("Modal isOpen:", isOpen); // 디버깅용
   const [error, setError] = useState(false);
-  const [emailHint, setEmailHint] = useState('');
-  const [textAreaHint, setTextAreaHint] = useState('');
+  const [emailHint, setEmailHint] = useState("");
+  const [textAreaHint, setTextAreaHint] = useState("");
 
   const onButtonToggle = () => {
     setError((prev) => !prev);
     if (error) {
-      setEmailHint('');
-      setTextAreaHint('');
+      setEmailHint("");
+      setTextAreaHint("");
       return;
     }
-    setEmailHint('이미 존재하는 이메일이에요');
-    setTextAreaHint('This is an error message');
+    setEmailHint("이미 존재하는 이메일이에요");
+    setTextAreaHint("This is an error message");
   };
 
   return (

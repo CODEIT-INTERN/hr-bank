@@ -1,7 +1,7 @@
-import { cx } from '@/utils/cx';
-import { X } from '@untitledui/icons';
-import * as React from 'react';
-import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components';
+import { cx } from "@/utils/cx";
+import { X } from "@untitledui/icons";
+import * as React from "react";
+import { Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 
 export type BaseModalProps = {
   isOpen: boolean;
@@ -25,7 +25,7 @@ export function BaseModal({
   className,
 }: BaseModalProps) {
   const computedAriaLabel =
-    ariaLabel ?? (typeof title === 'string' ? title : undefined) ?? 'Dialog';
+    ariaLabel ?? (typeof title === "string" ? title : undefined) ?? "Dialog";
 
   return (
     <ModalOverlay
@@ -33,17 +33,17 @@ export function BaseModal({
       onOpenChange={onOpenChange}
       isDismissable={isDismissable}
       className={cx(
-        'fixed inset-0 z-50 bg-black/70',
-        'flex min-h-dvh items-center justify-center p-4 overflow-y-auto',
-        'entering:animate-in entering:fade-in entering:duration-300',
-        'exiting:animate-out exiting:fade-out exiting:duration-200'
+        "fixed inset-0 z-50 bg-black/70",
+        "flex min-h-dvh items-center justify-center p-4 overflow-y-auto",
+        "entering:animate-in entering:fade-in entering:duration-300",
+        "exiting:animate-out exiting:fade-out exiting:duration-200"
       )}
     >
       <Modal
         className={cx(
-          'w-full max-w-md rounded-2xl bg-white outline-none',
-          'entering:animate-in entering:zoom-in-95 entering:duration-300',
-          'exiting:animate-out exiting:zoom-out-95 exiting:duration-200',
+          "w-full max-w-md rounded-2xl bg-white outline-none",
+          "entering:animate-in entering:zoom-in-95 entering:duration-300",
+          "exiting:animate-out exiting:zoom-out-95 exiting:duration-200",
           className
         )}
       >
@@ -68,9 +68,9 @@ export function BaseModal({
                     onClick={() => onOpenChange(false)}
                     aria-label="Close"
                     className={cx(
-                      'inline-flex h-9 w-9 items-center justify-center rounded-lg',
-                      'text-gray-400 hover:bg-gray-100 hover:text-gray-700',
-                      'focus:outline-none focus:ring-2 focus:ring-gray-300'
+                      "inline-flex h-9 w-9 items-center justify-center rounded-lg",
+                      "text-gray-400 hover:bg-gray-100 hover:text-gray-700",
+                      "focus:outline-none focus:ring-2 focus:ring-gray-300"
                     )}
                   >
                     <X />

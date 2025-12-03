@@ -16,10 +16,10 @@ export const BackupState = {
 
 export type BackupStateType = (typeof BackupState)[keyof typeof BackupState];
 
-export const HistoryState = {
+export const HistoryType = {
   CREATED: "CREATED",
   UPDATED: "UPDATED",
   DELETED: "DELETED",
 } as const;
 
-export type HistoryStateType = (typeof HistoryState)[keyof typeof HistoryState];
+export type HistoryType = (typeof HistoryType)[keyof typeof HistoryType];

@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import './theme.css';
+@import "tailwindcss";
+@import "./theme.css";
 
 @plugin "tailwindcss-animate";
 @plugin "tailwindcss-react-aria-components";
@@ -23,7 +23,7 @@
 }
 
 :root {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -44,7 +44,7 @@ body {
   min-height: 100vh;
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
@@ -55,4 +55,4 @@ body {
   button {
     background-color: #f9f9f9;
   }
-}
+} */

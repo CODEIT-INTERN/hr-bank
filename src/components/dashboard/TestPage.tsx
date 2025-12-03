@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Input } from "../common/input/input";
+import { Input } from "../common/input/Input";
 import { SearchLg } from "@untitledui/icons";
-import { TextArea } from "../common/input/text-area";
+import { TextArea } from "../common/input/TextArea";
 import { BaseModal } from "../common/modals/BaseModal";
 import { Button } from "../common/buttons/button";
 
@@ -71,11 +71,15 @@ export default function TestPage() {
       <BaseModal
         isOpen={isOpen}
         onOpenChange={setIsOpen}
-        title="새 항목 만들기"
+        title="부서 추가하기"
         footer={
           <>
-            <Button>취소</Button>
-            <Button>확인</Button>
+            <Button color="secondary" className="w-full">
+              취소
+            </Button>
+            <Button color="primary" className="w-full">
+              등록하기
+            </Button>
           </>
         }
       >

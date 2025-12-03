@@ -3,6 +3,7 @@ import { Input } from "../common/input/input";
 import { SearchLg } from "@untitledui/icons";
 import { TextArea } from "../common/input/text-area";
 import { BaseModal } from "../common/modals/BaseModal";
+import { Button } from "../common/buttons/button";
 
 // TODO: 배포 이후 삭제
 // 인풋 테스트 페이지
@@ -71,8 +72,28 @@ export default function TestPage() {
         isOpen={isOpen}
         onOpenChange={setIsOpen}
         title="새 항목 만들기"
+        footer={
+          <>
+            <Button>취소</Button>
+            <Button>확인</Button>
+          </>
+        }
       >
-        modal
+        <Input
+          label="부서명"
+          placeholder="부서명을 입력해주세요"
+          isRequired
+          isInvalid={error}
+          hint={emailHint}
+        />
+        <TextArea
+          isRequired
+          isInvalid={error}
+          placeholder="This is a placeholder."
+          label="Description"
+          hint={textAreaHint}
+          rows={5}
+        />
       </BaseModal>
     </div>
   );

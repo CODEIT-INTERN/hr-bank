@@ -54,7 +54,7 @@ export function BaseModal({
                 {title ? (
                   <Heading
                     slot="title"
-                    className="text-xl font-bold leading-7.5 text-gray-900"
+                    className="text-xl font-bold leading-7.5 text-secondary"
                   >
                     {title}
                   </Heading>
@@ -79,13 +79,11 @@ export function BaseModal({
               </div>
             )}
 
-            <div className="mt-4">{children}</div>
+            <div className="mt-4 space-y-4">{children}</div>
 
             {footer && (
-              <div className="mt-6 border-t border-gray-200 pt-4">
-                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-                  {footer}
-                </div>
+              <div className="mt-6">
+                <div className="flex gap-3">{footer}</div>
               </div>
             )}
           </div>

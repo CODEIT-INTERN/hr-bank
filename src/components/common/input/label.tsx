@@ -1,7 +1,7 @@
-import type { ReactNode, Ref } from 'react';
-import type { LabelProps as AriaLabelProps } from 'react-aria-components';
-import { Label as AriaLabel } from 'react-aria-components';
-import { cx } from '@/utils/cx';
+import type { ReactNode, Ref } from "react";
+import type { LabelProps as AriaLabelProps } from "react-aria-components";
+import { Label as AriaLabel } from "react-aria-components";
+import { cx } from "@/utils/cx";
 
 interface LabelProps extends AriaLabelProps {
   children: ReactNode;
@@ -21,7 +21,7 @@ export const Label = ({ isRequired, className, ...props }: LabelProps) => {
       data-label="true"
       {...props}
       className={cx(
-        'flex cursor-default items-center gap-0.5 text-sm font-medium text-secondary',
+        "flex cursor-default items-center gap-0.5 text-sm font-medium text-secondary",
         className
       )}
     >
@@ -29,9 +29,9 @@ export const Label = ({ isRequired, className, ...props }: LabelProps) => {
 
       <span
         className={cx(
-          'hidden text-brand-tertiary',
-          isRequired && 'block',
-          typeof isRequired === 'undefined' && 'group-required:block'
+          "hidden text-brand-tertiary",
+          isRequired && "block",
+          typeof isRequired === "undefined" && "group-required:block"
         )}
       >
         *
@@ -40,4 +40,4 @@ export const Label = ({ isRequired, className, ...props }: LabelProps) => {
   );
 };
 
-Label.displayName = 'Label';
+Label.displayName = "Label";

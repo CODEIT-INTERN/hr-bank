@@ -6,7 +6,6 @@ const BASE_URL = "/api";
 /**
  * axios 인스턴스
  * - baseURL만 설정한 아주 얇은 래퍼
- * - 나중에 인증이 필요해지면 여기에 interceptor만 추가하면 됨
  */
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: BASE_URL,

@@ -1,8 +1,12 @@
 import { XClose, Plus } from "@untitledui/icons";
 import { useEffect, useState } from "react";
 import { DropdownButton } from "../common/dropdown/DropdownButton";
-import { Button } from "../common/buttons/Button";
+import { Button } from "../common/buttons/button";
 import { EmploymentStateLabels } from "@/constants/EmploymentStateLabels";
+import { DatePicker } from "../common/date-picker/date-picker";
+import { DateRangePicker } from "../common/date-picker/date-range-picker";
+import type { DateValue } from "react-aria-components";
+import { getLocalTimeZone } from "@internationalized/date";
 import { StatusBadge } from "../common/badges/StatusBadge";
 import { employeeHistoryListMock } from "@/mocks/historyMock";
 import type {
@@ -15,9 +19,16 @@ import { employeeListMock } from "@/mocks/employeeMock";
 import { departmentListMock } from "@/mocks/departmentMock";
 
 // TODO : 페이지 구현 후 삭제
+
+type DateRange = { start: DateValue; end: DateValue };
+
 const TestComponents = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
+  const [committedDate, setCommittedDate] = useState<DateValue | null>(null);
+  const [tempDate, setTempDate] = useState<DateValue | null>(null);
+  const [committedRange, setCommittedRange] = useState<DateRange | null>(null);
+  const [tempRange, setTempRange] = useState<DateRange | null>(null);
   const [departments, setDepartments] = useState<Record<string, string>>({});
   const getLoading = () => {
     setIsLoading(true);
@@ -27,6 +38,46 @@ const TestComponents = () => {
     }, 1000);
   };
 
+  const handleTempChange = (value: DateValue | null) => {
+    setTempDate(value);
+  };
+
+  const handleApply = () => {
+    setCommittedDate(tempDate);
+  };
+
+  const handleCancel = () => {
+    setTempDate(committedDate);
+  };
+
+  const handleRangeChange = (value: DateRange | null) => {
+    setTempRange(value);
+  };
+
+  const handleRangeApply = () => {
+    setCommittedRange(tempRange);
+  };
+
+  const handleRangeCancel = () => {
+    setTempRange(null);
+    setCommittedRange(null);
+  };
+  const formatDateValue = (dateValue: DateValue | null) => {
+    if (!dateValue) return "";
+
+    const jsDate = dateValue.toDate(getLocalTimeZone());
+
+    const year = jsDate.getFullYear();
+    const month = String(jsDate.getMonth() + 1).padStart(2, "0");
+    const day = String(jsDate.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
+
+  useEffect(() => {
+    console.log("tempDate", formatDateValue(tempDate));
+    console.log("tempRange", tempRange);
+  }, [tempDate, tempRange]);
   const getDepartments = () => {
     try {
       // 실제 API 호출 대신 mock 사용
@@ -131,6 +182,21 @@ const TestComponents = () => {
           />
         ))}
       </div>
+      <hr />
+      <DatePicker
+        placeholder="입사일을 선택해주세요"
+        value={tempDate}
+        onChange={handleTempChange}
+        onApply={handleApply}
+        onCancel={handleCancel}
+      />
+      <DateRangePicker
+        placeholder="입사일을 선택해주세요"
+        value={tempRange}
+        onChange={handleRangeChange}
+        onApply={handleRangeApply}
+        onCancel={handleRangeCancel}
+      />
     </div>
   );
 };

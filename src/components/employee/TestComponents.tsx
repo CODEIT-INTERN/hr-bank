@@ -1,10 +1,13 @@
 import { XClose, Plus } from "@untitledui/icons";
 import { useState } from "react";
-import { Button } from "../common/buttons/button";
+import { DropdownButton } from "../common/dropdown/DropdownButton";
+import { Button } from "../common/buttons/Button";
+import { EmploymentStateLabels } from "@/constants/EmploymentStateLabels";
 
 // TODO : 페이지 구현 후 삭제
 const TestComponents = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<string | null>(null);
 
   const getLoading = () => {
     setIsLoading(true);
@@ -15,7 +18,7 @@ const TestComponents = () => {
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 py-5 px-5">
       <div className="flex gap-3">
         <h1>Primary</h1>
         <Button color="primary">버튼</Button>
@@ -59,6 +62,16 @@ const TestComponents = () => {
       <div className="flex gap-3">
         <h1>Icon</h1>
         <Button color="tertiary" iconLeading={<XClose data-icon />} />
+      </div>
+      <div>
+        <h1>Dropdown</h1>
+        <DropdownButton
+          placeholder="상태"
+          label={EmploymentStateLabels}
+          onChange={(value) => {
+            setStatusFilter(value);
+          }}
+        />
       </div>
     </div>
   );

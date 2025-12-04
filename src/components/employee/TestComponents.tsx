@@ -7,6 +7,17 @@ import { DatePicker } from "../common/date-picker/date-picker";
 import { DateRangePicker } from "../common/date-picker/date-range-picker";
 import type { DateValue } from "react-aria-components";
 import { getLocalTimeZone } from "@internationalized/date";
+import { StatusBadge } from "../common/badges/StatusBadge";
+import { employeeHistoryListMock } from "@/mocks/historyMock";
+import type {
+  BackupStateType,
+  EmploymentStateType,
+  HistoryType,
+} from "@/types/enums";
+import { backupListMock } from "@/mocks/backupMock";
+import { employeeListMock } from "@/mocks/employeeMock";
+import { departmentListMock } from "@/mocks/departmentMock";
+
 // TODO : 페이지 구현 후 삭제
 
 type DateRange = { start: DateValue; end: DateValue };
@@ -18,6 +29,7 @@ const TestComponents = () => {
   const [tempDate, setTempDate] = useState<DateValue | null>(null);
   const [committedRange, setCommittedRange] = useState<DateRange | null>(null);
   const [tempRange, setTempRange] = useState<DateRange | null>(null);
+  const [departments, setDepartments] = useState<Record<string, string>>({});
   const getLoading = () => {
     setIsLoading(true);
 
@@ -66,6 +78,30 @@ const TestComponents = () => {
     console.log("tempDate", formatDateValue(tempDate));
     console.log("tempRange", tempRange);
   }, [tempDate, tempRange]);
+  const getDepartments = () => {
+    try {
+      // 실제 API 호출 대신 mock 사용
+      const res = departmentListMock;
+
+      const records: Record<string, string> = {};
+      res.content.forEach((dept) => {
+        // key 를 id로 쓸지 name으로 쓸지 선택 가능
+        // id 기준
+        records[String(dept.id)] = dept.name;
+
+        // name 을 key/값 둘 다 쓰고 싶으면 아래로
+        // records[dept.name] = dept.name;
+      });
+
+      setDepartments(records);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getDepartments();
+  }, []);
 
   return (
     <div className="flex flex-col gap-3 py-5 px-5">
@@ -113,7 +149,7 @@ const TestComponents = () => {
         <h1>Icon</h1>
         <Button color="tertiary" iconLeading={<XClose data-icon />} />
       </div>
-      <div>
+      <div className="flex gap-3">
         <h1>Dropdown</h1>
         <DropdownButton
           placeholder="상태"
@@ -122,6 +158,29 @@ const TestComponents = () => {
             setStatusFilter(value);
           }}
         />
+        <DropdownButton
+          placeholder="부서"
+          label={departments || {}}
+          onChange={(value) => {
+            setStatusFilter(value);
+          }}
+        />
+      </div>
+      <div className="flex gap-3">
+        <h1>배지</h1>
+        {employeeHistoryListMock.content.map((history) => (
+          <StatusBadge key={history.id} kind="history" value={history.type} />
+        ))}
+        {backupListMock.content.map((backup) => (
+          <StatusBadge key={backup.id} kind="backup" value={backup.status} />
+        ))}
+        {employeeListMock.content.map((employee) => (
+          <StatusBadge
+            key={employee.id}
+            kind="employment"
+            value={employee.status}
+          />
+        ))}
       </div>
       <hr />
       <DatePicker

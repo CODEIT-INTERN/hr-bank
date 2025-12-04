@@ -9,7 +9,7 @@ import { Button } from "../common/buttons/button";
 // 인풋 테스트 페이지
 export default function TestPage() {
   const [isOpen, setIsOpen] = useState(false);
-  console.log("Modal isOpen:", isOpen); // 디버깅용
+
   const [error, setError] = useState(false);
   const [emailHint, setEmailHint] = useState("");
   const [textAreaHint, setTextAreaHint] = useState("");

@@ -1,0 +1,52 @@
+import type { EmployeeStatus } from "@/types/enums";
+
+// 직원 DTO
+export interface EmployeeDto {
+  id: number;
+  name: string;
+  email: string;
+  employeeNumber: string;
+  departmentId: number;
+  departmentName: string;
+  position: string;
+  hireDate: string; // "YYYY-MM-DD"
+  status: EmployeeStatus;
+  profileImageId: number | null;
+}
+
+// 직원 목록 조회용 쿼리 타입
+export interface EmployeeListQuery {
+  nameOrEmail?: string;
+  employeeNumber?: string;
+  departmentName?: string;
+  position?: string;
+  hireDateFrom?: string;
+  hireDateTo?: string;
+  status?: EmployeeStatus;
+  idAfter?: number;
+  cursor?: string;
+  size?: number;
+  sortField?: "name" | "employeeNumber" | "hireDate";
+  sortDirection?: "asc" | "desc";
+}
+
+// 직원 등록 요청
+export interface EmployeeCreateRequest {
+  name: string;
+  email: string;
+  departmentId: number;
+  position: string;
+  hireDate: string;
+  memo?: string;
+}
+
+// 직원 수정 요청
+export interface EmployeeUpdateRequest {
+  name: string;
+  email: string;
+  departmentId: number;
+  position: string;
+  hireDate: string;
+  status: EmployeeStatus;
+  memo?: string;
+}

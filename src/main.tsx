@@ -1,16 +1,22 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "@/styles/index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import Dashboard from "@/pages/Dashboard.tsx";
 import Department from "@/pages/Department.tsx";
 import Employee from "@/pages/Employee.tsx";
 import Backup from "@/pages/Backup.tsx";
+import History from "@/pages/History";
+import Layout from "./components/layout/Layout";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: <Navigation />, // 모든 페이지에 공통으로 적용될 레이아웃 (Navbar, Footer 등)
+    element: <Layout />, // 모든 페이지에 공통으로 적용될 레이아웃
     // errorElement: <ErrorPage />,
     children: [
       {
@@ -18,20 +24,24 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "department",
+        path: "departments",
         element: <Department />,
       },
       {
-        path: "employee",
+        path: "employees",
         element: <Employee />,
       },
       {
-        path: "backup",
+        path: "histories",
+        element: <History />,
+      },
+      {
+        path: "backups",
         element: <Backup />,
       },
       {
         index: true, // App의 자식 경로 중 기본 경로를 설정
-        element: <Dashboard />,
+        element: <Navigate to="/dashboard" replace />,
       },
     ],
   },

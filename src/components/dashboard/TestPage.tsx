@@ -28,12 +28,7 @@ export default function TestPage() {
   return (
     <div className="p-4 space-y-4">
       <h1>Input test page</h1>
-      <Input
-        wrapperClassName="w-80"
-        placeholder="Search"
-        isRequired
-        icon={SearchLg}
-      />
+      <Input wrapperClassName="w-80" placeholder="Search" isRequired icon={SearchLg} />
       <button className="bg-red-500 text-white p-2" onClick={onButtonToggle}>
         Error Toggle
       </button>
@@ -61,10 +56,7 @@ export default function TestPage() {
         hint={textAreaHint}
         rows={5}
       />
-      <button
-        className="bg-blue-500 text-white p-2"
-        onClick={() => setIsOpen(true)}
-      >
+      <button className="bg-blue-500 text-white p-2" onClick={() => setIsOpen(true)}>
         Open Modal
       </button>
 
@@ -83,13 +75,7 @@ export default function TestPage() {
           </>
         }
       >
-        <Input
-          label="부서명"
-          placeholder="부서명을 입력해주세요"
-          isRequired
-          isInvalid={error}
-          hint={emailHint}
-        />
+        <Input label="부서명" placeholder="부서명을 입력해주세요" isRequired isInvalid={error} hint={emailHint} />
         <TextArea
           isRequired
           isInvalid={error}

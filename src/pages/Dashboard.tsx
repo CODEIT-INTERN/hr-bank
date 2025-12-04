@@ -5,9 +5,7 @@ export default function Dashboard() {
   return (
     <div>
       <h1>Dashboard page</h1>
-      <div className="p-4">
-        <TableTestPage />
-      </div>
+      <TableTestPage />
 
       {/* <TestPage /> */}
     </div>

@@ -1,10 +1,10 @@
 import { XClose, Plus } from "@untitledui/icons";
 import { useEffect, useState } from "react";
 import { DropdownButton } from "../common/dropdown/DropdownButton";
-import { Button } from "../common/buttons/button";
+import { Button } from "../common/buttons/Button";
 import { EmploymentStateLabels } from "@/constants/EmploymentStateLabels";
-import { DatePicker } from "../common/date-picker/date-picker";
-import { DateRangePicker } from "../common/date-picker/date-range-picker";
+import { DatePicker } from "../common/date-picker/DatePicker";
+import { DateRangePicker } from "../common/date-picker/DateRangePicker";
 import type { DateValue } from "react-aria-components";
 import { getLocalTimeZone } from "@internationalized/date";
 import { StatusBadge } from "../common/badges/StatusBadge";
@@ -29,7 +29,17 @@ const TestComponents = () => {
   const [tempDate, setTempDate] = useState<DateValue | null>(null);
   const [committedRange, setCommittedRange] = useState<DateRange | null>(null);
   const [tempRange, setTempRange] = useState<DateRange | null>(null);
-  const [departments, setDepartments] = useState<Record<string, string>>({});
+  const [departments, setDepartments] = useState<Record<string, string>>(() => {
+    const res = departmentListMock;
+
+    const records: Record<string, string> = {};
+    res.content.forEach((dept) => {
+      records[String(dept.id)] = dept.name;
+    });
+
+    return records;
+  });
+
   const getLoading = () => {
     setIsLoading(true);
 
@@ -78,30 +88,31 @@ const TestComponents = () => {
     console.log("tempDate", formatDateValue(tempDate));
     console.log("tempRange", tempRange);
   }, [tempDate, tempRange]);
-  const getDepartments = () => {
-    try {
-      // 실제 API 호출 대신 mock 사용
-      const res = departmentListMock;
 
-      const records: Record<string, string> = {};
-      res.content.forEach((dept) => {
-        // key 를 id로 쓸지 name으로 쓸지 선택 가능
-        // id 기준
-        records[String(dept.id)] = dept.name;
+  // const getDepartments = () => {
+  //   try {
+  //     // 실제 API 호출 대신 mock 사용
+  //     const res = mockDataGetter();
 
-        // name 을 key/값 둘 다 쓰고 싶으면 아래로
-        // records[dept.name] = dept.name;
-      });
+  //     const records: Record<string, string> = {};
+  //     res.content.forEach((dept) => {
+  //       // key 를 id로 쓸지 name으로 쓸지 선택 가능
+  //       // id 기준
+  //       records[String(dept.id)] = dept.name;
 
-      setDepartments(records);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //       // name 을 key/값 둘 다 쓰고 싶으면 아래로
+  //       // records[dept.name] = dept.name;
+  //     });
 
-  useEffect(() => {
-    getDepartments();
-  }, []);
+  //     setDepartments(records);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getDepartments();
+  // }, []);
 
   return (
     <div className="flex flex-col gap-3 py-5 px-5">

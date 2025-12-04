@@ -1,4 +1,4 @@
-import { Badge, BadgeWithDot } from "./badges";
+import { Badge, BadgeWithDot } from "./Badges";
 import {
   EmploymentState,
   type EmploymentStateType,

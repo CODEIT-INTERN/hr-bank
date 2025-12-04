@@ -14,7 +14,7 @@ import {
 } from "react-aria-components";
 import { Button } from "@/components/common/buttons/button";
 import { cx } from "@/utils/cx";
-import { Calendar } from "./calendar";
+import { Calendar } from "./calendars";
 
 const highlightedDates = [today(getLocalTimeZone())];
 

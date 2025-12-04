@@ -16,8 +16,8 @@ import {
   useSlottedContext,
 } from "react-aria-components";
 import { Button } from "@/components/common/buttons/button";
-import { CalendarCell } from "./cell";
-import { DateInput } from "./date-input";
+import { CalendarCell } from "./cells";
+import { DateInput } from "./DateInput";
 
 export const RangeCalendarContextProvider = ({
   children,

@@ -15,8 +15,8 @@ import {
 } from "react-aria-components";
 import { Button } from "@/components/common/buttons/button";
 import { cx } from "@/utils/cx";
-import { DateInput } from "./date-input";
-import { RangeCalendar } from "./range-calendar";
+import { DateInput } from "./DateInput";
+import { RangeCalendar } from "./RangeCalendar";
 
 const highlightedDates = [today(getLocalTimeZone())];
 

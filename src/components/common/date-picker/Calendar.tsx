@@ -17,7 +17,7 @@ import {
 } from "react-aria-components";
 import { Button } from "@/components/common/buttons/button";
 import { cx } from "@/utils/cx";
-import { CalendarCell } from "./cells";
+import { CalendarCell } from "./Cell";
 
 export const CalendarContextProvider = ({ children }: PropsWithChildren) => {
   const [value, onChange] = useState<DateValue | null>(null);

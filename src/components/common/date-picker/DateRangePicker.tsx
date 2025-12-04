@@ -13,10 +13,10 @@ import {
   Group as AriaGroup,
   Popover as AriaPopover,
 } from "react-aria-components";
-import { Button } from "@/components/common/buttons/button";
+import { Button } from "@/components/common/buttons/Button";
 import { cx } from "@/utils/cx";
-import { DateInput } from "./date-input";
-import { RangeCalendar } from "./range-calendar";
+import { DateInput } from "./DateInput";
+import { RangeCalendar } from "./RangeCalendar";
 
 const highlightedDates = [today(getLocalTimeZone())];
 

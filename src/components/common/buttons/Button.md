@@ -8,7 +8,7 @@ Untitled UI + React Aria 스타일 구조 기반으로 다양한 상태를 시�
 ## 🧑🏻‍💻 사용법
 
 ```tsx
-import { Button } from "@/components/common/buttons/button";
+import { Button } from "@/components/common/buttons/Button";
 
 // 기본 버튼
 <Button color="primary">등록</Button>

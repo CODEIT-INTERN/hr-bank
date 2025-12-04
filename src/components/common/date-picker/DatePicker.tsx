@@ -12,9 +12,9 @@ import {
   Group as AriaGroup,
   Popover as AriaPopover,
 } from "react-aria-components";
-import { Button } from "@/components/common/buttons/button";
+import { Button } from "@/components/common/buttons/Button";
 import { cx } from "@/utils/cx";
-import { Calendar } from "./calendar";
+import { Calendar } from "./Calendar";
 
 const highlightedDates = [today(getLocalTimeZone())];
 

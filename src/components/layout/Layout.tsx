@@ -9,11 +9,9 @@ export default function Layout() {
       <Navigation />
 
       {/* 메인 컨텐츠 영역 */}
-      <main className="flex-1 flex flex-col py-[100px] px-[60px]">
+      <main className="flex-1 flex flex-col py-[100px] px-[60px] gap-7">
         <Header />
-        <div className="max-w-6xl">
-          <Outlet />
-        </div>
+        <Outlet />
       </main>
     </div>
   );

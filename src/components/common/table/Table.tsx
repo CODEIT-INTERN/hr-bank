@@ -23,13 +23,13 @@ interface TableRootProps extends AriaTableProps, Omit<ComponentPropsWithRef<"tab
 
 const TableRoot = ({ className, ...props }: TableRootProps) => {
   return (
-    <div className="w-full rounded-2xl border border-border-secondary bg-bg-primary">
-      <div className="w-full overflow-x-auto">
-        <AriaTable
-          {...props}
-          className={(state) => cx("min-w-[800px]", typeof className === "function" ? className(state) : className)}
-        />
-      </div>
+    <div className="rounded-2xl overflow-hidden border border-border-secondary bg-bg-primary w-full">
+      <AriaTable
+        {...props}
+        className={(state) =>
+          cx("w-full overflow-x-hidden", typeof className === "function" ? className(state) : className)
+        }
+      />
     </div>
   );
 };

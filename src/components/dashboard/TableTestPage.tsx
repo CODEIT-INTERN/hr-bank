@@ -9,6 +9,7 @@ import { createEmployee, getEmployees } from "@/api/employee/employeeApi";
 import { useEmployeeListStore } from "@/store/employeeStore";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import { Table } from "../common/table/table";
+import { sortByDescriptor } from "@/utils/sort";
 
 export const TableTestPage = () => {
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
@@ -32,35 +33,7 @@ export const TableTestPage = () => {
   }, [loadFirstPage]);
 
   const sortedItems = useMemo(() => {
-    if (items.length === 0) return [];
-
-    const copied = [...items];
-    const { column, direction } = sortDescriptor;
-
-    if (!column) return copied;
-
-    return copied.sort((a, b) => {
-      const first = a[column as keyof EmployeeDto];
-      const second = b[column as keyof EmployeeDto];
-
-      if (first == null || second == null) return 0;
-
-      // 수자열 정렬
-      if (typeof first === "number" && typeof second === "number") {
-        return direction === "descending" ? second - first : first - second;
-      }
-
-      // 나머지는 문자열로 비교
-      const f = String(first);
-      const s = String(second);
-      let cmp = f.localeCompare(s);
-
-      if (direction === "descending") {
-        cmp *= -1;
-      }
-
-      return cmp;
-    });
+    return sortByDescriptor<EmployeeDto>(items, sortDescriptor);
   }, [items, sortDescriptor]);
 
   // 직원 상태 -> 배지 색/텍스트 매핑

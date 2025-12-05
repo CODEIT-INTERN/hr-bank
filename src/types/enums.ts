@@ -1,11 +1,13 @@
 export const EmploymentState = {
-  ALL: "ALL",
+  // 백엔드 enum에 ALL이 없어서 ""로 대체
+  ALL: "",
   ACTIVE: "ACTIVE",
   ON_LEAVE: "ON_LEAVE",
   RESIGNED: "RESIGNED",
 } as const;
 
-export type EmploymentStateType = (typeof EmploymentState)[keyof typeof EmploymentState];
+export type EmploymentStateType =
+  (typeof EmploymentState)[keyof typeof EmploymentState];
 
 export const BackupState = {
   IN_PROGRESS: "IN_PROGRESS",

@@ -1,55 +1,51 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Edit01, Trash01 } from "@untitledui/icons";
 import type { SortDescriptor } from "react-aria-components";
 import { Table } from "@/components/common/table/table";
 import { Badge, BadgeWithDot } from "@/components/common/badges/badges";
 import { Button } from "@/components/common/buttons/UiButton";
-import type { EmployeeDto } from "@/model/employee";
+import type { EmployeeCreateRequest, EmployeeDto } from "@/model/employee";
 import type { CursorPageResponse } from "@/model/pagination";
-import { getEmployees } from "@/api/employee/employeeAPI";
+import { createEmployee, getEmployees } from "@/api/employee/employeeApi";
+import { useEmployeeListStore } from "@/store/employeeStore";
+import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 
 export const TableTestPage = () => {
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "name",
     direction: "ascending",
   });
-  const [employees, setEmployees] = useState<EmployeeDto[]>([]);
+
+  const { items, isLoading, errorMessage, hasNext, filters, setFilters, loadFirstPage, loadNextPage } =
+    useEmployeeListStore();
+
+  const { loadMoreRef } = useInfiniteScroll({
+    hasNext,
+    isLoading,
+    onLoadMore: loadNextPage,
+    rootMargin: "0px 0px 200px 0px",
+  });
 
   // API 호출
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res: CursorPageResponse<EmployeeDto> = await getEmployees({
-          size: 10,
-          sortField: "name",
-          sortDirection: "asc",
-        });
-        console.log("res :", res);
-        setEmployees(res.content);
-      } catch (error) {
-        console.error("error :", error);
-      }
-    };
+    loadFirstPage();
+  }, [loadFirstPage]);
 
-    void fetchData();
-  }, []);
-
-  // 정렬된 데이터 (이제 teamMembers.items 말고 employees 사용)
   const sortedItems = useMemo(() => {
-    if (employees.length === 0) return [];
+    if (items.length === 0) return [];
 
-    const items = [...employees];
+    const copied = [...items];
     const { column, direction } = sortDescriptor;
 
-    if (!column) return items;
+    if (!column) return copied;
 
-    return items.sort((a, b) => {
+    return copied.sort((a, b) => {
       const first = a[column as keyof EmployeeDto];
       const second = b[column as keyof EmployeeDto];
 
       if (first == null || second == null) return 0;
 
-      // 숫자 정렬 (지금은 거의 문자열일 거라 사실상 안 타도 됨)
+      // 수자열 정렬
       if (typeof first === "number" && typeof second === "number") {
         return direction === "descending" ? second - first : first - second;
       }
@@ -65,7 +61,7 @@ export const TableTestPage = () => {
 
       return cmp;
     });
-  }, [employees, sortDescriptor]);
+  }, [items, sortDescriptor]);
 
   // 직원 상태 -> 배지 색/텍스트 매핑
   const getStatusInfo = (status: EmployeeDto["status"]) => {
@@ -82,69 +78,79 @@ export const TableTestPage = () => {
   };
 
   return (
-    <Table aria-label="직원 목록" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
-      <Table.Header>
-        <Table.Head id="name" label="이름" isRowHeader allowsSorting />
-        <Table.Head id="status" label="상태" allowsSorting />
-        <Table.Head id="position" label="직함" allowsSorting />
-        <Table.Head id="email" label="이메일" allowsSorting />
-        <Table.Head id="departmentName" label="부서" allowsSorting />
-        <Table.Head id="actions" />
-      </Table.Header>
+    <>
+      <Table aria-label="직원 목록" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
+        <Table.Header>
+          <Table.Head id="name" label="이름" isRowHeader allowsSorting />
+          <Table.Head id="status" label="상태" allowsSorting />
+          <Table.Head id="position" label="직함" allowsSorting />
+          <Table.Head id="email" label="이메일" allowsSorting />
+          <Table.Head id="departmentName" label="부서" allowsSorting />
+          <Table.Head id="actions" />
+        </Table.Header>
 
-      <Table.Body items={sortedItems}>
-        {(item) => {
-          const statusInfo = getStatusInfo(item.status);
+        <Table.Body items={sortedItems}>
+          {(item) => {
+            const statusInfo = getStatusInfo(item.status);
 
-          return (
-            <Table.Row id={item.id}>
-              {/* 이름 + 사번 */}
-              <Table.Cell>
-                <div className="flex items-center gap-3">
-                  {/* 프로필 이미지가 없으니 이름 첫 글자 원형 아바타 */}
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-sm font-medium text-gray-700">
-                    {item.name.charAt(0)}
+            return (
+              <Table.Row id={item.id} key={item.id}>
+                {/* 이름 + 사번 */}
+                <Table.Cell>
+                  <div className="flex items-center gap-3">
+                    {/* 프로필 이미지가 없으니 이름 첫 글자 원형 아바타 */}
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-sm font-medium text-gray-700">
+                      {item.name.charAt(0)}
+                    </div>
+                    <div className="whitespace-nowrap">
+                      <p className="text-sm font-medium text-primary">{item.name}</p>
+                      <p className="text-xs text-tertiary">{item.employeeNumber}</p>
+                    </div>
                   </div>
-                  <div className="whitespace-nowrap">
-                    <p className="text-sm font-medium text-primary">{item.name}</p>
-                    <p className="text-xs text-tertiary">{item.employeeNumber}</p>
+                </Table.Cell>
+
+                {/* 상태 */}
+                <Table.Cell>
+                  <BadgeWithDot size="sm" color={statusInfo.color} type="modern">
+                    {statusInfo.label}
+                  </BadgeWithDot>
+                </Table.Cell>
+
+                {/* 직함 */}
+                <Table.Cell className="whitespace-nowrap">{item.position}</Table.Cell>
+
+                {/* 이메일 */}
+                <Table.Cell className="whitespace-nowrap">{item.email}</Table.Cell>
+
+                {/* 부서명 */}
+                <Table.Cell>
+                  {item.departmentName && (
+                    <Badge color="indigo" size="sm">
+                      {item.departmentName}
+                    </Badge>
+                  )}
+                </Table.Cell>
+
+                {/* 액션 버튼 */}
+                <Table.Cell className="px-4">
+                  <div className="flex justify-end gap-0.5">
+                    <Button color="tertiary" iconLeading={Trash01} />
+                    <Button color="tertiary" iconLeading={Edit01} />
                   </div>
-                </div>
-              </Table.Cell>
+                </Table.Cell>
+              </Table.Row>
+            );
+          }}
+        </Table.Body>
+      </Table>
 
-              {/* 상태 */}
-              <Table.Cell>
-                <BadgeWithDot size="sm" color={statusInfo.color} type="modern">
-                  {statusInfo.label}
-                </BadgeWithDot>
-              </Table.Cell>
+      <div ref={loadMoreRef} className="h-4"></div>
 
-              {/* 직함 */}
-              <Table.Cell className="whitespace-nowrap">{item.position}</Table.Cell>
-
-              {/* 이메일 */}
-              <Table.Cell className="whitespace-nowrap">{item.email}</Table.Cell>
-
-              {/* 부서명 */}
-              <Table.Cell>
-                {item.departmentName && (
-                  <Badge color="indigo" size="sm">
-                    {item.departmentName}
-                  </Badge>
-                )}
-              </Table.Cell>
-
-              {/* 액션 버튼 */}
-              <Table.Cell className="px-4">
-                <div className="flex justify-end gap-0.5">
-                  <Button color="tertiary" iconLeading={Trash01} />
-                  <Button color="tertiary" iconLeading={Edit01} />
-                </div>
-              </Table.Cell>
-            </Table.Row>
-          );
-        }}
-      </Table.Body>
-    </Table>
+      <div className="flex items-center justify-center text-xs text-gray-500">
+        {/* <div>{errorMessage && <span className="text-red-500">{errorMessage}</span>}</div> */}
+        {isLoading && <span>불러오는 중...</span>}
+        {!hasNext && <span>조회 끝</span>}
+      </div>
+    </>
   );
 };

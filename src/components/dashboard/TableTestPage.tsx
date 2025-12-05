@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Edit01, Trash01 } from "@untitledui/icons";
 import type { SortDescriptor } from "react-aria-components";
-import { Table } from "@/components/common/table/table";
-import { Badge, BadgeWithDot } from "@/components/common/badges/badges";
+import { Badge, BadgeWithDot } from "@/components/common/badges/Badges";
 import { Button } from "@/components/common/buttons/UiButton";
 import type { EmployeeCreateRequest, EmployeeDto } from "@/model/employee";
 import type { CursorPageResponse } from "@/model/pagination";
 import { createEmployee, getEmployees } from "@/api/employee/employeeApi";
 import { useEmployeeListStore } from "@/store/employeeStore";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
+import { Table } from "../common/table/table";
 
 export const TableTestPage = () => {
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({

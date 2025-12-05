@@ -3,7 +3,7 @@ import { Input } from "../common/input/Input";
 import { SearchLg } from "@untitledui/icons";
 import { TextArea } from "../common/input/TextArea";
 import { BaseModal } from "../common/modals/BaseModal";
-import { Button } from "../common/buttons/button";
+import { Button } from "../common/buttons/Button";
 
 // TODO: 배포 이후 삭제
 // 인풋 테스트 페이지

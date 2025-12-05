@@ -11,7 +11,7 @@ export default function Layout() {
       {/* 메인 컨텐츠 영역 */}
       <main className="flex-1 flex flex-col pt-[100px] px-[60px]">
         <Header />
-        <div className="mx-auto max-w-6xl px-15 pt-7">
+        <div className="max-w-6xl">
           <Outlet />
         </div>
       </main>

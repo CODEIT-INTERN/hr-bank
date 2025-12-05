@@ -1,8 +1,4 @@
-import type {
-  ComponentPropsWithRef,
-  TdHTMLAttributes,
-  ThHTMLAttributes,
-} from "react";
+import type { ComponentPropsWithRef, TdHTMLAttributes, ThHTMLAttributes } from "react";
 import { ArrowDown, ChevronSelectorVertical } from "@untitledui/icons";
 import type {
   CellProps as AriaCellProps,
@@ -23,20 +19,15 @@ import {
 } from "react-aria-components";
 import { cx } from "@/utils/cx";
 
-interface TableRootProps
-  extends AriaTableProps,
-    Omit<ComponentPropsWithRef<"table">, "className" | "slot" | "style"> {}
+interface TableRootProps extends AriaTableProps, Omit<ComponentPropsWithRef<"table">, "className" | "slot" | "style"> {}
 
 const TableRoot = ({ className, ...props }: TableRootProps) => {
   return (
-    <div className="rounded-2xl overflow-hidden border border-border-secondary bg-bg-primary">
+    <div className="rounded-2xl overflow-hidden border border-border-secondary bg-bg-primary w-full">
       <AriaTable
         {...props}
         className={(state) =>
-          cx(
-            "w-full overflow-x-hidden",
-            typeof className === "function" ? className(state) : className
-          )
+          cx("w-full overflow-x-hidden", typeof className === "function" ? className(state) : className)
         }
       />
     </div>
@@ -46,10 +37,7 @@ TableRoot.displayName = "Table";
 
 interface TableHeaderProps<T extends object>
   extends AriaTableHeaderProps<T>,
-    Omit<
-      ComponentPropsWithRef<"thead">,
-      "children" | "className" | "slot" | "style"
-    > {
+    Omit<ComponentPropsWithRef<"thead">, "children" | "className" | "slot" | "style"> {
   bordered?: boolean;
 }
 
@@ -80,21 +68,11 @@ TableHeader.displayName = "TableHeader";
 
 interface TableHeadProps
   extends AriaColumnProps,
-    Omit<
-      ThHTMLAttributes<HTMLTableCellElement>,
-      "children" | "className" | "style" | "id"
-    > {
+    Omit<ThHTMLAttributes<HTMLTableCellElement>, "children" | "className" | "style" | "id"> {
   label?: string;
-  tooltip?: string;
 }
 
-const TableHead = ({
-  className,
-  tooltip,
-  label,
-  children,
-  ...props
-}: TableHeadProps) => {
+const TableHead = ({ className, label, children, ...props }: TableHeadProps) => {
   return (
     <AriaColumn
       {...props}
@@ -109,11 +87,7 @@ const TableHead = ({
       {(state) => (
         <AriaGroup className="flex items-center gap-1">
           <div className="flex items-center gap-1">
-            {label && (
-              <span className="text-xs font-semibold whitespace-nowrap text-quaternary">
-                {label}
-              </span>
-            )}
+            {label && <span className="text-xs font-semibold whitespace-nowrap text-quaternary">{label}</span>}
             {typeof children === "function" ? children(state) : children}
           </div>
 
@@ -126,11 +100,7 @@ const TableHead = ({
                 )}
               />
             ) : (
-              <ChevronSelectorVertical
-                size={12}
-                strokeWidth={3}
-                className="text-fg-quaternary"
-              />
+              <ChevronSelectorVertical size={12} strokeWidth={3} className="text-fg-quaternary" />
             ))}
         </AriaGroup>
       )}
@@ -141,10 +111,7 @@ TableHead.displayName = "TableHead";
 
 interface TableRowProps<T extends object>
   extends AriaRowProps<T>,
-    Omit<
-      ComponentPropsWithRef<"tr">,
-      "children" | "className" | "onClick" | "slot" | "style" | "id"
-    > {
+    Omit<ComponentPropsWithRef<"tr">, "children" | "className" | "onClick" | "slot" | "style" | "id"> {
   highlightSelectedRow?: boolean;
 }
 
@@ -176,10 +143,7 @@ TableRow.displayName = "TableRow";
 
 interface TableCellProps
   extends AriaCellProps,
-    Omit<
-      TdHTMLAttributes<HTMLTableCellElement>,
-      "children" | "className" | "style" | "id"
-    > {}
+    Omit<TdHTMLAttributes<HTMLTableCellElement>, "children" | "className" | "style" | "id"> {}
 
 const TableCell = ({ className, children, ...props }: TableCellProps) => {
   return (

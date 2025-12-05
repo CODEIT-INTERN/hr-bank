@@ -11,4 +11,12 @@ export default defineConfig({
       "@": resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://sprint-project-1196140422.ap-northeast-2.elb.amazonaws.com/sb/hrbank",
+        changeOrigin: true,
+      },
+    },
+  },
 });

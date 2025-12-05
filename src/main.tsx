@@ -2,11 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "pretendard/dist/web/static/pretendard.css";
 import "@/styles/index.css";
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import Dashboard from "@/pages/Dashboard.tsx";
 import Department from "@/pages/Department.tsx";
 import Employee from "@/pages/Employee.tsx";

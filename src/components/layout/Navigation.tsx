@@ -1,10 +1,4 @@
-import {
-  Building05,
-  ClockFastForward,
-  Database01,
-  LineChartUp02,
-  Users01,
-} from "@untitledui/icons";
+import { NAV_ITEMS } from "@/constants/navigation";
 import type { FC } from "react";
 import { Link, NavLink } from "react-router-dom";
 
@@ -14,37 +8,9 @@ interface NavigationItem {
   icon: FC<{ className?: string }>;
 }
 
-const NAV_ITEMS: NavigationItem[] = [
-  {
-    label: "대시보드",
-    path: "/dashboard",
-    icon: LineChartUp02,
-  },
-  {
-    label: "부서 관리",
-    path: "/departments",
-    icon: Building05,
-  },
-  {
-    label: "직원 관리",
-    path: "/employees",
-    icon: Users01,
-  },
-  {
-    label: "수정 이력",
-    path: "/histories",
-    icon: ClockFastForward,
-  },
-  {
-    label: "데이터 백업",
-    path: "/backups",
-    icon: Database01,
-  },
-];
-
 export default function Navigation() {
   return (
-    <aside className="flex min-w-70 flex-col border-r border-gray-200 bg-white p-4">
+    <aside className="flex min-w-70 flex-col border-r border-gray-200 bg-gray-50 p-4">
       {/* 브랜드 영역 */}
       <div className="mt-6 mb-8 flex items-center gap-3 px-2">
         <Link to="/" aria-label="홈">

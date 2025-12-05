@@ -1,15 +1,17 @@
 import { Outlet } from "react-router-dom";
 import Navigation from "@/components/layout/Navigation";
+import Header from "../common/Header";
 
 export default function Layout() {
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-white">
       {/* 사이드바 */}
       <Navigation />
 
       {/* 메인 컨텐츠 영역 */}
-      <main className="flex-1">
-        <div className="mx-auto max-w-6xl px-15 py-25">
+      <main className="flex-1 flex flex-col pt-[100px] px-[60px]">
+        <Header />
+        <div className="mx-auto max-w-6xl px-15 pt-7">
           <Outlet />
         </div>
       </main>

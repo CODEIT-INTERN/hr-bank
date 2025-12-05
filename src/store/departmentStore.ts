@@ -1,0 +1,106 @@
+import { getDepartments } from "@/api/department/departmentApi";
+import type { DepartmentDto } from "@/model/department";
+import type { CursorPageResponse } from "@/model/pagination";
+import { create } from "zustand";
+
+interface DepartmentFilterState {
+  nameOrDescription: string;
+}
+
+interface DepartmentListState {
+  items: DepartmentDto[];
+  isLoading: boolean;
+  errorMessage?: string;
+  hasNext: boolean;
+  nextCursor: string | null;
+  totalElements: number;
+
+  filters: DepartmentFilterState;
+
+  setFilters: (partial: Partial<DepartmentFilterState>) => void;
+  resetFilters: () => void;
+
+  loadFirstPage: () => Promise<void>;
+  loadNextPage: () => Promise<void>;
+}
+
+const initialFilters: DepartmentFilterState = {
+  nameOrDescription: "",
+};
+
+export const useDepartmentListStore = create<DepartmentListState>((set, get) => ({
+  items: [],
+  isLoading: false,
+  errorMessage: undefined,
+  hasNext: false,
+  nextCursor: null,
+  totalElements: 0,
+  filters: initialFilters,
+
+  setFilters: (partial) =>
+    set((state) => ({
+      filters: { ...state.filters, ...partial },
+    })),
+
+  resetFilters: () =>
+    set({
+      filters: initialFilters,
+    }),
+
+  loadFirstPage: async () => {
+    const { filters } = get();
+
+    set({ isLoading: true, errorMessage: undefined });
+
+    try {
+      const page: CursorPageResponse<DepartmentDto> = await getDepartments({
+        nameOrDescription: filters.nameOrDescription || undefined,
+      });
+
+      set({
+        items: page.content,
+        hasNext: page.hasNext,
+        nextCursor: page.nextCursor ?? null,
+        isLoading: false,
+        totalElements: page.totalElements,
+      });
+    } catch (error) {
+      const message = "부서 불러오기 중 오류";
+      console.log(error);
+
+      set({
+        isLoading: false,
+        errorMessage: message,
+      });
+    }
+  },
+  loadNextPage: async () => {
+    const { filters, hasNext, nextCursor, items } = get();
+
+    if (!hasNext || !nextCursor) return;
+
+    set({ isLoading: true, errorMessage: undefined });
+
+    try {
+      const page: CursorPageResponse<DepartmentDto> = await getDepartments({
+        nameOrDescription: filters.nameOrDescription || undefined,
+        cursor: nextCursor,
+      });
+
+      set({
+        items: [...items, ...page.content],
+        hasNext: page.hasNext,
+        nextCursor: page.nextCursor ?? null,
+        isLoading: false,
+      });
+    } catch (error) {
+      const message = "부서 불러오기 중 오류";
+      console.log(error);
+
+      set({
+        isLoading: false,
+        errorMessage: message,
+      });
+    }
+  },
+}));

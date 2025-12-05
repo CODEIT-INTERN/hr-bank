@@ -1,4 +1,8 @@
-import { CalendarDate, getLocalTimeZone, parseDate } from "@internationalized/date";
+import {
+  CalendarDate,
+  getLocalTimeZone,
+  parseDate,
+} from "@internationalized/date";
 import type { DateValue } from "react-aria-components";
 
 // TODO: 백엔드 요청 데이터 형식이랑 같은 지 확인해봐야 함
@@ -16,7 +20,6 @@ export const formatDateValue = (dateValue: DateValue | null) => {
 };
 
 // RangeDateValue → YYYY-MM-DD 문자열 변환
-
 export const formatDateRange = (
   range: {
     start: DateValue;
@@ -32,7 +35,9 @@ export const formatDateRange = (
 };
 
 // string 날짜를 CalenderDate 객체로 변환
-export const parseDateValue = (date: string | null | undefined): DateValue | null => {
+export const parseDateValue = (
+  date: string | null | undefined
+): DateValue | null => {
   if (!date) return null;
   try {
     // "2025-04-12" 형식을 파싱
@@ -43,4 +48,24 @@ export const parseDateValue = (date: string | null | undefined): DateValue | nul
   } catch {
     return null;
   }
+};
+
+// YYYY-MM-DD -> 년 월 일로 문자열 변환
+export const formatDateAsKorean = (dateString?: string | null): string => {
+  if (!dateString) return "";
+
+  const pattern = /^\d{4}-\d{2}-\d{2}$/;
+  if (!pattern.test(dateString)) return dateString;
+
+  const [year, month, day] = dateString.split("-");
+
+  const yearNum = Number(year);
+  const monthNum = Number(month);
+  const dayNum = Number(day);
+
+  if (isNaN(yearNum) || isNaN(monthNum) || isNaN(dayNum)) {
+    return dateString;
+  }
+
+  return `${yearNum}년 ${monthNum}월 ${dayNum}일`;
 };

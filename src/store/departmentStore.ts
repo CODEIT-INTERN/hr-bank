@@ -12,6 +12,7 @@ interface DepartmentListState {
   isLoading: boolean;
   errorMessage?: string;
   hasNext: boolean;
+  idAfter: number;
   nextCursor: string | null;
   totalElements: number;
 
@@ -33,6 +34,7 @@ export const useDepartmentListStore = create<DepartmentListState>((set, get) => 
   isLoading: false,
   errorMessage: undefined,
   hasNext: false,
+  idAfter: 0,
   nextCursor: null,
   totalElements: 0,
   filters: initialFilters,
@@ -55,11 +57,14 @@ export const useDepartmentListStore = create<DepartmentListState>((set, get) => 
     try {
       const page: CursorPageResponse<DepartmentDto> = await getDepartments({
         nameOrDescription: filters.nameOrDescription || undefined,
+        sortField: "establishedDate",
+        sortDirection: "desc",
       });
 
       set({
         items: page.content,
         hasNext: page.hasNext,
+        idAfter: page.nextIdAfter,
         nextCursor: page.nextCursor ?? null,
         isLoading: false,
         totalElements: page.totalElements,
@@ -75,7 +80,7 @@ export const useDepartmentListStore = create<DepartmentListState>((set, get) => 
     }
   },
   loadNextPage: async () => {
-    const { filters, hasNext, nextCursor, items } = get();
+    const { filters, hasNext, nextCursor, items, idAfter } = get();
 
     if (!hasNext || !nextCursor) return;
 
@@ -84,15 +89,20 @@ export const useDepartmentListStore = create<DepartmentListState>((set, get) => 
     try {
       const page: CursorPageResponse<DepartmentDto> = await getDepartments({
         nameOrDescription: filters.nameOrDescription || undefined,
+        sortField: "establishedDate",
+        sortDirection: "desc",
+        idAfter: idAfter,
         cursor: nextCursor,
       });
 
       set({
         items: [...items, ...page.content],
         hasNext: page.hasNext,
+        idAfter: page.nextIdAfter,
         nextCursor: page.nextCursor ?? null,
         isLoading: false,
       });
+      console.log(page.content);
     } catch (error) {
       const message = "부서 불러오기 중 오류";
       console.log(error);

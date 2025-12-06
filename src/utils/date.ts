@@ -30,3 +30,23 @@ export const formatDateRange = (
     end: formatDateValue(range.end),
   };
 };
+
+// YYYY-MM-DD -> 년 월 일로 문자열 변환
+export const formatDateAsKorean = (dateString?: string | null): string => {
+  if (!dateString) return "";
+
+  const pattern = /^\d{4}-\d{2}-\d{2}$/;
+  if (!pattern.test(dateString)) return dateString;
+
+  const [year, month, day] = dateString.split("-");
+
+  const yearNum = Number(year);
+  const monthNum = Number(month);
+  const dayNum = Number(day);
+
+  if (isNaN(yearNum) || isNaN(monthNum) || isNaN(dayNum)) {
+    return dateString;
+  }
+
+  return `${yearNum}년 ${monthNum}월 ${dayNum}일`;
+};

@@ -18,40 +18,35 @@ export type StatusKind = "employment" | "backup" | "history";
 export type StatusValue = EmploymentStateType | BackupStateType | HistoryType;
 
 const employmentConfig: Record<string, StatusConfig> = {
-  [EmploymentStateLabels[EmploymentState.ACTIVE]]: {
+  [EmploymentState.ACTIVE]: {
     label: EmploymentStateLabels[EmploymentState.ACTIVE],
     type: "pill-color",
     color: "purple",
   },
-  [EmploymentStateLabels[EmploymentState.ON_LEAVE]]: {
+  [EmploymentState.ON_LEAVE]: {
     label: EmploymentStateLabels[EmploymentState.ON_LEAVE],
     type: "pill-color",
     color: "orange",
   },
-  [EmploymentStateLabels[EmploymentState.RESIGNED]]: {
+  [EmploymentState.RESIGNED]: {
     label: EmploymentStateLabels[EmploymentState.RESIGNED],
-    type: "pill-color",
-    color: "gray",
-  },
-  [EmploymentStateLabels[EmploymentState.ALL]]: {
-    label: EmploymentStateLabels[EmploymentState.ALL],
     type: "pill-color",
     color: "gray",
   },
 };
 
 const backupConfig: Record<string, StatusConfig> = {
-  [BackupStateLabels[BackupState.COMPLETED]]: {
+  [BackupState.COMPLETED]: {
     label: BackupStateLabels[BackupState.COMPLETED],
     type: "color",
     color: "success",
   },
-  [BackupStateLabels[BackupState.IN_PROGRESS]]: {
+  [BackupState.IN_PROGRESS]: {
     label: BackupStateLabels[BackupState.IN_PROGRESS],
     type: "color",
     color: "blue",
   },
-  [BackupStateLabels[BackupState.FAILED]]: {
+  [BackupState.FAILED]: {
     label: BackupStateLabels[BackupState.FAILED],
     type: "color",
     color: "warning",
@@ -96,6 +91,8 @@ interface StatusBadgeProps {
 }
 
 export const StatusBadge = ({ kind, value, className }: StatusBadgeProps) => {
+  console.log("밸류유유유", value);
+
   let config: StatusConfig | undefined;
 
   if (kind === "employment") {

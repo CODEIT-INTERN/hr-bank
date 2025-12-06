@@ -8,7 +8,7 @@ import type { CursorPageResponse } from "@/model/pagination";
 import { createEmployee, getEmployees } from "@/api/employee/employeeApi";
 import { useEmployeeListStore } from "@/store/employeeStore";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
-import { Table } from "../common/table/table";
+import { Table } from "../common/table/Table";
 import { sortByDescriptor } from "@/utils/sort";
 
 export const TableTestPage = () => {

@@ -1,21 +1,7 @@
-import {
-  type ComponentType,
-  type HTMLAttributes,
-  type ReactNode,
-  type Ref,
-  createContext,
-  useContext,
-} from "react";
+import { type ComponentType, type HTMLAttributes, type ReactNode, type Ref, createContext, useContext } from "react";
 import { InfoCircle } from "@untitledui/icons";
-import type {
-  InputProps as AriaInputProps,
-  TextFieldProps as AriaTextFieldProps,
-} from "react-aria-components";
-import {
-  Group as AriaGroup,
-  Input as AriaInput,
-  TextField as AriaTextField,
-} from "react-aria-components";
+import type { InputProps as AriaInputProps, TextFieldProps as AriaTextFieldProps } from "react-aria-components";
+import { Group as AriaGroup, Input as AriaInput, TextField as AriaTextField } from "react-aria-components";
 import { HintText } from "@/components/common/input/HintText";
 import { Label } from "@/components/common/input/Label";
 import { cx, sortCx } from "@/utils/cx";
@@ -127,7 +113,7 @@ export const InputBase = ({
         ref={ref}
         placeholder={placeholder}
         className={cx(
-          "m-0 w-full bg-transparent text-md text-primary ring-0 outline-hidden placeholder:text-placeholder autofill:rounded-lg autofill:text-primary",
+          "m-0 w-full bg-transparent text-md text-primary ring-0 outline-hidden placeholder:text-placeholder placeholder:font-normal autofill:rounded-lg autofill:text-primary",
           isDisabled && "cursor-not-allowed text-disabled",
           sizes[inputSize].root,
           context?.inputClassName,
@@ -138,10 +124,7 @@ export const InputBase = ({
       {/* Invalid icon */}
       {isInvalid && (
         <InfoCircle
-          className={cx(
-            "pointer-events-none absolute size-4 text-fg-error-secondary",
-            sizes[inputSize].iconTrailing
-          )}
+          className={cx("pointer-events-none absolute size-4 text-fg-error-secondary", sizes[inputSize].iconTrailing)}
         />
       )}
 
@@ -180,10 +163,7 @@ interface BaseProps {
 interface TextFieldProps
   extends BaseProps,
     AriaTextFieldProps,
-    Pick<
-      InputBaseProps,
-      "size" | "wrapperClassName" | "inputClassName" | "iconClassName"
-    > {
+    Pick<InputBaseProps, "size" | "wrapperClassName" | "inputClassName" | "iconClassName"> {
   ref?: Ref<HTMLDivElement>;
 }
 
@@ -230,22 +210,10 @@ export const Input = ({
   ...props
 }: InputProps) => {
   return (
-    <TextField
-      aria-label={!label ? placeholder : undefined}
-      {...props}
-      className={className}
-    >
+    <TextField aria-label={!label ? placeholder : undefined} {...props} className={className}>
       {({ isRequired, isInvalid }) => (
         <>
-          {label && (
-            <Label
-              isRequired={
-                hideRequiredIndicator ? !hideRequiredIndicator : isRequired
-              }
-            >
-              {label}
-            </Label>
-          )}
+          {label && <Label isRequired={hideRequiredIndicator ? !hideRequiredIndicator : isRequired}>{label}</Label>}
 
           <InputBase
             {...{

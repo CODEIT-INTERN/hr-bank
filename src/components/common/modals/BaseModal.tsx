@@ -24,8 +24,24 @@ export function BaseModal({
   isDismissable = true,
   className,
 }: BaseModalProps) {
-  const computedAriaLabel =
-    ariaLabel ?? (typeof title === "string" ? title : undefined) ?? "Dialog";
+  const computedAriaLabel = ariaLabel ?? (typeof title === "string" ? title : undefined) ?? "Dialog";
+
+  // scrollbar-gutter로 생기는 흰색 배경 제거
+  React.useEffect(() => {
+    if (isOpen) {
+      // 현재 스크롤바 너비 계산
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+      // body에 overflow hidden과 padding 추가
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+
+      return () => {
+        document.body.style.overflow = "";
+        document.body.style.paddingRight = "";
+      };
+    }
+  }, [isOpen]);
 
   return (
     <ModalOverlay
@@ -52,10 +68,7 @@ export function BaseModal({
             {(title || isDismissable) && (
               <div className="flex items-center justify-between gap-4">
                 {title ? (
-                  <Heading
-                    slot="title"
-                    className="text-xl font-bold leading-7.5 text-secondary"
-                  >
+                  <Heading slot="title" className="text-xl font-bold leading-7.5 text-secondary">
                     {title}
                   </Heading>
                 ) : (

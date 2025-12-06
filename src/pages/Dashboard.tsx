@@ -10,8 +10,8 @@ export default function Dashboard() {
     <div>
       <h1>Dashboard page</h1>
       {/* <ApiTest /> */}
-      <TableTestPage />
-      {/* <TestPage /> */}
+      {/* <TableTestPage /> */}
+      <TestPage />
     </div>
   );
 }

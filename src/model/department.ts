@@ -13,7 +13,7 @@ export interface DepartmentListQuery {
   idAfter?: number;
   cursor?: string;
   size?: number;
-  sortField?: "name" | "departmentNumber" | "hireDate";
+  sortField?: "name" | "establishedDate";
   sortDirection?: "asc" | "desc";
 }
 

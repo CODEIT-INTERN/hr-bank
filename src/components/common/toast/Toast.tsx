@@ -15,7 +15,7 @@ export default function Toast({ type, message, onClose }: ToastProps) {
   return (
     <div
       className={cx(
-        "pointer-events-auto flex w-fit items-center gap-3 rounded-xl border px-3 py-3.5",
+        "pointer-events-auto flex w-fit min-w-80 items-center gap-3 rounded-xl border px-3 py-3.5",
         isSuccess
           ? "border-brand-200 bg-brand-primary text-brand-600 "
           : "border-red-100 bg-error-primary text-error-500"
@@ -27,7 +27,7 @@ export default function Toast({ type, message, onClose }: ToastProps) {
         {isSuccess ? <CheckCircle className="size-6 text" /> : <AlertCircle className="size-6 " />}
       </div>
 
-      <p className={cx("text-md", isSuccess ? "" : "")}>{message}</p>
+      <p className={cx("flex-1 text-md", isSuccess ? "" : "")}>{message}</p>
 
       <Button color="tertiary" className="inline-flex items-center justify-center size-6" onClick={onClose}>
         <X className="text-gray-400" />

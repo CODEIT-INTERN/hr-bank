@@ -9,6 +9,9 @@ interface EmployeeFilterState {
   departmentName: string;
   position: string;
   status?: EmployeeStatus;
+  employeeNumber?: string;
+  hireDateFrom?: string;
+  hireDateTo?: string;
   sortField: "name" | "employeeNumber" | "hireDate";
   sortDirection: "asc" | "desc";
   size: number;
@@ -20,7 +23,7 @@ interface EmployeeListState {
   errorMessage?: string;
   hasNext: boolean;
   nextCursor: string | null;
-
+  totalElements: number;
   filters: EmployeeFilterState;
 
   setFilters: (partial: Partial<EmployeeFilterState>) => void;
@@ -34,8 +37,8 @@ const initialFilters: EmployeeFilterState = {
   nameOrEmail: "",
   departmentName: "",
   position: "",
-  sortField: "name",
-  sortDirection: "asc",
+  sortField: "hireDate",
+  sortDirection: "desc",
   size: 10,
 };
 
@@ -46,6 +49,7 @@ export const useEmployeeListStore = create<EmployeeListState>((set, get) => ({
   hasNext: false,
   nextCursor: null,
   filters: initialFilters,
+  totalElements: 0,
 
   setFilters: (partial) =>
     set((state) => ({
@@ -69,6 +73,9 @@ export const useEmployeeListStore = create<EmployeeListState>((set, get) => ({
         departmentName: filters.departmentName || undefined,
         position: filters.position || undefined,
         status: filters.status,
+        employeeNumber: filters.employeeNumber,
+        hireDateFrom: filters.hireDateFrom,
+        hireDateTo: filters.hireDateTo,
         size: filters.size,
         sortField: filters.sortField,
         sortDirection: filters.sortDirection,
@@ -79,6 +86,7 @@ export const useEmployeeListStore = create<EmployeeListState>((set, get) => ({
         hasNext: page.hasNext,
         nextCursor: page.nextCursor ?? null,
         isLoading: false,
+        totalElements: page.totalElements ?? 0,
       });
     } catch (error) {
       const message = "직원 불러오기 중 오류";
@@ -105,6 +113,9 @@ export const useEmployeeListStore = create<EmployeeListState>((set, get) => ({
         departmentName: filters.departmentName || undefined,
         position: filters.position || undefined,
         status: filters.status,
+        employeeNumber: filters.employeeNumber,
+        hireDateFrom: filters.hireDateFrom,
+        hireDateTo: filters.hireDateTo,
         size: filters.size,
         sortField: filters.sortField,
         sortDirection: filters.sortDirection,
@@ -115,6 +126,7 @@ export const useEmployeeListStore = create<EmployeeListState>((set, get) => ({
         items: [...items, ...page.content],
         hasNext: page.hasNext,
         nextCursor: page.nextCursor ?? null,
+        totalElements: page.totalElements ?? 0,
         isLoading: false,
       });
     } catch (error) {

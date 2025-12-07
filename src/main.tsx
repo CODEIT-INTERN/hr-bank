@@ -9,6 +9,7 @@ import Employee from "@/pages/Employee.tsx";
 import Backup from "@/pages/Backup.tsx";
 import History from "@/pages/History";
 import Layout from "./components/layout/Layout";
+import { ToastContainer } from "./components/common/toast/ToastContainer";
 
 const router = createBrowserRouter([
   {
@@ -47,5 +48,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} />
+    <ToastContainer />
   </StrictMode>
 );

@@ -12,6 +12,7 @@ import { createDepartment, updateDepartment } from "@/api/department/departmentA
 import { useDepartmentListStore } from "@/store/departmentStore";
 import axios from "axios";
 import { HintText } from "../common/input/HintText";
+import { useToastStore } from "@/store/toastStore";
 
 interface DepartmentModalProps {
   isOpen: boolean;
@@ -55,6 +56,7 @@ export default function DepartmentModal({ isOpen, onOpenChange, department }: De
   const [errors, setErrors] = useState<FormErrors>({});
 
   const { loadFirstPage } = useDepartmentListStore();
+  const { successToast } = useToastStore();
 
   const handleChange = (field: keyof FormData, value: string | DateValue | null) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -110,6 +112,10 @@ export default function DepartmentModal({ isOpen, onOpenChange, department }: De
           description: formData.description,
           establishedDate: formattedDate,
         });
+
+        onOpenChange(false);
+
+        successToast("부서가 수정되었습니다");
       } else {
         // 부서 생성
         await createDepartment({
@@ -117,6 +123,18 @@ export default function DepartmentModal({ isOpen, onOpenChange, department }: De
           description: formData.description,
           establishedDate: formattedDate,
         });
+
+        // 폼 데이터 초기화
+        setFormData({
+          departmentName: "",
+          tempDate: null,
+          establishedDate: null,
+          description: "",
+        });
+
+        onOpenChange(false);
+
+        successToast("부서가 추가되었습니다");
       }
 
       // 생성/수정 성공 후 목록 첫 페이지 재조회
@@ -137,8 +155,6 @@ export default function DepartmentModal({ isOpen, onOpenChange, department }: De
       }
       console.log(error);
     }
-
-    onOpenChange(false);
   };
 
   const handleClose = () => {

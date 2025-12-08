@@ -1,4 +1,3 @@
-// src/api/department/departmentApi.ts
 import type {
   DepartmentCreateRequest,
   DepartmentDto,

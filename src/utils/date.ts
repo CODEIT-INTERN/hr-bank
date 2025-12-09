@@ -82,3 +82,28 @@ export const formatIsoToYmdHms = (isoString: string): string => {
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
+
+// react-aria-components DateValue -> isoZ
+export function formatDateValueToIsoZ(value: DateValue | Date | null | undefined): string | undefined {
+  if (!value) return undefined;
+
+  if (value instanceof Date) return value.toISOString();
+
+  const anyValue = value as unknown as { toDate?: (timeZone?: string) => Date };
+
+  if (typeof anyValue.toDate === "function") {
+    try {
+      return anyValue.toDate().toISOString();
+    } catch {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      return anyValue.toDate(tz).toISOString();
+    }
+  }
+
+  const v = value as unknown as { year: number; month: number; day: number };
+  if (typeof v.year === "number" && typeof v.month === "number" && typeof v.day === "number") {
+    return new Date(v.year, v.month - 1, v.day, 0, 0, 0, 0).toISOString();
+  }
+
+  return undefined;
+}

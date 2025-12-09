@@ -67,7 +67,7 @@ export default function Department() {
   };
 
   return (
-    <div className="w-full space-y-4 mt-7">
+    <div className="w-full space-y-4">
       {/* 필터 및 버튼 */}
       <DepartmentFilterSection onAdd={onAddClick} />
 

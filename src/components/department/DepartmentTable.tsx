@@ -28,7 +28,7 @@ export function DepartmentTable({ onEdit, onDelete }: DepartmentTableProps) {
     hasNext,
     isLoading,
     onLoadMore: loadNextPage,
-    rootMargin: "0px 0px 100px 0px",
+    rootMargin: "0px 0px 200px 0px",
   });
 
   // 아이템 정렬
@@ -37,7 +37,7 @@ export function DepartmentTable({ onEdit, onDelete }: DepartmentTableProps) {
   }, [items, sortDescriptor]);
 
   return (
-    <>
+    <div className="h-[692px] overflow-y-auto border border-border-secondary rounded-2xl">
       <Table aria-label="부서 목록" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
         <Table.Header>
           <Table.Head id="name" label="부서명" isRowHeader allowsSorting className="min-w-45" />
@@ -70,8 +70,7 @@ export function DepartmentTable({ onEdit, onDelete }: DepartmentTableProps) {
       <div className="flex items-center justify-center text-center text-sm text-gray-600">
         <div>{errorMessage && <span className="text-red-500">{errorMessage}</span>}</div>
         <div>{isLoading && <span>불러오는 중...</span>}</div>
-        <div className="flex justify-center">{!isLoading && !hasNext && <span>조회 끝</span>}</div>
       </div>
-    </>
+    </div>
   );
 }

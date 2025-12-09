@@ -34,7 +34,7 @@ export interface BackupDto {
  */
 export interface BackupListQuery {
   worker?: string;
-  status?: Exclude<BackupStatus, "SKIPPED">; // 요청 쿼리는 IN_PROGRESS, COMPLETED, FAILED
+  status?: BackupStatus; // 요청 쿼리는 IN_PROGRESS, COMPLETED, FAILED
   startedAtFrom?: string;
   startedAtTo?: string;
   idAfter?: number;
@@ -47,8 +47,8 @@ export interface BackupListQuery {
 /**
  * 최근 백업 조회 쿼리
  */
-export type LatestBackupStatus = "COMPLETED" | "FAILED" | "IN_PROGRESS";
+export type LatestBackupStatus = "COMPLETED" | "FAILED" | "IN_PROGRESS" | "SKIPPED";
 
 export interface LatestBackupQuery {
-  status?: Exclude<BackupStatus, "SKIPPED">;
+  status?: BackupStatus;
 }

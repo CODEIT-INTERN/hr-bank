@@ -9,7 +9,7 @@ import { Edit01, Trash01 } from "@untitledui/icons";
 import { StatusBadge } from "../common/badges/StatusBadge";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import { formatDateAsKorean } from "@/utils/date";
-import ConfirmModal from "../common/modals/ComfirmModal";
+import ConfirmModal from "../common/modals/ConfirmModal2";
 import { deleteEmployee } from "@/api/employee/employeeApi";
 import CreateUpdateEmployeeModal from "./CreateUpdateEmployeeModal";
 import { AvatarLabelGroup } from "../common/avatar/avatar-label-group";

@@ -39,7 +39,7 @@ export function createEmployee(
     formData.append("profile", profileFile);
   }
 
-  return apiClient.post<EmployeeDto>("/employees", formData);
+  return apiClient.multiPartPost<EmployeeDto>("/employees", formData);
 }
 
 /**
@@ -60,7 +60,7 @@ export function updateEmployee(
     formData.append("profile", profileFile);
   }
 
-  return apiClient.patch<EmployeeDto>(`/employees/${id}`, formData);
+  return apiClient.multiPartPatch<EmployeeDto>(`/employees/${id}`, formData);
 }
 
 /**

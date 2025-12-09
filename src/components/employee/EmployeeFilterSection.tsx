@@ -9,18 +9,15 @@ import { useEmployeeListStore } from "@/store/employeeStore";
 import type { EmployeeStatus } from "@/types/enums";
 import { formatDateRange } from "@/utils/date";
 import type { DateRange } from "react-aria-components";
+import CreateUpdateEmployeeModal from "./CreateUpdateEmployeeModal";
 
-interface EmployeeFilterSectionProps {
-  onClickCreateButton: () => void;
-}
-
-const EmployeeFilterSection = ({
-  onClickCreateButton,
-}: EmployeeFilterSectionProps) => {
-  const { setFilters, totalElements } = useEmployeeListStore();
+const EmployeeFilterSection = () => {
+  const { setFilters, filters, totalElements } = useEmployeeListStore();
   const [isFilterActive, setIsFilterActive] = useState(false);
   const [committedRange, setCommittedRange] = useState<DateRange | null>(null);
   const [tempRange, setTempRange] = useState<DateRange | null>(null);
+
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
 
   const handleToggleFilter = () => {
     setIsFilterActive((prev) => !prev);
@@ -43,6 +40,10 @@ const EmployeeFilterSection = ({
     setCommittedRange(null);
   };
 
+  const handleClickCreateButton = () => {
+    setIsCreateModalOpen(true);
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <span className="text-tertiary text-sm">총 {totalElements}명</span>
@@ -50,6 +51,7 @@ const EmployeeFilterSection = ({
         <div className="flex gap-3 items-center">
           <Input
             icon={SearchMd}
+            iconClassName="w-5 h-5 stroke-black"
             placeholder="이름 또는 이메일을 입력해주세요"
             className="w-80"
             onChange={(value) => {
@@ -58,22 +60,24 @@ const EmployeeFilterSection = ({
           />
           <DropdownButton
             label={EmploymentStateLabels}
+            value={filters.status}
             placeholder="상태"
             onChange={(value) => {
               setFilters({ status: value as EmployeeStatus });
             }}
+            className="min-w-[110px] h-10"
           />
           <Button
-            iconLeading={FilterLines}
+            iconLeading={<FilterLines className="stroke-black" size={20} />}
             color="secondary"
-            className="w-8 h-8"
+            className="w-8 h-8 data-icon-only:p-0"
             onClick={handleToggleFilter}
           />
         </div>
         {/* TODO: h-10이 적용 안됨 */}
         <Button
           iconLeading={<Plus data-icon color="white" />}
-          onClick={onClickCreateButton}
+          onClick={handleClickCreateButton}
         >
           직원 등록하기
         </Button>
@@ -89,7 +93,7 @@ const EmployeeFilterSection = ({
           />
           <Input
             placeholder="부서명을 입력해주세요"
-            className="w-80"
+            className="w-48"
             onChange={(value) => {
               // TODO:
               setFilters({ departmentName: value });
@@ -97,7 +101,7 @@ const EmployeeFilterSection = ({
           />
           <Input
             placeholder="직함을 입력해주세요"
-            className="w-80"
+            className="w-48"
             onChange={(value) => {
               // TODO:
               setFilters({ position: value });
@@ -111,6 +115,11 @@ const EmployeeFilterSection = ({
           />
         </div>
       )}
+      <CreateUpdateEmployeeModal
+        employee={null}
+        isOpen={isCreateModalOpen}
+        onOpenChange={setIsCreateModalOpen}
+      />
     </div>
   );
 };

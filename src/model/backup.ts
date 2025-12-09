@@ -6,6 +6,7 @@
  * - FAILED: 실패
  */
 export type BackupStatus = "IN_PROGRESS" | "COMPLETED" | "SKIPPED" | "FAILED";
+export type BackupStatusFilter = BackupStatus | "ALL";
 
 /**
  * 백업 정렬 필드

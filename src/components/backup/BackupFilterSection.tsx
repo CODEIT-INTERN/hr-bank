@@ -7,7 +7,7 @@ import { RefreshCw04, SearchMd } from "@untitledui/icons";
 import { formatDateValueToIsoZ, formatIsoToYmdHms } from "@/utils/date";
 import { DropdownButton } from "@/components/common/dropdown/DropdownButton";
 import { BackupStatusFilterLabels } from "@/constants/BackupStateLabels";
-import type { BackupStatus } from "@/model/backup";
+import type { BackupStatus, BackupStatusFilter } from "@/model/backup";
 import { type DateRange } from "react-aria-components";
 import { DateRangePicker } from "../common/date-picker/DateRangePicker";
 import { createBackup } from "@/api/backup/backupApi";
@@ -19,6 +19,7 @@ export function BackupFilterSection() {
   const { successToast, errorToast } = useToastStore();
 
   const [keyword, setKeyword] = useState(filters.worker ?? ""); // 검색
+  const [status, setStatus] = useState<BackupStatusFilter | undefined>(filters.status); // 검색
   const [tempDateRange, setTempDateRange] = useState<DateRange | null>(null); // 시작 날짜
 
   // 디바운스
@@ -29,11 +30,13 @@ export function BackupFilterSection() {
   };
 
   const handleStatusChange = (value: BackupStatus | "ALL") => {
+    setStatus(value);
+
     if (value === "ALL") {
       setFilters({ status: undefined });
-      return;
+    } else {
+      setFilters({ status: value });
     }
-    setFilters({ status: value as BackupStatus });
   };
 
   const handleDateChange = (value: DateRange | null) => {

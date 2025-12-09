@@ -14,10 +14,16 @@ interface BackupListState {
   latestBackup?: BackupDto | null;
   filters: BackupListQuery;
   setFilters: (partial: Partial<BackupListQuery>) => void;
+  resetFilters: () => void;
   loadFirstPage: () => Promise<void>;
   loadNextPage: () => Promise<void>;
   getLatestBackup: () => Promise<void>;
 }
+
+const initialFilters: BackupListQuery = {
+  sortField: "startedAt",
+  sortDirection: "DESC",
+};
 
 export const useBackupListStore = create<BackupListState>((set, get) => ({
   items: [],
@@ -40,6 +46,12 @@ export const useBackupListStore = create<BackupListState>((set, get) => ({
         ...filters,
       },
     }));
+  },
+
+  resetFilters: () => {
+    set({
+      filters: initialFilters,
+    });
   },
 
   loadFirstPage: async () => {

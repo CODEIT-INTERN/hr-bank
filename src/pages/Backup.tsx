@@ -5,13 +5,17 @@ import { BackupFilterSection } from "@/components/backup/BackupFilterSection";
 
 export default function Backup() {
   // 백업 쿼리 스토어
-  const { filters, loadFirstPage, getLatestBackup } = useBackupListStore();
+  const { filters, resetFilters, loadFirstPage, getLatestBackup } = useBackupListStore();
+
+  useEffect(() => {
+    resetFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // store 필터 + 재조회
   useEffect(() => {
     loadFirstPage();
     getLatestBackup();
-    console.log(filters);
   }, [getLatestBackup, loadFirstPage, filters]);
 
   return (

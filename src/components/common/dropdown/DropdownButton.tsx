@@ -1,42 +1,46 @@
 import { ChevronDown, Check } from "@untitledui/icons";
 import { Dropdown } from "./dropdown";
-import { useState } from "react";
 import { Button } from "../buttons/Button";
 
 interface DropdownButtonProps {
   placeholder?: string;
   label: Record<string, string>;
+  value?: string | null;
   onChange?: (value: string) => void;
+  className?: string;
 }
 
 export const DropdownButton = ({
   placeholder,
   label,
+  value,
   onChange,
+  className,
 }: DropdownButtonProps) => {
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
-
-  const selectedLabel = (selectedKey && label[selectedKey]) || placeholder;
+  const selectedLabel = (value && label[value]) || placeholder;
 
   return (
     <Dropdown>
-      <Button className="group" color="secondary" iconTrailing={ChevronDown}>
+      <Button
+        className={`group py-2 px-3 rounded-lg flex justify-between ${className}`}
+        color="secondary"
+        iconTrailing={<ChevronDown size={16} />}
+      >
         {selectedLabel}
       </Button>
       <Dropdown.Popover>
         <Dropdown.Menu>
           <Dropdown.Section>
-            {Object.entries(label).map(([key, value]) => (
+            {Object.entries(label).map(([key, itemLabel]) => (
               <Dropdown.Item
                 key={key}
                 id={key}
                 onClick={() => {
-                  setSelectedKey(key);
                   onChange?.(key);
                 }}
-                icon={selectedKey === key ? Check : undefined}
+                icon={value === key ? Check : undefined}
               >
-                {value}
+                {itemLabel}
               </Dropdown.Item>
             ))}
           </Dropdown.Section>

@@ -21,7 +21,7 @@ export function BackupTable() {
     hasNext,
     isLoading,
     onLoadMore: loadNextPage,
-    rootMargin: "0px 0px 100px 0px",
+    rootMargin: "0px 0px 200px 0px",
   });
 
   // 아이템 정렬
@@ -29,17 +29,15 @@ export function BackupTable() {
     return sortByDescriptor<BackupDto>(items, sortDescriptor);
   }, [items, sortDescriptor]);
 
-  console.log(sortedItems);
-
   return (
-    <>
+    <div className="h-[692px] overflow-y-auto border border-border-secondary rounded-2xl">
       <Table aria-label="백업 목록" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
         <Table.Header>
-          <Table.Head id="fileId" label="ID" isRowHeader allowsSorting className="min-w-25" />
-          <Table.Head id="worker" label="작업자" allowsSorting className="min-w-50 w-full" />
-          <Table.Head id="startedAt" label="시작시간" allowsSorting className="min-w-50" />
-          <Table.Head id="endedAt" label="종료시간" allowsSorting className="min-w-50" />
-          <Table.Head id="status" label="작업상태" className="min-w-50" />
+          <Table.Head id="fileId" label="ID" isRowHeader allowsSorting />
+          <Table.Head id="worker" label="작업자" allowsSorting />
+          <Table.Head id="startedAt" label="시작시간" allowsSorting />
+          <Table.Head id="endedAt" label="종료시간" allowsSorting />
+          <Table.Head id="status" label="작업상태" />
         </Table.Header>
 
         <Table.Body items={sortedItems}>
@@ -60,10 +58,9 @@ export function BackupTable() {
       <div ref={loadMoreRef} className="h-4" />
 
       <div className="flex items-center justify-center text-center text-sm text-gray-600">
-        <div>{errorMessage && <span className="text-red-500">{errorMessage}</span>}</div>
+        <div>{errorMessage && <span>{errorMessage}</span>}</div>
         <div>{isLoading && <span>불러오는 중...</span>}</div>
-        <div className="flex justify-center">{!hasNext && <span>조회 끝</span>}</div>
       </div>
-    </>
+    </div>
   );
 }

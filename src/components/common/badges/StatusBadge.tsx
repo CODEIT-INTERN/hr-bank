@@ -90,8 +90,6 @@ interface StatusBadgeProps {
 }
 
 export const StatusBadge = ({ kind, value, className }: StatusBadgeProps) => {
-  console.log("밸류유유유", value);
-
   let config: StatusConfig | undefined;
 
   if (kind === "employment") {

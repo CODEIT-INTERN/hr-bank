@@ -1,14 +1,14 @@
-export interface EmployeeHistory {
+export interface History {
   id: number;
-  type: string; // "UPDATED" | "CREATED" | "DELETED" 등
+  type: string; // "UPDATED" | "CREATED" | "DELETED"
   employeeNumber: string;
   memo: string;
   ipAddress: string;
   at: string;
 }
 
-export interface EmployeeHistoryListResponse {
-  content: EmployeeHistory[];
+export interface HistoryListResponse {
+  content: History[];
   nextCursor: string | null;
   nextIdAfter: number | null;
   size: number;
@@ -17,7 +17,7 @@ export interface EmployeeHistoryListResponse {
 }
 
 // 직원 정보 수정 이력 목록
-export const employeeHistoryListMock: EmployeeHistoryListResponse = {
+export const historyListMock: HistoryListResponse = {
   content: [
     {
       id: 1,

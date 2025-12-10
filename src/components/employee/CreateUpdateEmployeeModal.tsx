@@ -161,10 +161,14 @@ const CreateUpdateEmployeeModal = ({
     if (field === "departmentId" && typeof value === "string") {
       setFormData((prev) => ({ ...prev, departmentId: Number(value) }));
       setDropdownClassName("");
+    } else if (field === "hireDate") {
+      setFormData((prev) => ({ ...prev, hireDate: value as DateValue | null }));
     } else {
-      setFormData((prev) => ({ ...prev, [field]: value as any }));
+      setFormData((prev) => ({
+        ...prev,
+        [field]: value as string | null | undefined,
+      }));
     }
-
     setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
@@ -277,10 +281,6 @@ const CreateUpdateEmployeeModal = ({
     if (!formData.email.trim()) {
       newErrors.email = "이메일을 입력해주세요";
     }
-    // TODO: email 중복체킹 API 없음
-    //  if (!formData.email) {
-    //       newErrors.email = "이미 존재하는 이메일이예요";
-    //     }
 
     if (formData.departmentId < 1) {
       newErrors.departmentId = "부서를 선택해주세요";
@@ -288,18 +288,6 @@ const CreateUpdateEmployeeModal = ({
 
     if (!formData.position) {
       newErrors.position = "직함을 입력해주세요";
-      // const handleChange = (
-      //   field: keyof FormData,
-      //   value: string | DateValue | null
-      // ) => {
-      //   if (field === "departmentId" && typeof value === "string") {
-      //     setFormData((prev) => ({ ...prev, departmentId: Number(value) }));
-      //   } else {
-      //     setFormData((prev) => ({ ...prev, [field]: value as any }));
-      //   }
-
-      //   setErrors((prev) => ({ ...prev, [field]: undefined }));
-      // };
     }
 
     if (!formData.hireDate) {

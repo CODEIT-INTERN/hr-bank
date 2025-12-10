@@ -12,6 +12,7 @@ export type BaseModalProps = {
   footer?: React.ReactNode;
   isDismissable?: boolean;
   className?: string;
+  contentClassName?: string;
 };
 
 export function BaseModal({
@@ -23,14 +24,17 @@ export function BaseModal({
   footer,
   isDismissable = true,
   className,
+  contentClassName = "px-5 py-7",
 }: BaseModalProps) {
-  const computedAriaLabel = ariaLabel ?? (typeof title === "string" ? title : undefined) ?? "Dialog";
+  const computedAriaLabel =
+    ariaLabel ?? (typeof title === "string" ? title : undefined) ?? "Dialog";
 
   // scrollbar-gutter로 생기는 흰색 배경 제거
   React.useEffect(() => {
     if (isOpen) {
       // 현재 스크롤바 너비 계산
-      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      const scrollbarWidth =
+        window.innerWidth - document.documentElement.clientWidth;
 
       // body에 overflow hidden과 padding 추가
       document.body.style.overflow = "hidden";
@@ -64,11 +68,14 @@ export function BaseModal({
         )}
       >
         <Dialog aria-label={computedAriaLabel} className="outline-none">
-          <div className="px-5 py-7">
+          <div className={cx(contentClassName)}>
             {(title || isDismissable) && (
               <div className="flex items-center justify-between gap-4">
                 {title ? (
-                  <Heading slot="title" className="text-xl font-bold leading-7.5 text-secondary">
+                  <Heading
+                    slot="title"
+                    className="text-xl font-bold leading-7.5 text-secondary"
+                  >
                     {title}
                   </Heading>
                 ) : (

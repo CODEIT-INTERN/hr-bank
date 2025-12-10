@@ -15,6 +15,14 @@ const axiosInstance: AxiosInstance = axios.create({
   },
 });
 
+const axiosMultipartInstance: AxiosInstance = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": undefined,
+  },
+});
+
 /**
  * 공통 GET 메서드
  *
@@ -35,23 +43,53 @@ async function get<T>(url: string, params?: unknown): Promise<T> {
  * @param data - JSON 객체 또는 FormData
  * @param config - 추가 axios 설정 (headers 등)
  */
-async function post<T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
+async function post<T>(
+  url: string,
+  data?: unknown,
+  config?: AxiosRequestConfig
+): Promise<T> {
   const response = await axiosInstance.post<T>(url, data, config);
+  return response.data;
+}
+
+async function multiPartPost<T>(
+  url: string,
+  data?: unknown,
+  config?: AxiosRequestConfig
+): Promise<T> {
+  const response = await axiosMultipartInstance.post<T>(url, data, config);
   return response.data;
 }
 
 /**
  * 공통 PATCH 메서드
  */
-async function patch<T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
+async function patch<T>(
+  url: string,
+  data?: unknown,
+  config?: AxiosRequestConfig
+): Promise<T> {
   const response = await axiosInstance.patch<T>(url, data, config);
+  return response.data;
+}
+
+async function multiPartPatch<T>(
+  url: string,
+  data?: unknown,
+  config?: AxiosRequestConfig
+): Promise<T> {
+  const response = await axiosMultipartInstance.patch<T>(url, data, config);
   return response.data;
 }
 
 /**
  * 공통 PUT 메서드
  */
-async function put<T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
+async function put<T>(
+  url: string,
+  data?: unknown,
+  config?: AxiosRequestConfig
+): Promise<T> {
   const response = await axiosInstance.put<T>(url, data, config);
   return response.data;
 }
@@ -77,7 +115,9 @@ async function del<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
 const apiClient = {
   get,
   post,
+  multiPartPost,
   patch,
+  multiPartPatch,
   put,
   delete: del,
 };

@@ -11,6 +11,7 @@ export interface EmployeeDto {
   position: string;
   hireDate: string; // "YYYY-MM-DD"
   status: EmployeeStatus;
+  memo?: string;
   profileImageId: number | null;
 }
 
@@ -47,6 +48,6 @@ export interface EmployeeUpdateRequest {
   departmentId: number;
   position: string;
   hireDate: string;
-  status: EmployeeStatus;
+  status: string;
   memo?: string;
 }

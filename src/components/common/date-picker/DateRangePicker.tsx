@@ -65,7 +65,11 @@ export const DateRangePicker = ({
       onChange={setValue}
     >
       <AriaGroup slot="trigger">
-        <Button size="md" color="secondary" iconLeading={CalendarIcon}>
+        <Button
+          size="md"
+          color="secondary"
+          iconLeading={<CalendarIcon size={20} stroke="black" />}
+        >
           {!value ? (
             <span className="text-placeholder">{placeholder}</span>
           ) : (

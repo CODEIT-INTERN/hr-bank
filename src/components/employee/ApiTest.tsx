@@ -1,9 +1,10 @@
 import { createEmployee } from "@/api/employee/employeeApi";
 import type { EmployeeCreateRequest, EmployeeDto } from "@/model/employee";
 import { useEffect, useState } from "react";
-import { Button } from "../common/buttons/button";
+import { Button } from "../common/buttons/Button";
 import { useEmployeeListStore } from "@/store/employeeStore";
 
+// TODO: 배포 후 삭제
 export default function ApiTest() {
   const [employees, setEmployees] = useState<EmployeeDto[]>([]);
   const [form, setForm] = useState<EmployeeCreateRequest>({

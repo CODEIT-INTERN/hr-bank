@@ -15,12 +15,9 @@ interface DepartmentListState {
   idAfter: number;
   nextCursor: string | null;
   totalElements: number;
-
   filters: DepartmentFilterState;
-
   setFilters: (partial: Partial<DepartmentFilterState>) => void;
   resetFilters: () => void;
-
   loadFirstPage: () => Promise<void>;
   loadNextPage: () => Promise<void>;
 }
@@ -102,7 +99,6 @@ export const useDepartmentListStore = create<DepartmentListState>((set, get) => 
         nextCursor: page.nextCursor ?? null,
         isLoading: false,
       });
-      console.log(page.content);
     } catch (error) {
       const message = "부서 불러오기 중 오류";
       console.log(error);

@@ -9,10 +9,7 @@ import {
 import { EmploymentStateLabels } from "@/constants/EmploymentStateLabels";
 import { BackupStateLabels } from "@/constants/BackupStateLabels";
 import { HistoryTypeLabels } from "@/constants/HistoryTypeLabels";
-import type {
-  BadgeColors,
-  BadgeTypes,
-} from "@/components/common/badges/badge-types";
+import type { BadgeColors, BadgeTypes } from "@/components/common/badges/badge-types";
 
 export type StatusKind = "employment" | "backup" | "history";
 export type StatusValue = EmploymentStateType | BackupStateType | HistoryType;
@@ -51,12 +48,14 @@ const backupConfig: Record<string, StatusConfig> = {
     type: "color",
     color: "warning",
   },
+  [BackupState.SKIPPED]: {
+    label: BackupStateLabels[BackupState.SKIPPED],
+    type: "color",
+    color: "gray-blue",
+  },
 };
 
-const historyConfig: Record<
-  HistoryType,
-  { label: string; type: BadgeTypes; color: BadgeColors; withDot: boolean }
-> = {
+const historyConfig: Record<HistoryType, { label: string; type: BadgeTypes; color: BadgeColors; withDot: boolean }> = {
   [HistoryType.CREATED]: {
     label: HistoryTypeLabels[HistoryType.CREATED],
     type: "pill-color",

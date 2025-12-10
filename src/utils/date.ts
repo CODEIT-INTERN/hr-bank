@@ -1,8 +1,4 @@
-import {
-  CalendarDate,
-  getLocalTimeZone,
-  parseDate,
-} from "@internationalized/date";
+import { CalendarDate, getLocalTimeZone, parseDate } from "@internationalized/date";
 import type { DateValue } from "react-aria-components";
 
 // TODO: 백엔드 요청 데이터 형식이랑 같은 지 확인해봐야 함
@@ -35,9 +31,7 @@ export const formatDateRange = (
 };
 
 // string 날짜를 CalenderDate 객체로 변환
-export const parseDateValue = (
-  date: string | null | undefined
-): DateValue | null => {
+export const parseDateValue = (date: string | null | undefined): DateValue | null => {
   if (!date) return null;
   try {
     // "2025-04-12" 형식을 파싱
@@ -69,3 +63,47 @@ export const formatDateAsKorean = (dateString?: string | null): string => {
 
   return `${yearNum}년 ${monthNum}월 ${dayNum}일`;
 };
+
+// isoString -> YYYY-MM-DD HH:MM:SS
+export const formatIsoToYmdHms = (isoString: string): string => {
+  const date = new Date(isoString);
+  if (Number.isNaN(date.getTime)) {
+    return "";
+  }
+
+  const pad = (n: number) => n.toString().padStart(2, "0");
+
+  const year = date.getFullYear();
+  const month = pad(date.getMonth() + 1); // 0-based
+  const day = pad(date.getDate());
+  const hours = pad(date.getHours());
+  const minutes = pad(date.getMinutes());
+  const seconds = pad(date.getSeconds());
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
+// react-aria-components DateValue -> isoZ
+export function formatDateValueToIsoZ(value: DateValue | Date | null | undefined): string | undefined {
+  if (!value) return undefined;
+
+  if (value instanceof Date) return value.toISOString();
+
+  const anyValue = value as unknown as { toDate?: (timeZone?: string) => Date };
+
+  if (typeof anyValue.toDate === "function") {
+    try {
+      return anyValue.toDate().toISOString();
+    } catch {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      return anyValue.toDate(tz).toISOString();
+    }
+  }
+
+  const v = value as unknown as { year: number; month: number; day: number };
+  if (typeof v.year === "number" && typeof v.month === "number" && typeof v.day === "number") {
+    return new Date(v.year, v.month - 1, v.day, 0, 0, 0, 0).toISOString();
+  }
+
+  return undefined;
+}

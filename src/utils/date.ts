@@ -15,6 +15,13 @@ export const formatDateValue = (dateValue: DateValue | null) => {
   return `${year}-${month}-${day}`;
 };
 
+export const formatDateThisMonth = (date: Date) => {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = "01";
+  return `${yyyy}-${mm}-${dd}`;
+};
+
 // RangeDateValue → YYYY-MM-DD 문자열 변환
 export const formatDateRange = (
   range: {
@@ -107,3 +114,14 @@ export function formatDateValueToIsoZ(value: DateValue | Date | null | undefined
 
   return undefined;
 }
+
+// isoZ -> 시간 전
+export const hoursAgoFromNow = (isoString?: string, now: Date = new Date()): number | null => {
+  if (!isoString) return null;
+
+  const ts = Date.parse(isoString);
+  if (Number.isNaN(ts)) throw new Error(`Invalid date string: ${isoString}`);
+
+  const diffMs = now.getTime() - ts;
+  return Math.floor(diffMs / 3_600_000);
+};

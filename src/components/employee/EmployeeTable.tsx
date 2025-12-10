@@ -12,7 +12,7 @@ import { formatDateAsKorean } from "@/utils/date";
 import ConfirmModal from "../common/modals/ConfirmModal2";
 import { deleteEmployee } from "@/api/employee/employeeApi";
 import CreateUpdateEmployeeModal from "./CreateUpdateEmployeeModal";
-import { AvatarLabelGroup } from "../common/avatar/avatar-label-group";
+import { AvatarLabelGroup } from "../common/avatar/AvatarLabelGroup";
 
 const EmployeeTable = () => {
   const {

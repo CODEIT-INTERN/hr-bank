@@ -6,12 +6,13 @@ import { useBackupListStore } from "@/store/backupStore";
 import { formatIsoToYmdHms } from "@/utils/date";
 import { sortByDescriptor } from "@/utils/sort";
 import { StatusBadge } from "@/components/common/badges/StatusBadge";
-import { downloadFileById } from "@/api/files/fileApi";
+import { downloadFileById } from "@/api/file/fileApi";
 import { useToastStore } from "@/store/toastStore";
 import { Download01 } from "@untitledui/icons";
 import { Button } from "@/components/common/buttons/Button";
 import type { SortDescriptor } from "react-aria-components";
 import type { BackupDto } from "@/model/backup";
+import { downloadBlob } from "@/utils/download";
 
 export function BackupTable() {
   const { items, isLoading, errorMessage, hasNext, loadNextPage } = useBackupListStore();
@@ -38,7 +39,8 @@ export function BackupTable() {
   // 파일 다운로드
   const onDownload = async (fileId: number) => {
     try {
-      await downloadFileById(fileId); // ✅ 여기서 실제 다운로드 진행
+      const { blob, filename } = await downloadFileById(fileId);
+      downloadBlob(blob, filename);
     } catch (error) {
       console.error(error);
       errorToast("파일 다운로드 중 오류가 발생했습니다");

@@ -132,9 +132,6 @@ const CreateUpdateEmployeeModal = ({
     setProfilePreview(null);
   };
 
-  useEffect(() => {
-    console.log("formData", formData);
-  }, [formData]);
   const renderProfileContent = () => {
     if (profilePreview) {
       return (

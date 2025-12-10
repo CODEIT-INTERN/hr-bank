@@ -19,12 +19,12 @@ export default function Backup() {
   }, [getLatestBackup, loadFirstPage, filters]);
 
   return (
-    <div className="w-full space-y-4">
+    <>
       {/* 검색 및 백업하기 버튼 */}
       <BackupFilterSection />
 
       {/* 백업 목록 테이블 */}
       <BackupTable />
-    </div>
+    </>
   );
 }

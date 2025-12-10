@@ -67,7 +67,7 @@ export default function Department() {
   };
 
   return (
-    <div className="w-full space-y-4">
+    <>
       {/* 필터 및 버튼 */}
       <DepartmentFilterSection onAdd={onAddClick} />
 
@@ -89,6 +89,6 @@ export default function Department() {
         description={`${`${deleteTarget?.name}`} 부서를 삭제할까요? \n 삭제 후에는 되돌릴 수 없어요`}
         onConfirm={handleDelete}
       />
-    </div>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 import { cx } from "@/utils/cx";
-import { Avatar, type AvatarProps } from "./vatar";
+import { Avatar, type AvatarProps } from "./Avatar";
 
 const styles = {
   sm: { root: "gap-2", title: "text-sm font-semibold", subtitle: "text-xs" },

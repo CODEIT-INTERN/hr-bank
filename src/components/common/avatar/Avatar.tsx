@@ -1,7 +1,7 @@
 import { type FC, type ReactNode, useState } from "react";
 import { User01 } from "@untitledui/icons";
 import { cx } from "@/utils/cx";
-import { AvatarOnlineIndicator, VerifiedTick } from "./baseComponents/ndex";
+import { AvatarOnlineIndicator, VerifiedTick } from "./baseComponents/Index";
 
 type AvatarSize = "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 

@@ -35,6 +35,16 @@ export function BackupTable() {
     return sortByDescriptor<BackupDto>(items, sortDescriptor);
   }, [items, sortDescriptor]);
 
+  // 파일 다운로드
+  const onDownload = async (fileId: number) => {
+    try {
+      await downloadFileById(fileId); // ✅ 여기서 실제 다운로드 진행
+    } catch (error) {
+      console.error(error);
+      errorToast("파일 다운로드 중 오류가 발생했습니다");
+    }
+  };
+
   return (
     <div className="flex flex-col h-full min-h-0">
       {/* 테이블 영역 - 가로 스크롤 적용 */}

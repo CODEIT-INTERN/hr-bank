@@ -56,3 +56,30 @@ body {
     background-color: #f9f9f9;
   }
 } */
+
+/* 공통 커스텀 스크롤바 */
+.scrollbar-thin {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgb(217, 217, 217) transparent;
+}
+
+/* Chrome, Edge, Safari */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent; /* 배경 투명 */
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgb(217, 217, 217); /* thumb 색 */
+  border-radius: 9999px;
+  border: 2px solid transparent; /* 살짝 얇게 보이게 */
+}
+
+/* 위/아래 화살표 버튼 제거 */
+.scrollbar-thin::-webkit-scrollbar-button {
+  display: none;
+}

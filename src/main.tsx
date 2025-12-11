@@ -2,14 +2,18 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "pretendard/dist/web/static/pretendard.css";
 import "@/styles/index.css";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+import Backup from "@/pages/Backup.tsx";
 import Dashboard from "@/pages/Dashboard.tsx";
 import Department from "@/pages/Department.tsx";
 import Employee from "@/pages/Employee.tsx";
-import Backup from "@/pages/Backup.tsx";
 import History from "@/pages/History";
-import Layout from "./components/layout/Layout";
 import { ToastContainer } from "./components/common/toast/ToastContainer";
+import Layout from "./components/layout/Layout";
 
 const router = createBrowserRouter([
   {
@@ -49,5 +53,5 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} />
     <ToastContainer />
-  </StrictMode>
+  </StrictMode>,
 );

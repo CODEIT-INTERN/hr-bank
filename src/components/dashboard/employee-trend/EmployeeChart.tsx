@@ -17,8 +17,7 @@ import { useEmployeeTrendStore } from "@/store/employeeTrendStore";
 import { formatTooltipLabel, formatXAxisTick } from "@/utils/chart";
 
 export function EmployeeChart() {
-  const { items, filters, setFilters, getTrend, isLoading } =
-    useEmployeeTrendStore();
+  const { items, filters, setFilters, getTrend } = useEmployeeTrendStore();
 
   useEffect(() => {
     getTrend();

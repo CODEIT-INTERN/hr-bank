@@ -64,14 +64,13 @@ export const formatTooltipLabel = (
 
   switch (unit) {
     case "day":
-      // 예: 2024. 12. 03
+      // 예: 12월 9일
       return d.toLocaleDateString("ko-KR", {
         month: "long",
         day: "numeric",
       });
 
     case "week":
-      // 예: 2024년 48주 (간단하게 주 시작일로 표시)
       return d.toLocaleDateString("ko-KR", {
         month: "long",
         day: "numeric",

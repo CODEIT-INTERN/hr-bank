@@ -1,3 +1,4 @@
+import { EmployeeDistributionCard } from "@/components/dashboard/distribution/DistributionCard";
 import { EmployeeChart } from "@/components/dashboard/employee-trend/EmployeeChart";
 import StatSection from "@/components/dashboard/stat/StatSection";
 
@@ -7,9 +8,15 @@ export default function Dashboard() {
       {/* 대시보드 지표 */}
       <StatSection />
 
-      <div className="rounded-xl bg-white p-5 shadow-xs">
+      <div className="space-y-3 rounded-xl bg-white p-5 shadow-xs">
         {/* 직원수 변동 추이 차트 */}
         <EmployeeChart />
+        <div className="grid grid-cols-2 gap-3 max-xl:grid-cols-1">
+          {/* 부서별 직원 분포 */}
+          <EmployeeDistributionCard type="department" />
+          {/* 직함별 직원 분포 */}
+          <EmployeeDistributionCard type="position" />
+        </div>
       </div>
     </>
   );

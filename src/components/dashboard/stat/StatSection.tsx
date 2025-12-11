@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
 
 import { StatCard } from "@/components/dashboard/stat/StatCard";
-import { useEmployeeCountStore } from "@/store/employeeCountStore";
-import { ClockFastForward, Database01, FaceSmile, Users01 } from "@untitledui/icons";
 import { useBackupListStore } from "@/store/backupStore";
+import { useEmployeeCountStore } from "@/store/employeeCountStore";
 import { hoursAgoFromNow } from "@/utils/date";
+import {
+  ClockFastForward,
+  Database01,
+  FaceSmile,
+  Users01,
+} from "@untitledui/icons";
 
 export default function StatSection() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const { count, monthCount, getCount, getThisMonthCount } = useEmployeeCountStore();
+  const { count, monthCount, getCount, getThisMonthCount } =
+    useEmployeeCountStore();
   const { latestBackup, getLatestBackup } = useBackupListStore();
 
   useEffect(() => {
@@ -26,8 +32,13 @@ export default function StatSection() {
   }, [getCount, getThisMonthCount, getLatestBackup]);
 
   return (
-    <section className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
-      <StatCard icon={Users01} label="총 직원 수" value={`${count?.toLocaleString()}명`} isLoading={isLoading} />
+    <section className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-3">
+      <StatCard
+        icon={Users01}
+        label="총 직원 수"
+        value={`${count?.toLocaleString()}명`}
+        isLoading={isLoading}
+      />
       {/* TODO: 최근 변경 연동 */}
       <StatCard
         icon={ClockFastForward}

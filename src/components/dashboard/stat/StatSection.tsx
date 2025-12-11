@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { StatCard } from "@/components/dashboard/StatCard";
+import { StatCard } from "@/components/dashboard/stat/StatCard";
 import { useEmployeeCountStore } from "@/store/employeeCountStore";
 import { ClockFastForward, Database01, FaceSmile, Users01 } from "@untitledui/icons";
 import { useBackupListStore } from "@/store/backupStore";
@@ -28,6 +28,7 @@ export default function StatSection() {
   return (
     <section className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
       <StatCard icon={Users01} label="총 직원 수" value={`${count?.toLocaleString()}명`} isLoading={isLoading} />
+      {/* TODO: 최근 변경 연동 */}
       <StatCard
         icon={ClockFastForward}
         label="최근 변경 건수"

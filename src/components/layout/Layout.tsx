@@ -1,6 +1,6 @@
+import { Outlet, useLocation } from "react-router-dom";
 import Navigation from "@/components/layout/Navigation";
 import { cx } from "@/utils/cx";
-import { Outlet, useLocation } from "react-router-dom";
 import Header from "../common/Header";
 
 export default function Layout() {

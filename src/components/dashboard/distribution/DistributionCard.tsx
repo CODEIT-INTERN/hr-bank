@@ -31,7 +31,7 @@ export function EmployeeDistributionCard({
 
   // 마운트 시 한 번만 조회
   useEffect(() => {
-    void getDistributions();
+    getDistributions();
   }, [getDistributions]);
 
   // 타입에 따라 사용할 원본 데이터 선택

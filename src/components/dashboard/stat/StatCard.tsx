@@ -3,17 +3,24 @@ import type { FC } from "react";
 interface StatCardProps {
   icon: FC<{ className?: string }>;
   label: string;
-  value: string;
-  isLoading: boolean;
+  value: number | null;
+  unit: string;
 }
 
-export function StatCard({ icon: Icon, label, value, isLoading = true }: StatCardProps) {
+export function StatCard({ icon: Icon, label, value, unit }: StatCardProps) {
+  const display = !value ? "-" : value.toLocaleString();
+
   return (
-    <div className="flex gap-4 bg-white border border-secondary shadow-xs rounded-xl p-5 min-w-0">
-      <Icon className="shrink-0 size-10 rounded-md border border-secondary p-2.5 shadow-xs" />
+    <div className="border-secondary flex min-w-0 gap-4 rounded-xl border bg-white p-5 shadow-xs">
+      <Icon className="border-secondary size-10 shrink-0 rounded-md border p-2.5 shadow-xs" />
       <div className="min-w-0 flex-1">
-        <div className="font-medium leading-6 text-md text-tertiary">{label}</div>
-        <p className="font-semibold text-gray-900 text-display-sm truncate">{isLoading ? "-" : value}</p>
+        <div className="text-md text-tertiary leading-6 font-medium">
+          {label}
+        </div>
+        <p className="text-display-sm truncate font-semibold text-gray-900">
+          {display}
+          {display !== "-" ? unit : null}
+        </p>
       </div>
     </div>
   );

@@ -1,5 +1,9 @@
-import { CalendarDate, getLocalTimeZone, parseDate } from "@internationalized/date";
 import type { DateValue } from "react-aria-components";
+import {
+  CalendarDate,
+  getLocalTimeZone,
+  parseDate,
+} from "@internationalized/date";
 
 // TODO: 백엔드 요청 데이터 형식이랑 같은 지 확인해봐야 함
 // DateValue → YYYY-MM-DD 문자열 변환
@@ -27,7 +31,7 @@ export const formatDateRange = (
   range: {
     start: DateValue;
     end: DateValue;
-  } | null
+  } | null,
 ) => {
   if (!range) return { start: "", end: "" };
 
@@ -38,7 +42,9 @@ export const formatDateRange = (
 };
 
 // string 날짜를 CalenderDate 객체로 변환
-export const parseDateValue = (date: string | null | undefined): DateValue | null => {
+export const parseDateValue = (
+  date: string | null | undefined,
+): DateValue | null => {
   if (!date) return null;
   try {
     // "2025-04-12" 형식을 파싱
@@ -91,7 +97,9 @@ export const formatIsoToYmdHms = (isoString: string): string => {
 };
 
 // react-aria-components DateValue -> isoZ
-export function formatDateValueToIsoZ(value: DateValue | Date | null | undefined): string | undefined {
+export function formatDateValueToIsoZ(
+  value: DateValue | Date | null | undefined,
+): string | undefined {
   if (!value) return undefined;
 
   if (value instanceof Date) return value.toISOString();
@@ -108,7 +116,11 @@ export function formatDateValueToIsoZ(value: DateValue | Date | null | undefined
   }
 
   const v = value as unknown as { year: number; month: number; day: number };
-  if (typeof v.year === "number" && typeof v.month === "number" && typeof v.day === "number") {
+  if (
+    typeof v.year === "number" &&
+    typeof v.month === "number" &&
+    typeof v.day === "number"
+  ) {
     return new Date(v.year, v.month - 1, v.day, 0, 0, 0, 0).toISOString();
   }
 
@@ -116,11 +128,14 @@ export function formatDateValueToIsoZ(value: DateValue | Date | null | undefined
 }
 
 // isoZ -> 시간 전
-export const hoursAgoFromNow = (isoString?: string, now: Date = new Date()): number | null => {
+export const hoursAgoFromNow = (
+  isoString?: string,
+  now: Date = new Date(),
+): number | null => {
   if (!isoString) return null;
 
   const ts = Date.parse(isoString);
-  if (Number.isNaN(ts)) throw new Error(`Invalid date string: ${isoString}`);
+  if (Number.isNaN(ts)) return null;
 
   const diffMs = now.getTime() - ts;
   return Math.floor(diffMs / 3_600_000);

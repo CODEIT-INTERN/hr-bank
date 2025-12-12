@@ -49,7 +49,7 @@ export default function Department() {
     try {
       await deleteDepartment(deleteTarget?.id);
       loadFirstPage();
-      setDeleteTarget(null);
+
       successToast("부서가 삭제되었습니다");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -63,6 +63,9 @@ export default function Department() {
         }
       }
       console.log(error);
+    } finally {
+      setDeleteTarget(null);
+      setIsConfirmOpen(false);
     }
   };
 
@@ -83,12 +86,12 @@ export default function Department() {
       />
 
       {/* Confirm Modal */}
-      <ConfirmModal
-        isOpen={isConfirmOpen}
-        onOpenChange={setIsConfirmOpen}
-        description={`${`${deleteTarget?.name}`} 부서를 삭제할까요? \n 삭제 후에는 되돌릴 수 없어요`}
-        onConfirm={handleDelete}
-      />
+      <ConfirmModal isOpen={isConfirmOpen} onClose={() => setIsConfirmOpen(false)} onConfirm={handleDelete}>
+        <p>
+          '{`${deleteTarget?.name}`}' 부서를 삭제할까요? <br />
+          삭제 후에는 되돌릴 수 없어요
+        </p>
+      </ConfirmModal>
     </>
   );
 }

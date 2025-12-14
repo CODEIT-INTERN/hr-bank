@@ -163,35 +163,35 @@ const EmployeeTable = () => {
             }}
           </Table.Body>
         </Table>
-        <div ref={loadMoreRef} />
-        {/* 수정 모달 */}
-        <CreateUpdateEmployeeModal
-          employee={updatingEmployee}
-          isOpen={isUpdateModalOpen}
-          onOpenChange={setUpdateModalOpen}
-        />
-        {/* 삭제 모달 */}
-        <ConfirmModal
-          isOpen={isDeleteModalOpen}
-          onClose={() => setDeleteModalOpen(false)}
-          onConfirm={handleDelete}
-        >
-          <p>
-            ‘{targetEmployeeName}’ 직원을 삭제할까요?
-            <br />
-            삭제 후에는 되돌릴 수 없어요
-          </p>
-        </ConfirmModal>
-        {!isLoading && sortedItems.length === 0 && (
-          <div className="flex justify-center items-center h-48 text-gray-500">
-            현재 표시할 직원이 없습니다
-          </div>
-        )}
-        <div className="flex items-center justify-center text-xs text-gray-500">
-          {/* TODO: 에러처리, 로딩상태 */}
-          {/* <div>{errorMessage && <span className="text-red-500">{errorMessage}</span>}</div> */}
-          {/* {isLoading && <span>불러오는 중...</span>} */}
+        <div ref={loadMoreRef} className="h-4" />
+      </div>
+      {/* 수정 모달 */}
+      <CreateUpdateEmployeeModal
+        employee={updatingEmployee}
+        isOpen={isUpdateModalOpen}
+        onOpenChange={setUpdateModalOpen}
+      />
+      {/* 삭제 모달 */}
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={handleDelete}
+      >
+        <p>
+          ‘{targetEmployeeName}’ 직원을 삭제할까요?
+          <br />
+          삭제 후에는 되돌릴 수 없어요
+        </p>
+      </ConfirmModal>
+      {!isLoading && sortedItems.length === 0 && (
+        <div className="flex justify-center items-center h-48 text-gray-500">
+          현재 표시할 직원이 없습니다
         </div>
+      )}
+      <div className="flex items-center justify-center text-xs text-gray-500">
+        {/* TODO: 에러처리, 로딩상태 */}
+        {/* <div>{errorMessage && <span className="text-red-500">{errorMessage}</span>}</div> */}
+        {/* {isLoading && <span>불러오는 중...</span>} */}
       </div>
     </div>
   );

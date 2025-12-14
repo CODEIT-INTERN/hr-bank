@@ -20,6 +20,7 @@ interface HistoryListState {
   items: HistoryDto[];
   isLoading: boolean;
   errorMessage?: string;
+  idAfter: number;
   hasNext: boolean;
   nextCursor: string | null;
   totalElements: number;
@@ -42,7 +43,7 @@ const initialFilters: HistoryFilterState = {
   atFrom: "",
   atTo: "",
   sortField: "at",
-  sortDirection: "asc",
+  sortDirection: "desc",
   size: 20,
 };
 
@@ -51,6 +52,7 @@ export const useHistoryListStore = create<HistoryListState>((set, get) => ({
   isLoading: false,
   errorMessage: undefined,
   hasNext: false,
+  idAfter: 0,
   nextCursor: null,
   filters: initialFilters,
   totalElements: 0,
@@ -108,7 +110,7 @@ export const useHistoryListStore = create<HistoryListState>((set, get) => ({
 
   // 다음 페이지 로딩 (현재 커서 정보 사용)
   loadNextPage: async () => {
-    const { filters, hasNext, nextCursor, items } = get();
+    const { filters, idAfter, hasNext, nextCursor, items } = get();
 
     if (!hasNext || !nextCursor) return; // 다음 페이지가 없거나 커서가 없으면 종료
 
@@ -119,6 +121,7 @@ export const useHistoryListStore = create<HistoryListState>((set, get) => ({
         ...filters,
         // 다음 페이지 로딩 시 현재 커서 값을 쿼리에 추가
         cursor: nextCursor,
+        idAfter: idAfter,
         // idAfter: get().nextIdAfter ?? undefined, // nextIdAfter 사용 시
       };
 
@@ -129,7 +132,7 @@ export const useHistoryListStore = create<HistoryListState>((set, get) => ({
         hasNext: page.hasNext,
         nextCursor: page.nextCursor ?? null,
         totalElements: page.totalElements ?? 0,
-        // nextIdAfter: page.nextIdAfter ?? null,
+        idAfter: page.nextIdAfter,
         isLoading: false,
       });
     } catch (error) {

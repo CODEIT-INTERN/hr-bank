@@ -15,8 +15,9 @@ import { createEmployee, updateEmployee } from "@/api/employee/employeeApi";
 import { useEmployeeListStore } from "@/store/employeeStore";
 import { DropdownButton } from "../common/dropdown/DropdownButton";
 import AddProfileImage from "../common/images/AddProfileImage";
-import Employee from "@/pages/Employee";
 import EmployeeProfile from "./EmployeeProfile";
+import { EmploymentEnableStateLabels } from "@/constants/EmploymentStateLabels";
+import { useToastStore } from "@/store/toastStore";
 
 interface CreateEmployeeModalProps {
   isOpen: boolean;
@@ -85,6 +86,7 @@ const CreateUpdateEmployeeModal = ({
     loadNextPage,
   } = useDepartmentListStore();
   const { loadFirstPage } = useEmployeeListStore();
+  const { successToast } = useToastStore();
 
   const [formData, setFormData] = useState<FormData>(() =>
     getInitialFormData(employee)
@@ -126,7 +128,9 @@ const CreateUpdateEmployeeModal = ({
   useEffect(() => {
     setFormData(getInitialFormData(employee));
   }, [employee]);
+
   const resetFormdata = () => {
+    setErrors({});
     setFormData(getInitialFormData(employee));
     setDropdownClassName(placeholderStyle);
     setProfilePreview(null);
@@ -250,6 +254,9 @@ const CreateUpdateEmployeeModal = ({
       await loadFirstPage();
       resetFormdata();
       onOpenChange(false);
+      if (!employee) {
+        successToast("직원이 추가되었습니다.");
+      }
     } catch (error) {
       // 400 에러 → 중복 이메일 처리
       if (axios.isAxiosError(error)) {
@@ -356,7 +363,7 @@ const CreateUpdateEmployeeModal = ({
                 hint={errors.email}
               />
               <div className="flex justify-between gap-4">
-                <div className="flex flex-col gap-1.5 flex-[1]">
+                <div className="flex flex-col gap-1.5 min-w-36">
                   <Label>부서</Label>
                   {/* TODO: placeholder값 지정 */}
                   <DropdownButton
@@ -369,16 +376,17 @@ const CreateUpdateEmployeeModal = ({
                     className={employee ? "" : dropdownClassName}
                   />
                 </div>
-                <Input
-                  label="직함"
-                  placeholder="직함을 입력해주세요"
-                  value={formData.position}
-                  onChange={(value) => handleChange("position", value)}
-                  isRequired
-                  isInvalid={!!errors.position}
-                  hint={errors.position}
-                  className="flex-[1.5]"
-                />
+                <div className="w-full">
+                  <Input
+                    label="직함"
+                    placeholder="직함을 입력해주세요"
+                    value={formData.position}
+                    onChange={(value) => handleChange("position", value)}
+                    isRequired
+                    isInvalid={!!errors.position}
+                    hint={errors.position}
+                  />
+                </div>
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label id="hire-date-label">입사일</Label>
@@ -400,6 +408,20 @@ const CreateUpdateEmployeeModal = ({
                   </HintText>
                 )}
               </div>
+              {employee && (
+                <div className="flex flex-col gap-1.5 w-36">
+                  <Label>상태</Label>
+                  <DropdownButton
+                    placeholder={String(formData.status)}
+                    label={EmploymentEnableStateLabels}
+                    value={String(formData.status)}
+                    onChange={(value) => {
+                      handleChange("status", value);
+                    }}
+                    className={dropdownClassName}
+                  />
+                </div>
+              )}
             </div>
           </div>
           <TextArea

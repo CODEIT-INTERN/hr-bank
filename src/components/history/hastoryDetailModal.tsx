@@ -1,10 +1,6 @@
-import React from "react";
 import { BaseModal } from "../common/modals/BaseModal";
-import type { HistoryDto, HistoryListQuery } from "@/model/history";
 import { AvatarLabelGroup } from "../common/avatar/AvatarLabelGroup";
 import { StatusBadge } from "../common/badges/StatusBadge";
-import { HeaderContext } from "react-aria-components";
-import { formatDateAsKorean } from "@/utils/date";
 import type { HistoryDetailDto } from "@/api/history/historyApi";
 
 interface HIstoryDetailModalProps {

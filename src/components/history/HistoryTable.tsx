@@ -9,11 +9,11 @@ import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import { formatIsoToYmdHms } from "@/utils/date";
 import type { HistoryDto } from "@/model/history";
 import { useHistoryListStore } from "@/store/historyStore";
-import HIstoryDetailModal from "./HIstoryDetailModal";
 import {
   getChangeLogDetails,
   type HistoryDetailDto,
 } from "@/api/history/historyApi";
+import HistoryDetailModal from "./HIstoryDetailModal";
 
 const HistoryTable = () => {
   const {
@@ -28,7 +28,9 @@ const HistoryTable = () => {
     loadNextPage,
   } = useHistoryListStore();
   const [selectedHistory, setSelectedHistory] =
-    useState<HistoryDetailDto | null>(null);
+    useState<Array<HistoryDetailDto> | null>(null);
+  const [selectedHistoryList, setSelectedHistoryList] =
+    useState<HistoryDto | null>(null);
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "at",
@@ -50,11 +52,12 @@ const HistoryTable = () => {
     rootMargin: "0px 0px 200px 0px",
   });
 
-  const handleOpenDetailModal = async (historyId: number) => {
+  const handleOpenDetailModal = async (history: HistoryDto) => {
     try {
-      const detailData = await getChangeLogDetails({ id: historyId });
+      const detailData = await getChangeLogDetails({ id: history.id });
 
       setSelectedHistory(detailData);
+      setSelectedHistoryList(history);
       setDetailModalOpen(true);
     } catch (error) {
       console.error("상세 이력을 불러오는 데 실패했습니다", error);
@@ -72,58 +75,62 @@ const HistoryTable = () => {
           onSortChange={setSortDescriptor}
         >
           <Table.Header>
-            <Table.Head id="type" label="유형" className="w-32" isRowHeader />
-            <Table.Head id="name" label="이름" className="w-24" />
-            <Table.Head id="employeeNumber" label="사원번호" className="w-64" />
-            {/* <Table.Head id="employeeNumber" label="사원번호" /> */}
-            <Table.Head id="memo" label="변경상세내용" />
+            <Table.Head id="type" label="유형" className="w-1/12" isRowHeader />
+            <Table.Head
+              id="employeeNumber"
+              label="사원번호"
+              className="w-3/12"
+            />
+            <Table.Head id="memo" label="변경상세내용" className="w-3/12" />
             <Table.Head
               id="ipAddress"
               label="IP주소"
-              className="w-48"
+              className="w-2/12"
               allowsSorting
             />
-            <Table.Head id="at" label="수정일" className="w-56" allowsSorting />
-            <Table.Head id="actions" className="w-20" />
+            <Table.Head
+              id="at"
+              label="수정일"
+              className="w-2/12"
+              allowsSorting
+            />
+            <Table.Head id="actions" className="w-1/12" />
           </Table.Header>
           <Table.Body items={sortedItems}>
             {(item: HistoryDto) => {
               return (
                 <Table.Row id={item.id} key={item.id}>
                   {/* 유형 */}
-                  <Table.Cell>
+                  <Table.Cell className="w-1/12">
                     <StatusBadge kind="history" value={item.type} />
                   </Table.Cell>
 
-                  {/* 이름 */}
-                  <Table.Cell className="whitespace-nowrap">이름</Table.Cell>
-
                   {/* 사원번호 */}
-                  <Table.Cell className="whitespace-nowrap">
+                  <Table.Cell className="whitespace-nowrap w-3/12">
                     {item.employeeNumber}
                   </Table.Cell>
 
                   {/* 변경상세내용 */}
-                  <Table.Cell className="whitespace-nowrap w-full">
+                  <Table.Cell className="whitespace-nowrap w-3/12">
                     {item.memo}
                   </Table.Cell>
 
                   {/* IP주소 */}
-                  <Table.Cell className="whitespace-nowrap">
+                  <Table.Cell className="whitespace-nowrap w-2/12">
                     {item.ipAddress}
                   </Table.Cell>
 
                   {/* 수정일 */}
-                  <Table.Cell className="whitespace-nowrap">
+                  <Table.Cell className="whitespace-nowrap w-2/12">
                     {formatIsoToYmdHms(item.at)}
                   </Table.Cell>
 
                   {/* 액션 버튼 */}
-                  <Table.Cell className="px-4 flex justify-center">
+                  <Table.Cell className="px-4 flex justify-center w-1/12">
                     <Button
                       color="tertiary"
                       iconLeading={SearchMd}
-                      onClick={() => handleOpenDetailModal(item.id)}
+                      onClick={() => handleOpenDetailModal(item)}
                     />
                   </Table.Cell>
                 </Table.Row>
@@ -131,22 +138,23 @@ const HistoryTable = () => {
             }}
           </Table.Body>
         </Table>
-        <div ref={loadMoreRef} />
-        <HIstoryDetailModal
-          history={selectedHistory}
-          isOpen={isDetailModalOpen}
-          onOpenChange={setDetailModalOpen}
-        />
-        {!isLoading && sortedItems.length === 0 && (
-          <div className="flex justify-center items-center h-48 text-gray-500">
-            현재 표시할 이력이 없습니다
-          </div>
-        )}
-        <div className="flex items-center justify-center text-xs text-gray-500">
-          {/* TODO: 데이터 없을 때, 에러처리, 로딩상태 */}
-          {/* <div>{errorMessage && <span className="text-red-500">{errorMessage}</span>}</div> */}
-          {/* {isLoading && <span>불러오는 중...</span>} */}
+        <div ref={loadMoreRef} className="h-4" />
+      </div>
+      <HistoryDetailModal
+        history={selectedHistory}
+        historyList={selectedHistoryList}
+        isOpen={isDetailModalOpen}
+        onOpenChange={setDetailModalOpen}
+      />
+      {!isLoading && sortedItems.length === 0 && (
+        <div className="flex justify-center items-center h-48 text-gray-500">
+          현재 표시할 이력이 없습니다
         </div>
+      )}
+      <div className="flex items-center justify-center text-xs text-gray-500">
+        {/* TODO: 데이터 없을 때, 에러처리, 로딩상태 */}
+        {/* <div>{errorMessage && <span className="text-red-500">{errorMessage}</span>}</div> */}
+        {/* {isLoading && <span>불러오는 중...</span>} */}
       </div>
     </div>
   );

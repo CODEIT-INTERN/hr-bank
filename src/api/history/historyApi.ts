@@ -8,11 +8,9 @@ import type { CursorPageResponse } from "@/model/pagination";
 import apiClient from "../client";
 
 export interface HistoryDetailDto extends HistoryDto {
-  diffs: {
-    fieldName: string;
-    oldValue: unknown;
-    newValue: unknown;
-  }[];
+  propertyName: string;
+  before: unknown;
+  after: unknown;
 }
 
 export interface HistoryCountDto {

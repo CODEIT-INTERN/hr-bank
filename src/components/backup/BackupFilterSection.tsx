@@ -97,6 +97,7 @@ export function BackupFilterSection() {
           <DropdownButton
             placeholder="상태"
             label={BackupStatusFilterLabels}
+            value={filters.status}
             onChange={(value) => handleStatusChange(value as BackupStatus)}
           />
           <DateRangePicker

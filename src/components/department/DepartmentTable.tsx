@@ -38,6 +38,8 @@ export function DepartmentTable({ onEdit, onDelete }: DepartmentTableProps) {
     return sortByDescriptor<DepartmentDto>(items, sortDescriptor);
   }, [items, sortDescriptor]);
 
+  const hasNoData = !isLoading && !errorMessage && sortedItems.length === 0;
+
   return (
     <div className="border-border-secondary scrollbar-thin h-[692px] overflow-y-auto rounded-2xl border">
       <Table
@@ -99,14 +101,18 @@ export function DepartmentTable({ onEdit, onDelete }: DepartmentTableProps) {
         </Table.Body>
       </Table>
 
-      <div ref={loadMoreRef} className="h-4" />
+      {hasNext && <div ref={loadMoreRef} className="h-4" />}
 
-      <div className="flex items-center justify-center text-center text-sm text-gray-600">
-        <div>
-          {errorMessage && <span className="text-red-500">{errorMessage}</span>}
-        </div>
-        <div>{isLoading && <span>불러오는 중...</span>}</div>
+      <div className="flex flex-col items-center justify-center gap-1 py-2 text-center text-sm text-gray-600">
+        {errorMessage && <span className="text-red-500">{errorMessage}</span>}
+        {isLoading && <span>불러오는 중...</span>}
       </div>
+
+      {hasNoData && (
+        <div className="flex h-[calc(100%-80px)] flex-1 flex-col items-center justify-center text-center">
+          <span className="text-disabled">현재 표시할 부서가 없습니다</span>
+        </div>
+      )}
     </div>
   );
 }

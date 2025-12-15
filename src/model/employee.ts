@@ -23,7 +23,7 @@ export interface EmployeeListQuery {
   position?: string;
   hireDateFrom?: string;
   hireDateTo?: string;
-  status?: EmployeeStatus;
+  status?: EmployeeStatus | "";
   idAfter?: number;
   cursor?: string;
   size?: number;

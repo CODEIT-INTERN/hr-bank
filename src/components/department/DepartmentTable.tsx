@@ -6,8 +6,8 @@ import { Table } from "@/components/common/table/Table";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { DepartmentDto } from "@/model/department";
 import { useDepartmentListStore } from "@/store/departmentStore";
+import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
 import { formatDateAsKorean } from "@/utils/date";
-import { sortByDescriptor } from "@/utils/sort";
 
 interface DepartmentTableProps {
   onEdit: (item: DepartmentDto) => void;
@@ -54,12 +54,14 @@ export function DepartmentTable({ onEdit, onDelete }: DepartmentTableProps) {
             isRowHeader
             allowsSorting
             className="min-w-45"
+            isActive={isActiveSortColumn("name", sortDescriptor)}
           />
           <Table.Head
             id="description"
             label="설명"
             allowsSorting
             className="w-full min-w-50"
+            isActive={isActiveSortColumn("description", sortDescriptor)}
           />
           <Table.Head id="employeeCount" label="인원수" />
           <Table.Head
@@ -67,6 +69,7 @@ export function DepartmentTable({ onEdit, onDelete }: DepartmentTableProps) {
             label="부서생성일"
             allowsSorting
             className="min-w-45"
+            isActive={isActiveSortColumn("establishedDate", sortDescriptor)}
           />
           <Table.Head id="actions" />
         </Table.Header>

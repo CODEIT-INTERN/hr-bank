@@ -62,7 +62,7 @@ export const DatePicker = ({
           size="md"
           color="secondary"
           iconLeading={CalendarIcon}
-          className="flex w-full items-center justify-start"
+          className={`${!value ? "text-text-placeholder" : ""} text-md flex w-full justify-start font-normal`}
         >
           {formattedDate}
         </Button>

@@ -12,42 +12,47 @@ interface EmployeeCountStore {
   getThisMonthCount: () => Promise<void>;
 }
 
-export const useEmployeeCountStore = create<EmployeeCountStore>((set, get) => ({
-  count: null,
-  monthCount: null,
-  isLoading: false,
-  isLoadingMonthCount: false,
-  errorMessage: null,
+export const useEmployeeCountStore = create<EmployeeCountStore>(
+  (set, _get) => ({
+    count: null,
+    monthCount: null,
+    isLoading: false,
+    isLoadingMonthCount: false,
+    errorMessage: null,
 
-  getCount: async () => {
-    set({ isLoading: true, errorMessage: null });
+    getCount: async () => {
+      set({ isLoading: true, errorMessage: null });
 
-    try {
-      const data = await getEmployeeCount({ status: "ACTIVE" });
-      set({ count: data, isLoading: false });
-    } catch (error) {
-      console.error(error);
-      set({
-        errorMessage: "직원 수를 불러오지 못했어요.",
-        isLoading: false,
-      });
-    }
-  },
+      try {
+        const data = await getEmployeeCount({ status: "ACTIVE" });
+        set({ count: data, isLoading: false });
+      } catch (error) {
+        console.error(error);
+        set({
+          errorMessage: "직원 수를 불러오지 못했어요.",
+          isLoading: false,
+        });
+      }
+    },
 
-  getThisMonthCount: async () => {
-    set({ isLoadingMonthCount: true, errorMessage: null });
+    getThisMonthCount: async () => {
+      set({ isLoadingMonthCount: true, errorMessage: null });
 
-    const date = formatDateThisMonth(new Date());
+      const date = formatDateThisMonth(new Date());
 
-    try {
-      const data = await getEmployeeCount({ status: "ACTIVE", fromDate: date });
-      set({ monthCount: data, isLoadingMonthCount: false });
-    } catch (error) {
-      console.error(error);
-      set({
-        errorMessage: "직원 수를 불러오지 못했어요.",
-        isLoadingMonthCount: false,
-      });
-    }
-  },
-}));
+      try {
+        const data = await getEmployeeCount({
+          status: "ACTIVE",
+          fromDate: date,
+        });
+        set({ monthCount: data, isLoadingMonthCount: false });
+      } catch (error) {
+        console.error(error);
+        set({
+          errorMessage: "직원 수를 불러오지 못했어요.",
+          isLoadingMonthCount: false,
+        });
+      }
+    },
+  }),
+);

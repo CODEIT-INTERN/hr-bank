@@ -9,24 +9,15 @@ import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { HistoryDto } from "@/model/history";
 import { useHistoryListStore } from "@/store/historyStore";
 import { formatIsoToYmdHms } from "@/utils/date";
-import { sortByDescriptor } from "@/utils/sort";
+import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
 import { StatusBadge } from "../common/badges/StatusBadge";
 import { Button } from "../common/buttons/Button";
 import { Table } from "../common/table/Table";
-import HistoryDetailModal from "./HIstoryDetailModal";
+import HistoryDetailModal from "./HistoryDetailModal";
 
 const HistoryTable = () => {
-  const {
-    items,
-    isLoading,
-    errorMessage,
-    hasNext,
-    nextCursor,
-    filters,
-    totalElements,
-    loadFirstPage,
-    loadNextPage,
-  } = useHistoryListStore();
+  const { items, isLoading, hasNext, filters, loadFirstPage, loadNextPage } =
+    useHistoryListStore();
   const [selectedHistory, setSelectedHistory] =
     useState<Array<HistoryDetailDto> | null>(null);
   const [selectedHistoryList, setSelectedHistoryList] =
@@ -87,12 +78,14 @@ const HistoryTable = () => {
               label="IP주소"
               className="w-2/12"
               allowsSorting
+              isActive={isActiveSortColumn("ipAddress", sortDescriptor)}
             />
             <Table.Head
               id="at"
               label="수정일"
               className="w-2/12"
               allowsSorting
+              isActive={isActiveSortColumn("at", sortDescriptor)}
             />
             <Table.Head id="actions" className="w-1/12" />
           </Table.Header>

@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import { Input } from "../common/input/Input";
+import { useState } from "react";
+import type { DateRange } from "react-aria-components";
 import { FilterLines, Plus, SearchMd } from "@untitledui/icons";
-import { DropdownButton } from "../common/dropdown/DropdownButton";
 import { EmploymentStateLabels } from "@/constants/EmploymentStateLabels";
-import { Button } from "../common/buttons/Button";
-import { DateRangePicker } from "../common/date-picker/DateRangePicker";
 import { useEmployeeListStore } from "@/store/employeeStore";
 import type { EmployeeStatus } from "@/types/enums";
 import { formatDateRange } from "@/utils/date";
-import type { DateRange } from "react-aria-components";
+import { Button } from "../common/buttons/Button";
+import { DateRangePicker } from "../common/date-picker/DateRangePicker";
+import { DropdownButton } from "../common/dropdown/DropdownButton";
+import { Input } from "../common/input/Input";
 import CreateUpdateEmployeeModal from "./CreateUpdateEmployeeModal";
 
 const EmployeeFilterSection = () => {
   const { setFilters, filters, totalElements } = useEmployeeListStore();
   const [isFilterActive, setIsFilterActive] = useState(false);
-  const [committedRange, setCommittedRange] = useState<DateRange | null>(null);
+  const [_committedRange, setCommittedRange] = useState<DateRange | null>(null);
   const [tempRange, setTempRange] = useState<DateRange | null>(null);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
@@ -47,8 +47,8 @@ const EmployeeFilterSection = () => {
   return (
     <div className="flex flex-col gap-4">
       <span className="text-tertiary text-sm">총 {totalElements}명</span>
-      <div className="flex justify-between items-center">
-        <div className="flex gap-3 items-center">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
           <Input
             icon={SearchMd}
             iconClassName="w-5 h-5 stroke-black"
@@ -65,16 +65,15 @@ const EmployeeFilterSection = () => {
             onChange={(value) => {
               setFilters({ status: value as EmployeeStatus });
             }}
-            className="min-w-[110px] h-10"
+            className="h-10 min-w-[110px]"
           />
           <Button
             iconLeading={<FilterLines className="stroke-black" size={20} />}
             color="secondary"
-            className="w-8 h-8 data-icon-only:p-0"
+            className="h-8 w-8 data-icon-only:p-0"
             onClick={handleToggleFilter}
           />
         </div>
-        {/* TODO: h-10이 적용 안됨 */}
         <Button
           iconLeading={<Plus data-icon color="white" />}
           onClick={handleClickCreateButton}
@@ -83,7 +82,7 @@ const EmployeeFilterSection = () => {
         </Button>
       </div>
       {isFilterActive && (
-        <div className="flex gap-3 items-center">
+        <div className="flex items-center gap-3">
           <Input
             placeholder="사번을 입력해주세요"
             className="w-80"

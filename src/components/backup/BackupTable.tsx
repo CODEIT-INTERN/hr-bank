@@ -11,7 +11,7 @@ import { useBackupListStore } from "@/store/backupStore";
 import { useToastStore } from "@/store/toastStore";
 import { formatIsoToYmdHms } from "@/utils/date";
 import { downloadBlob } from "@/utils/download";
-import { sortByDescriptor } from "@/utils/sort";
+import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
 
 export function BackupTable() {
   const { items, isLoading, errorMessage, hasNext, loadNextPage } =
@@ -57,19 +57,32 @@ export function BackupTable() {
           onSortChange={setSortDescriptor}
         >
           <Table.Header>
-            <Table.Head id="fileId" label="ID" isRowHeader allowsSorting />
-            <Table.Head id="worker" label="작업자" allowsSorting />
+            <Table.Head
+              id="fileId"
+              label="ID"
+              isRowHeader
+              allowsSorting
+              isActive={isActiveSortColumn("fileId", sortDescriptor)}
+            />
+            <Table.Head
+              id="worker"
+              label="작업자"
+              allowsSorting
+              isActive={isActiveSortColumn("worker", sortDescriptor)}
+            />
             <Table.Head
               id="startedAt"
               label="시작시간"
               allowsSorting
               className="min-w-40"
+              isActive={isActiveSortColumn("startedAt", sortDescriptor)}
             />
             <Table.Head
               id="endedAt"
               label="종료시간"
               allowsSorting
               className="min-w-40"
+              isActive={isActiveSortColumn("endedAt", sortDescriptor)}
             />
             <Table.Head id="status" label="작업상태" />
             <Table.Head id="actions" label="다운로드" />

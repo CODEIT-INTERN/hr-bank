@@ -6,7 +6,7 @@ import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { EmployeeDto } from "@/model/employee";
 import { useEmployeeListStore } from "@/store/employeeStore";
 import { formatDateAsKorean } from "@/utils/date";
-import { sortByDescriptor } from "@/utils/sort";
+import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
 import { AvatarLabelGroup } from "../common/avatar/AvatarLabelGroup";
 import { StatusBadge } from "../common/badges/StatusBadge";
 import { Button } from "../common/buttons/Button";
@@ -15,15 +15,8 @@ import { Table } from "../common/table/Table";
 import CreateUpdateEmployeeModal from "./CreateUpdateEmployeeModal";
 
 const EmployeeTable = () => {
-  const {
-    items,
-    isLoading,
-    errorMessage,
-    filters,
-    hasNext,
-    loadFirstPage,
-    loadNextPage,
-  } = useEmployeeListStore();
+  const { items, isLoading, filters, hasNext, loadFirstPage, loadNextPage } =
+    useEmployeeListStore();
 
   // 기본 정렬값(입사일)
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
@@ -93,11 +86,27 @@ const EmployeeTable = () => {
           onSortChange={setSortDescriptor}
         >
           <Table.Header>
-            <Table.Head id="name" label="이름" isRowHeader allowsSorting />
-            <Table.Head id="employeeNumber" label="사원번호" allowsSorting />
+            <Table.Head
+              id="name"
+              label="이름"
+              isRowHeader
+              allowsSorting
+              isActive={isActiveSortColumn("name", sortDescriptor)}
+            />
+            <Table.Head
+              id="employeeNumber"
+              label="사원번호"
+              allowsSorting
+              isActive={isActiveSortColumn("employeeNumber", sortDescriptor)}
+            />
             <Table.Head id="departmentName" label="부서명" />
             <Table.Head id="position" label="직함" />
-            <Table.Head id="hireDate" label="입사일" allowsSorting />
+            <Table.Head
+              id="hireDate"
+              label="입사일"
+              allowsSorting
+              isActive={isActiveSortColumn("hireDate", sortDescriptor)}
+            />
             <Table.Head id="status" label="재직상태" />
             <Table.Head id="actions" />
           </Table.Header>

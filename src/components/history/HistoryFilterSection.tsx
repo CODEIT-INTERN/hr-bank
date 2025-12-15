@@ -1,22 +1,20 @@
-import React, { useState } from "react";
-import { Input } from "../common/input/Input";
-import { FilterLines, Plus, SearchMd } from "@untitledui/icons";
-import { DropdownButton } from "../common/dropdown/DropdownButton";
-import { EmploymentStateLabels } from "@/constants/EmploymentStateLabels";
+import { useState } from "react";
+import type { DateRange } from "react-aria-components";
+import { FilterLines, SearchMd } from "@untitledui/icons";
+import { HistoryTypeLabels } from "@/constants/HistoryTypeLabels";
+import { useHistoryListStore } from "@/store/historyStore";
+import type { HistoryType } from "@/types/enums";
+import { formatDateRange } from "@/utils/date";
 import { Button } from "../common/buttons/Button";
 import { DateRangePicker } from "../common/date-picker/DateRangePicker";
-import { useEmployeeListStore } from "@/store/employeeStore";
-import type { EmployeeStatus, HistoryType } from "@/types/enums";
-import { formatDateRange } from "@/utils/date";
-import type { DateRange } from "react-aria-components";
+import { DropdownButton } from "../common/dropdown/DropdownButton";
+import { Input } from "../common/input/Input";
 import CreateUpdateEmployeeModal from "../employee/CreateUpdateEmployeeModal";
-import { useHistoryListStore } from "@/store/historyStore";
-import { HistoryTypeLabels } from "@/constants/HistoryTypeLabels";
 
 const HistoryFilterSection = () => {
   const { setFilters, filters, totalElements } = useHistoryListStore();
   const [isFilterActive, setIsFilterActive] = useState(false);
-  const [committedRange, setCommittedRange] = useState<DateRange | null>(null);
+  const [_committedRange, setCommittedRange] = useState<DateRange | null>(null);
   const [tempRange, setTempRange] = useState<DateRange | null>(null);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
@@ -28,8 +26,8 @@ const HistoryFilterSection = () => {
   const handleRangeChange = (value: DateRange | null) => {
     const formattedDate = formatDateRange(value);
     setFilters({
-      hireDateFrom: formattedDate.start,
-      hireDateTo: formattedDate.end,
+      atFrom: formattedDate.start,
+      atTo: formattedDate.end,
     });
   };
 
@@ -42,15 +40,11 @@ const HistoryFilterSection = () => {
     setCommittedRange(null);
   };
 
-  const handleClickCreateButton = () => {
-    setIsCreateModalOpen(true);
-  };
-
   return (
     <div className="flex flex-col gap-4">
       <span className="text-tertiary text-sm">총 {totalElements}건</span>
-      <div className="flex justify-between items-center">
-        <div className="flex gap-3 items-center">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
           <Input
             icon={SearchMd}
             iconClassName="w-5 h-5 stroke-black"
@@ -67,18 +61,18 @@ const HistoryFilterSection = () => {
             onChange={(value) => {
               setFilters({ type: value as HistoryType });
             }}
-            className="min-w-[110px] h-10"
+            className="h-10 w-[120px]"
           />
           <Button
             iconLeading={<FilterLines className="stroke-black" size={20} />}
             color="secondary"
-            className="w-8 h-8 data-icon-only:p-0"
+            className="hover:bg-primary_hover h-8 w-8 data-icon-only:p-0"
             onClick={handleToggleFilter}
           />
         </div>
       </div>
       {isFilterActive && (
-        <div className="flex gap-3 items-center">
+        <div className="flex items-center gap-3">
           <Input
             placeholder="내용을 입력해주세요"
             className="w-80"

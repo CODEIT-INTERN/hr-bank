@@ -1,7 +1,9 @@
 // src/api/http/client.ts
 import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
 
-const BASE_URL = import.meta.env.VITE_APP_API_URL || "/api";
+const isProduction = import.meta.env.MODE === "production";
+
+const BASE_URL = isProduction ? import.meta.env.VITE_APP_API_URL : "/api";
 /**
  * axios 인스턴스
  * - baseURL만 설정한 아주 얇은 래퍼

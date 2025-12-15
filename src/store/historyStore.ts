@@ -1,8 +1,8 @@
-import { getChangeLogs } from "@/api/history/historyApi";
+import { create } from "zustand";
+import { getChangeLogs, getRecentChangeCount } from "@/api/history/historyApi";
 import type { HistoryDto, HistoryListQuery } from "@/model/history";
 import type { CursorPageResponse } from "@/model/pagination";
 import type { HistoryType } from "@/types/enums";
-import { create } from "zustand";
 
 interface HistoryFilterState {
   employeeNumber?: string;
@@ -25,7 +25,7 @@ interface HistoryListState {
   nextCursor: string | null;
   totalElements: number;
   // nextIdAfter: number | null;
-
+  recentChangeCount: number | null;
   filters: HistoryFilterState;
 
   setFilters: (partial: Partial<HistoryFilterState>) => void;
@@ -33,6 +33,7 @@ interface HistoryListState {
 
   loadFirstPage: () => Promise<void>;
   loadNextPage: () => Promise<void>;
+  getRecentChangeCount: () => Promise<void>;
 }
 
 const initialFilters: HistoryFilterState = {
@@ -54,6 +55,7 @@ export const useHistoryListStore = create<HistoryListState>((set, get) => ({
   hasNext: false,
   idAfter: 0,
   nextCursor: null,
+  recentChangeCount: null,
   filters: initialFilters,
   totalElements: 0,
   // nextIdAfter: null,
@@ -143,6 +145,18 @@ export const useHistoryListStore = create<HistoryListState>((set, get) => ({
         isLoading: false,
         errorMessage: message,
       });
+    }
+  },
+
+  // 최근 수정 이력 건수 조회
+  getRecentChangeCount: async () => {
+    try {
+      const res = await getRecentChangeCount();
+      set({
+        recentChangeCount: res,
+      });
+    } catch (error) {
+      console.log(error);
     }
   },
 }));

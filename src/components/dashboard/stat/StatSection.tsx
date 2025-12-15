@@ -8,24 +8,31 @@ import {
 import { StatCard } from "@/components/dashboard/stat/StatCard";
 import { useBackupListStore } from "@/store/backupStore";
 import { useEmployeeCountStore } from "@/store/employeeCountStore";
+import { useHistoryListStore } from "@/store/historyStore";
 import { hoursAgoFromNow } from "@/utils/date";
 
 export default function StatSection() {
   const { count, monthCount, getCount, getThisMonthCount } =
     useEmployeeCountStore();
+  const { recentChangeCount, getRecentChangeCount } = useHistoryListStore();
   const { latestBackup, getLatestBackup } = useBackupListStore();
 
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        await Promise.all([getCount(), getThisMonthCount(), getLatestBackup()]);
+        await Promise.all([
+          getCount(),
+          getThisMonthCount(),
+          getRecentChangeCount(),
+          getLatestBackup(),
+        ]);
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchAll();
-  }, [getCount, getThisMonthCount, getLatestBackup]);
+  }, [getCount, getThisMonthCount, getLatestBackup, getRecentChangeCount]);
 
   const backupHoursAgo =
     latestBackup?.endedAt != null
@@ -35,11 +42,10 @@ export default function StatSection() {
   return (
     <section className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-3">
       <StatCard icon={Users01} label="총 직원 수" value={count} unit="명" />
-      {/* TODO: 최근 변경 연동 */}
       <StatCard
         icon={ClockFastForward}
         label="최근 변경 건수"
-        value={1234512345}
+        value={recentChangeCount}
         unit="건"
       />
       <StatCard

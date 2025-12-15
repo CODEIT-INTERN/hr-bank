@@ -1,23 +1,23 @@
-import { BaseModal } from "@/components/common/modals/BaseModal";
-import { Input } from "@/components/common/input/Input";
-import { DatePicker } from "@/components/common/date-picker/DatePicker";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Form, type DateValue } from "react-aria-components";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Label } from "@/components/common/input/Label";
+import axios from "axios";
+import { createEmployee, updateEmployee } from "@/api/employee/employeeApi";
+import { DatePicker } from "@/components/common/date-picker/DatePicker";
+import { Input } from "@/components/common/input/Input";
 import { TextArea } from "@/components/common/input/TextArea";
+import { BaseModal } from "@/components/common/modals/BaseModal";
+import { EmploymentEnableStateLabels } from "@/constants/EmploymentStateLabels";
+import type { EmployeeDto } from "@/model/employee";
+import { useDepartmentListStore } from "@/store/departmentStore";
+import { useEmployeeListStore } from "@/store/employeeStore";
+import { useToastStore } from "@/store/toastStore";
 import { formatDateValue, parseDateValue } from "@/utils/date";
 import { Button } from "../common/buttons/Button";
-import { useDepartmentListStore } from "@/store/departmentStore";
-import axios from "axios";
-import { HintText } from "../common/input/HintText";
-import type { EmployeeDto } from "@/model/employee";
-import { createEmployee, updateEmployee } from "@/api/employee/employeeApi";
-import { useEmployeeListStore } from "@/store/employeeStore";
 import { DropdownButton } from "../common/dropdown/DropdownButton";
 import AddProfileImage from "../common/images/AddProfileImage";
+import { HintText } from "../common/input/HintText";
+import { Label } from "../common/input/Label";
 import EmployeeProfile from "./EmployeeProfile";
-import { EmploymentEnableStateLabels } from "@/constants/EmploymentStateLabels";
-import { useToastStore } from "@/store/toastStore";
 
 interface CreateEmployeeModalProps {
   isOpen: boolean;
@@ -79,17 +79,13 @@ const CreateUpdateEmployeeModal = ({
   onOpenChange,
   employee,
 }: CreateEmployeeModalProps) => {
-  const {
-    items: departmentItems,
-    loadFirstPage: loadDepartments,
-    hasNext,
-    loadNextPage,
-  } = useDepartmentListStore();
+  const { items: departmentItems, loadFirstPage: loadDepartments } =
+    useDepartmentListStore();
   const { loadFirstPage } = useEmployeeListStore();
   const { successToast } = useToastStore();
 
   const [formData, setFormData] = useState<FormData>(() =>
-    getInitialFormData(employee)
+    getInitialFormData(employee),
   );
   const [errors, setErrors] = useState<FormErrors>({});
   // 프로필 이미지
@@ -136,28 +132,31 @@ const CreateUpdateEmployeeModal = ({
     setProfilePreview(null);
   };
 
-  const renderProfileContent = () => {
+  const renderProfileContent = (): ReactNode => {
+    // 1. 새 이미지 미리보기 (파일 선택됨)
     if (profilePreview) {
       return (
         <img
           src={profilePreview}
           alt="프로필 미리보기"
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
         />
       );
     }
 
+    // 2. 기존 직원 이미지 (수정 모드이며 이미지가 있을 경우)
     if (employee && employee.profileImageId) {
       return <EmployeeProfile employee={employee} />;
     }
 
-    return <AddProfileImage className="w-full h-full" />;
+    // 3. 기본 이미지 (새 직원 등록 또는 기존 이미지 없음)
+    return <AddProfileImage className="h-full w-full" />;
   };
 
   // 부서 변경 핸들러
   const handleChange = (
     field: keyof FormData,
-    value: string | DateValue | null
+    value: string | DateValue | null,
   ) => {
     if (field === "departmentId" && typeof value === "string") {
       setFormData((prev) => ({ ...prev, departmentId: Number(value) }));
@@ -233,7 +232,7 @@ const CreateUpdateEmployeeModal = ({
             status: formData.status || "재직중",
             memo: formData.memo,
           },
-          profileImage
+          profileImage,
         );
       } else {
         // 직원 생성
@@ -246,7 +245,7 @@ const CreateUpdateEmployeeModal = ({
             hireDate: formattedDate,
             memo: formData.memo,
           },
-          profileImage
+          profileImage,
         );
       }
 
@@ -323,27 +322,17 @@ const CreateUpdateEmployeeModal = ({
           onChange={handleProfileChange}
         />
         <div className="flex flex-col gap-4">
-          <div className="flex justify-between gap-8 items-start">
+          <div className="flex items-start justify-between gap-8">
             <button
               onClick={(e) => {
                 e.preventDefault();
                 handleClickProfile();
               }}
-              className="w-[126px] h-[126px] min-w-[126px] rounded-full overflow-hidden flex items-center justify-center"
+              className="flex h-[126px] w-[126px] min-w-[126px] items-center justify-center overflow-hidden rounded-full"
             >
-              {profilePreview ? (
-                <img
-                  src={profilePreview}
-                  alt="프로필 미리보기"
-                  className="w-full h-full object-cover"
-                />
-              ) : employee && employee.profileImageId ? (
-                <EmployeeProfile employee={employee} />
-              ) : (
-                <AddProfileImage className="w-full h-full" />
-              )}
+              {renderProfileContent()}
             </button>
-            <div className="flex flex-col gap-4 w-full">
+            <div className="flex w-full flex-col gap-4">
               <Input
                 label="이름"
                 placeholder="이름을 입력해주세요"
@@ -363,7 +352,7 @@ const CreateUpdateEmployeeModal = ({
                 hint={errors.email}
               />
               <div className="flex justify-between gap-4">
-                <div className="flex flex-col gap-1.5 min-w-36">
+                <div className="flex min-w-36 flex-col gap-1.5">
                   <Label>부서</Label>
                   {/* TODO: placeholder값 지정 */}
                   <DropdownButton
@@ -409,8 +398,9 @@ const CreateUpdateEmployeeModal = ({
                 )}
               </div>
               {employee && (
-                <div className="flex flex-col gap-1.5 w-36">
+                <div className="flex w-36 flex-col gap-1.5">
                   <Label>상태</Label>
+                  {/* TODO: 라벨 */}
                   <DropdownButton
                     placeholder={String(formData.status)}
                     label={EmploymentEnableStateLabels}

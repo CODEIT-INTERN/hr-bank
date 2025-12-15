@@ -39,7 +39,7 @@ export function DepartmentTable({ onEdit, onDelete }: DepartmentTableProps) {
   }, [items, sortDescriptor]);
 
   return (
-    <div className="border-border-secondary h-[692px] overflow-y-auto rounded-2xl border">
+    <div className="border-border-secondary scrollbar-thin h-[692px] overflow-y-auto rounded-2xl border">
       <Table
         aria-label="부서 목록"
         sortDescriptor={sortDescriptor}

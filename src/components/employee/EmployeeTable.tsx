@@ -1,18 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
-import { Table } from "../common/table/Table";
 import type { SortDescriptor } from "react-aria-components";
-import type { EmployeeDto } from "@/model/employee";
-import { sortByDescriptor } from "@/utils/sort";
-import { useEmployeeListStore } from "@/store/employeeStore";
-import { Button } from "../common/buttons/Button";
 import { Edit01, Trash01 } from "@untitledui/icons";
-import { StatusBadge } from "../common/badges/StatusBadge";
-import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
-import { formatDateAsKorean } from "@/utils/date";
-import ConfirmModal from "../common/modals/ConfirmModal";
 import { deleteEmployee } from "@/api/employee/employeeApi";
-import CreateUpdateEmployeeModal from "./CreateUpdateEmployeeModal";
+import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
+import type { EmployeeDto } from "@/model/employee";
+import { useEmployeeListStore } from "@/store/employeeStore";
+import { formatDateAsKorean } from "@/utils/date";
+import { sortByDescriptor } from "@/utils/sort";
 import { AvatarLabelGroup } from "../common/avatar/AvatarLabelGroup";
+import { StatusBadge } from "../common/badges/StatusBadge";
+import { Button } from "../common/buttons/Button";
+import ConfirmModal from "../common/modals/ConfirmModal";
+import { Table } from "../common/table/Table";
+import CreateUpdateEmployeeModal from "./CreateUpdateEmployeeModal";
 
 const EmployeeTable = () => {
   const {
@@ -36,7 +36,7 @@ const EmployeeTable = () => {
   // 수정 모달
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
   const [updatingEmployee, setUpdatingEmployee] = useState<EmployeeDto | null>(
-    null
+    null,
   );
 
   useEffect(() => {
@@ -83,9 +83,9 @@ const EmployeeTable = () => {
   };
 
   return (
-    <div className="flex flex-col h-full min-h-0">
+    <div className="flex h-full min-h-0 flex-col">
       {/* 테이블 영역 - 가로 스크롤 적용 */}
-      <div className="overflow-auto flex-1 border border-border-secondary rounded-2xl">
+      <div className="border-border-secondary scrollbar-thin flex-1 overflow-auto rounded-2xl border">
         {" "}
         <Table
           aria-label="직원 목록"
@@ -184,7 +184,7 @@ const EmployeeTable = () => {
         </p>
       </ConfirmModal>
       {!isLoading && sortedItems.length === 0 && (
-        <div className="flex justify-center items-center h-48 text-gray-500">
+        <div className="flex h-48 items-center justify-center text-gray-500">
           현재 표시할 직원이 없습니다
         </div>
       )}

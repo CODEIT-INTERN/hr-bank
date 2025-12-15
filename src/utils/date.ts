@@ -1,5 +1,10 @@
 import { CalendarDate, getLocalTimeZone } from "@internationalized/date";
 import type { DateValue } from "react-aria-components";
+import {
+  CalendarDate,
+  getLocalTimeZone,
+  parseDate,
+} from "@internationalized/date";
 
 // TODO: 백엔드 요청 데이터 형식이랑 같은 지 확인해봐야 함
 // DateValue → YYYY-MM-DD 문자열 변환
@@ -15,12 +20,19 @@ export const formatDateValue = (dateValue: DateValue | null) => {
   return `${year}-${month}-${day}`;
 };
 
+export const formatDateThisMonth = (date: Date) => {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = "01";
+  return `${yyyy}-${mm}-${dd}`;
+};
+
 // RangeDateValue → YYYY-MM-DD 문자열 변환
 export const formatDateRange = (
   range: {
     start: DateValue;
     end: DateValue;
-  } | null
+  } | null,
 ) => {
   if (!range) return { start: "", end: "" };
 
@@ -115,3 +127,17 @@ export function formatDateValueToIsoZ(
 
   return undefined;
 }
+
+// isoZ -> 시간 전
+export const hoursAgoFromNow = (
+  isoString?: string,
+  now: Date = new Date(),
+): number | null => {
+  if (!isoString) return null;
+
+  const ts = Date.parse(isoString);
+  if (Number.isNaN(ts)) return null;
+
+  const diffMs = now.getTime() - ts;
+  return Math.floor(diffMs / 3_600_000);
+};

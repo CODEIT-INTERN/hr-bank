@@ -3,6 +3,11 @@ import type {
   EmployeeListQuery,
   EmployeeCreateRequest,
   EmployeeUpdateRequest,
+  EmployeeTrendQuery,
+  EmployeeTrendDto,
+  EmployeeDistributionQuery,
+  EmployeeDistributionDto,
+  EmployeeCountQuery,
 } from "@/model/employee";
 import type { CursorPageResponse } from "@/model/pagination";
 import apiClient from "../client";
@@ -30,15 +35,9 @@ export function getEmployeeById(id: number): Promise<EmployeeDto> {
 /**
  * 직원 등록
  */
-export function createEmployee(
-  request: EmployeeCreateRequest,
-  profileFile?: File | null
-): Promise<EmployeeDto> {
+export function createEmployee(request: EmployeeCreateRequest, profileFile?: File | null): Promise<EmployeeDto> {
   const formData = new FormData();
-  formData.append(
-    "employee",
-    new Blob([JSON.stringify(request)], { type: "application/json" })
-  );
+  formData.append("employee", new Blob([JSON.stringify(request)], { type: "application/json" }));
   if (profileFile) {
     formData.append("profile", profileFile);
   }
@@ -55,10 +54,7 @@ export function updateEmployee(
   profileFile?: File | null
 ): Promise<EmployeeDto> {
   const formData = new FormData();
-  formData.append(
-    "employee",
-    new Blob([JSON.stringify(request)], { type: "application/json" })
-  );
+  formData.append("employee", new Blob([JSON.stringify(request)], { type: "application/json" }));
 
   if (profileFile !== undefined && profileFile !== null) {
     formData.append("profile", profileFile);
@@ -72,4 +68,25 @@ export function updateEmployee(
  */
 export function deleteEmployee(id: number): Promise<void> {
   return apiClient.delete<void>(`/employees/${id}`);
+}
+
+/**
+ * 직원 수 추이 조회
+ */
+export function getEmployeeTrend(query?: EmployeeTrendQuery): Promise<EmployeeTrendDto[]> {
+  return apiClient.get<EmployeeTrendDto[]>("/employees/stats/trend", query);
+}
+
+/**
+ * 직원 분포 조회 (부서별/직무별)
+ */
+export function getEmployeeDistribution(query?: EmployeeDistributionQuery): Promise<EmployeeDistributionDto[]> {
+  return apiClient.get<EmployeeDistributionDto[]>("/employees/stats/distribution", query);
+}
+
+/**
+ * 직원 수 조회
+ */
+export function getEmployeeCount(query?: EmployeeCountQuery): Promise<number> {
+  return apiClient.get<number>("/employees/count", query);
 }

@@ -51,3 +51,40 @@ export interface EmployeeUpdateRequest {
   status: string;
   memo?: string;
 }
+
+// 직원 수 추이 단위
+export type EmployeeTrendUnit = "day" | "week" | "month" | "quarter" | "year";
+
+// 직원 수 추이 DTO
+export interface EmployeeTrendDto {
+  date: string;
+  count: number;
+  change: number;
+  changeRate: number;
+}
+
+export type EmployeeDistributionGroupBy = "department" | "position";
+
+// 직원 분포 DTO
+export interface EmployeeDistributionDto {
+  groupKey: string;
+  count: number;
+  percentage: number;
+}
+
+export interface EmployeeTrendQuery {
+  from?: string;
+  to?: string;
+  unit?: EmployeeTrendUnit;
+}
+
+export interface EmployeeDistributionQuery {
+  groupBy?: EmployeeDistributionGroupBy;
+  status?: EmployeeStatus;
+}
+
+export interface EmployeeCountQuery {
+  status?: EmployeeStatus;
+  fromDate?: string;
+  toDate?: string;
+}

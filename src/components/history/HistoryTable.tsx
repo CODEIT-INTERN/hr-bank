@@ -59,7 +59,6 @@ const HistoryTable = () => {
     <div className="flex h-full min-h-0 flex-col">
       {/* 테이블 영역 - 가로 스크롤 적용 */}
       <div className="border-border-secondary flex-1 overflow-auto rounded-2xl border">
-        {" "}
         <Table
           aria-label="직원 수정 이력 목록"
           sortDescriptor={sortDescriptor}

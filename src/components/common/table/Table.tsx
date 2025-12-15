@@ -1,5 +1,4 @@
 import {
-  useEffect,
   type ComponentPropsWithRef,
   type TdHTMLAttributes,
   type ThHTMLAttributes,

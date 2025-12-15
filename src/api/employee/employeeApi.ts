@@ -6,6 +6,7 @@ import type {
 } from "@/model/employee";
 import type { CursorPageResponse } from "@/model/pagination";
 import apiClient from "../client";
+import { EmploymentState } from "@/types/enums";
 
 /**
  * 직원 목록 조회
@@ -13,6 +14,9 @@ import apiClient from "../client";
 export function getEmployees(
   query: EmployeeListQuery
 ): Promise<CursorPageResponse<EmployeeDto>> {
+  if (query.status === EmploymentState.ALL) {
+    query.status = "";
+  }
   return apiClient.get<CursorPageResponse<EmployeeDto>>("/employees", query);
 }
 

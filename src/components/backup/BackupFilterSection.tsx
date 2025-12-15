@@ -1,25 +1,31 @@
 import { useEffect, useState } from "react";
-import { Button } from "@/components/common/buttons/Button";
-import { Input } from "@/components/common/input/Input";
-import { useBackupListStore } from "@/store/backupStore";
-import { useDebouncedValue } from "@/hooks/use-debounced-value";
-import { RefreshCw04, SearchMd } from "@untitledui/icons";
-import { formatDateValueToIsoZ, formatIsoToYmdHms } from "@/utils/date";
-import { DropdownButton } from "@/components/common/dropdown/DropdownButton";
-import { BackupStatusFilterLabels } from "@/constants/BackupStateLabels";
-import type { BackupStatus, BackupStatusFilter } from "@/model/backup";
 import { type DateRange } from "react-aria-components";
-import { DateRangePicker } from "../common/date-picker/DateRangePicker";
-import { createBackup } from "@/api/backup/backupApi";
-import { useToastStore } from "@/store/toastStore";
+import { RefreshCw04, SearchMd } from "@untitledui/icons";
 import axios from "axios";
+import { createBackup } from "@/api/backup/backupApi";
+import { Button } from "@/components/common/buttons/Button";
+import { DropdownButton } from "@/components/common/dropdown/DropdownButton";
+import { Input } from "@/components/common/input/Input";
+import { BackupStatusFilterLabels } from "@/constants/BackupStateLabels";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
+import type { BackupStatus } from "@/model/backup";
+import { useBackupListStore } from "@/store/backupStore";
+import { useToastStore } from "@/store/toastStore";
+import { formatDateValueToIsoZ, formatIsoToYmdHms } from "@/utils/date";
+import { DateRangePicker } from "../common/date-picker/DateRangePicker";
 
 export function BackupFilterSection() {
-  const { totalElements, filters, latestBackup, setFilters, getLatestBackup, loadFirstPage } = useBackupListStore();
+  const {
+    totalElements,
+    filters,
+    latestBackup,
+    setFilters,
+    getLatestBackup,
+    loadFirstPage,
+  } = useBackupListStore();
   const { successToast, errorToast } = useToastStore();
 
   const [keyword, setKeyword] = useState(filters.worker ?? ""); // 검색
-  const [status, setStatus] = useState<BackupStatusFilter | undefined>(filters.status); // 검색
   const [tempDateRange, setTempDateRange] = useState<DateRange | null>(null); // 시작 날짜
 
   // 디바운스
@@ -30,8 +36,6 @@ export function BackupFilterSection() {
   };
 
   const handleStatusChange = (value: BackupStatus | "ALL") => {
-    setStatus(value);
-
     if (value === "ALL") {
       setFilters({ status: undefined });
     } else {
@@ -46,7 +50,10 @@ export function BackupFilterSection() {
   const handleDateApply = () => {
     if (!tempDateRange) return;
     const { start, end } = tempDateRange;
-    setFilters({ startedAtFrom: formatDateValueToIsoZ(start), startedAtTo: formatDateValueToIsoZ(end) });
+    setFilters({
+      startedAtFrom: formatDateValueToIsoZ(start),
+      startedAtTo: formatDateValueToIsoZ(end),
+    });
   };
 
   const onBackupClick = async () => {
@@ -73,10 +80,12 @@ export function BackupFilterSection() {
   return (
     <>
       {/* 총 백업 수 */}
-      <span className="block font-normal text-sm text-gray-600">총 {totalElements}팀</span>
+      <span className="block text-sm font-normal text-gray-600">
+        총 {totalElements}팀
+      </span>
       {/* 검색 및 백업하기 버튼 */}
       <div className="flex justify-between gap-3">
-        <div className="flex flex-1 items-center gap-3 shrink-0 flex-wrap">
+        <div className="flex flex-1 shrink-0 flex-wrap items-center gap-3">
           <Input
             icon={SearchMd}
             iconClassName="text-black"
@@ -88,6 +97,7 @@ export function BackupFilterSection() {
           <DropdownButton
             placeholder="상태"
             label={BackupStatusFilterLabels}
+            value={filters.status}
             onChange={(value) => handleStatusChange(value as BackupStatus)}
           />
           <DateRangePicker
@@ -99,12 +109,18 @@ export function BackupFilterSection() {
           />
         </div>
 
-        <div className="inline-flex gap-2 shrink-0">
+        <div className="inline-flex shrink-0 gap-2">
           <div className="flex flex-col text-end text-sm font-normal text-gray-500">
             <span>마지막 백업</span>
-            <span>{latestBackup && formatIsoToYmdHms(latestBackup?.startedAt)}</span>
+            <span>
+              {latestBackup && formatIsoToYmdHms(latestBackup?.startedAt)}
+            </span>
           </div>
-          <Button iconLeading={RefreshCw04} className="text-white" onClick={onBackupClick}>
+          <Button
+            iconLeading={RefreshCw04}
+            className="text-white"
+            onClick={onBackupClick}
+          >
             백업하기
           </Button>
         </div>

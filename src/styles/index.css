@@ -44,19 +44,6 @@ body {
   min-height: 100vh;
 }
 
-/* @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
-
 /* 공통 커스텀 스크롤바 */
 .scrollbar-thin {
   /* Firefox */

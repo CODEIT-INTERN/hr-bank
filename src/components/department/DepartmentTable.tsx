@@ -7,6 +7,7 @@ import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { DepartmentDto } from "@/model/department";
 import { useDepartmentListStore } from "@/store/departmentStore";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
+import { formatDateAsKorean } from "@/utils/date";
 
 interface DepartmentTableProps {
   onEdit: (item: DepartmentDto) => void;
@@ -37,8 +38,10 @@ export function DepartmentTable({ onEdit, onDelete }: DepartmentTableProps) {
     return sortByDescriptor<DepartmentDto>(items, sortDescriptor);
   }, [items, sortDescriptor]);
 
+  const hasNoData = !isLoading && !errorMessage && sortedItems.length === 0;
+
   return (
-    <div className="border-border-secondary h-[692px] overflow-y-auto rounded-2xl border">
+    <div className="border-border-secondary scrollbar-thin h-[692px] overflow-y-auto rounded-2xl border">
       <Table
         aria-label="부서 목록"
         sortDescriptor={sortDescriptor}
@@ -78,8 +81,10 @@ export function DepartmentTable({ onEdit, onDelete }: DepartmentTableProps) {
                 {item.name}
               </Table.Cell>
               <Table.Cell>{item.description}</Table.Cell>
-              <Table.Cell>{item.employeeCount}</Table.Cell>
-              <Table.Cell>{item.establishedDate}</Table.Cell>
+              <Table.Cell>{item.employeeCount}명</Table.Cell>
+              <Table.Cell>
+                {formatDateAsKorean(item.establishedDate)}
+              </Table.Cell>
               <Table.Cell>
                 <div className="flex justify-end gap-0.5">
                   <Button
@@ -99,14 +104,18 @@ export function DepartmentTable({ onEdit, onDelete }: DepartmentTableProps) {
         </Table.Body>
       </Table>
 
-      <div ref={loadMoreRef} className="h-4" />
+      {hasNext && <div ref={loadMoreRef} className="h-4" />}
 
-      <div className="flex items-center justify-center text-center text-sm text-gray-600">
-        <div>
-          {errorMessage && <span className="text-red-500">{errorMessage}</span>}
-        </div>
-        <div>{isLoading && <span>불러오는 중...</span>}</div>
+      <div className="flex flex-col items-center justify-center gap-1 py-2 text-center text-sm text-gray-600">
+        {errorMessage && <span className="text-red-500">{errorMessage}</span>}
+        {isLoading && <span>불러오는 중...</span>}
       </div>
+
+      {hasNoData && (
+        <div className="flex h-[calc(100%-80px)] flex-1 flex-col items-center justify-center text-center">
+          <span className="text-disabled">현재 표시할 부서가 없습니다</span>
+        </div>
+      )}
     </div>
   );
 }

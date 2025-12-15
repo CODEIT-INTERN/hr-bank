@@ -400,7 +400,6 @@ const CreateUpdateEmployeeModal = ({
               {employee && (
                 <div className="flex w-36 flex-col gap-1.5">
                   <Label>상태</Label>
-                  {/* TODO: 라벨 */}
                   <DropdownButton
                     placeholder={String(formData.status)}
                     label={EmploymentEnableStateLabels}

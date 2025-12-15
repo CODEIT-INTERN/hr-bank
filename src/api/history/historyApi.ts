@@ -55,3 +55,7 @@ export async function getChangeLogsCount(
 
   return response;
 }
+
+export async function getRecentChangeCount(): Promise<number> {
+  return await apiClient.get(`/change-logs/count`);
+}

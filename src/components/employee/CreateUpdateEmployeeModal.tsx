@@ -1,23 +1,23 @@
-import { BaseModal } from "@/components/common/modals/BaseModal";
-import { Input } from "@/components/common/input/Input";
-import { DatePicker } from "@/components/common/date-picker/DatePicker";
-import { Form, type DateValue } from "react-aria-components";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Form, type DateValue } from "react-aria-components";
+import axios from "axios";
+import { createEmployee, updateEmployee } from "@/api/employee/employeeApi";
+import { DatePicker } from "@/components/common/date-picker/DatePicker";
+import { Input } from "@/components/common/input/Input";
 import { Label } from "@/components/common/input/Label";
 import { TextArea } from "@/components/common/input/TextArea";
+import { BaseModal } from "@/components/common/modals/BaseModal";
+import type { EmployeeDto } from "@/model/employee";
+import { useDepartmentListStore } from "@/store/departmentStore";
+import { useEmployeeListStore } from "@/store/employeeStore";
+// import { EmploymentEnableStateLabels } from "@/constants/EmploymentStateLabels";
+import { useToastStore } from "@/store/toastStore";
 import { formatDateValue, parseDateValue } from "@/utils/date";
 import { Button } from "../common/buttons/Button";
-import { useDepartmentListStore } from "@/store/departmentStore";
-import axios from "axios";
-import { HintText } from "../common/input/HintText";
-import type { EmployeeDto } from "@/model/employee";
-import { createEmployee, updateEmployee } from "@/api/employee/employeeApi";
-import { useEmployeeListStore } from "@/store/employeeStore";
 import { DropdownButton } from "../common/dropdown/DropdownButton";
 import AddProfileImage from "../common/images/AddProfileImage";
+import { HintText } from "../common/input/HintText";
 import EmployeeProfile from "./EmployeeProfile";
-import { EmploymentEnableStateLabels } from "@/constants/EmploymentStateLabels";
-import { useToastStore } from "@/store/toastStore";
 
 interface CreateEmployeeModalProps {
   isOpen: boolean;
@@ -89,7 +89,7 @@ const CreateUpdateEmployeeModal = ({
   const { successToast } = useToastStore();
 
   const [formData, setFormData] = useState<FormData>(() =>
-    getInitialFormData(employee)
+    getInitialFormData(employee),
   );
   const [errors, setErrors] = useState<FormErrors>({});
   // 프로필 이미지
@@ -142,7 +142,7 @@ const CreateUpdateEmployeeModal = ({
         <img
           src={profilePreview}
           alt="프로필 미리보기"
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
         />
       );
     }
@@ -151,13 +151,13 @@ const CreateUpdateEmployeeModal = ({
       return <EmployeeProfile employee={employee} />;
     }
 
-    return <AddProfileImage className="w-full h-full" />;
+    return <AddProfileImage className="h-full w-full" />;
   };
 
   // 부서 변경 핸들러
   const handleChange = (
     field: keyof FormData,
-    value: string | DateValue | null
+    value: string | DateValue | null,
   ) => {
     if (field === "departmentId" && typeof value === "string") {
       setFormData((prev) => ({ ...prev, departmentId: Number(value) }));
@@ -233,7 +233,7 @@ const CreateUpdateEmployeeModal = ({
             status: formData.status || "재직중",
             memo: formData.memo,
           },
-          profileImage
+          profileImage,
         );
       } else {
         // 직원 생성
@@ -246,7 +246,7 @@ const CreateUpdateEmployeeModal = ({
             hireDate: formattedDate,
             memo: formData.memo,
           },
-          profileImage
+          profileImage,
         );
       }
 
@@ -323,27 +323,27 @@ const CreateUpdateEmployeeModal = ({
           onChange={handleProfileChange}
         />
         <div className="flex flex-col gap-4">
-          <div className="flex justify-between gap-8 items-start">
+          <div className="flex items-start justify-between gap-8">
             <button
               onClick={(e) => {
                 e.preventDefault();
                 handleClickProfile();
               }}
-              className="w-[126px] h-[126px] min-w-[126px] rounded-full overflow-hidden flex items-center justify-center"
+              className="flex h-[126px] w-[126px] min-w-[126px] items-center justify-center overflow-hidden rounded-full"
             >
               {profilePreview ? (
                 <img
                   src={profilePreview}
                   alt="프로필 미리보기"
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                 />
               ) : employee && employee.profileImageId ? (
                 <EmployeeProfile employee={employee} />
               ) : (
-                <AddProfileImage className="w-full h-full" />
+                <AddProfileImage className="h-full w-full" />
               )}
             </button>
-            <div className="flex flex-col gap-4 w-full">
+            <div className="flex w-full flex-col gap-4">
               <Input
                 label="이름"
                 placeholder="이름을 입력해주세요"
@@ -363,7 +363,7 @@ const CreateUpdateEmployeeModal = ({
                 hint={errors.email}
               />
               <div className="flex justify-between gap-4">
-                <div className="flex flex-col gap-1.5 min-w-36">
+                <div className="flex min-w-36 flex-col gap-1.5">
                   <Label>부서</Label>
                   {/* TODO: placeholder값 지정 */}
                   <DropdownButton
@@ -409,9 +409,9 @@ const CreateUpdateEmployeeModal = ({
                 )}
               </div>
               {employee && (
-                <div className="flex flex-col gap-1.5 w-36">
+                <div className="flex w-36 flex-col gap-1.5">
                   <Label>상태</Label>
-                  <DropdownButton
+                  {/* <DropdownButton
                     placeholder={String(formData.status)}
                     label={EmploymentEnableStateLabels}
                     value={String(formData.status)}
@@ -419,7 +419,7 @@ const CreateUpdateEmployeeModal = ({
                       handleChange("status", value);
                     }}
                     className={dropdownClassName}
-                  />
+                  /> */}
                 </div>
               )}
             </div>

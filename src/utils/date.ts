@@ -1,10 +1,5 @@
-import { CalendarDate, getLocalTimeZone } from "@internationalized/date";
 import type { DateValue } from "react-aria-components";
-import {
-  CalendarDate,
-  getLocalTimeZone,
-  parseDate,
-} from "@internationalized/date";
+import { CalendarDate, getLocalTimeZone } from "@internationalized/date";
 
 // TODO: 백엔드 요청 데이터 형식이랑 같은 지 확인해봐야 함
 // DateValue → YYYY-MM-DD 문자열 변환
@@ -44,7 +39,7 @@ export const formatDateRange = (
 
 // string 날짜를 CalenderDate 객체로 변환
 export const parseDateValue = (
-  date: string | null | undefined
+  date: string | null | undefined,
 ): DateValue | null => {
   if (!date) return null;
   try {
@@ -99,7 +94,7 @@ export const formatIsoToYmdHms = (isoString: string): string => {
 
 // react-aria-components DateValue -> isoZ
 export function formatDateValueToIsoZ(
-  value: DateValue | Date | null | undefined
+  value: DateValue | Date | null | undefined,
 ): string | undefined {
   if (!value) return undefined;
 

@@ -1,18 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
-import { Table } from "../common/table/Table";
 import type { SortDescriptor } from "react-aria-components";
-import { sortByDescriptor } from "@/utils/sort";
-import { Button } from "../common/buttons/Button";
 import { SearchMd } from "@untitledui/icons";
-import { StatusBadge } from "../common/badges/StatusBadge";
-import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
-import { formatIsoToYmdHms } from "@/utils/date";
-import type { HistoryDto } from "@/model/history";
-import { useHistoryListStore } from "@/store/historyStore";
 import {
   getChangeLogDetails,
   type HistoryDetailDto,
 } from "@/api/history/historyApi";
+import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
+import type { HistoryDto } from "@/model/history";
+import { useHistoryListStore } from "@/store/historyStore";
+import { formatIsoToYmdHms } from "@/utils/date";
+import { sortByDescriptor } from "@/utils/sort";
+import { StatusBadge } from "../common/badges/StatusBadge";
+import { Button } from "../common/buttons/Button";
+import { Table } from "../common/table/Table";
 import HistoryDetailModal from "./HIstoryDetailModal";
 
 const HistoryTable = () => {
@@ -65,9 +65,9 @@ const HistoryTable = () => {
   };
 
   return (
-    <div className="flex flex-col h-full min-h-0">
+    <div className="flex h-full min-h-0 flex-col">
       {/* 테이블 영역 - 가로 스크롤 적용 */}
-      <div className="overflow-auto flex-1 border border-border-secondary rounded-2xl">
+      <div className="border-border-secondary scrollbar-thin flex-1 overflow-auto rounded-2xl border">
         {" "}
         <Table
           aria-label="직원 수정 이력 목록"
@@ -106,27 +106,27 @@ const HistoryTable = () => {
                   </Table.Cell>
 
                   {/* 사원번호 */}
-                  <Table.Cell className="whitespace-nowrap w-3/12">
+                  <Table.Cell className="w-3/12 whitespace-nowrap">
                     {item.employeeNumber}
                   </Table.Cell>
 
                   {/* 변경상세내용 */}
-                  <Table.Cell className="whitespace-nowrap w-3/12">
+                  <Table.Cell className="w-3/12 whitespace-nowrap">
                     {item.memo}
                   </Table.Cell>
 
                   {/* IP주소 */}
-                  <Table.Cell className="whitespace-nowrap w-2/12">
+                  <Table.Cell className="w-2/12 whitespace-nowrap">
                     {item.ipAddress}
                   </Table.Cell>
 
                   {/* 수정일 */}
-                  <Table.Cell className="whitespace-nowrap w-2/12">
+                  <Table.Cell className="w-2/12 whitespace-nowrap">
                     {formatIsoToYmdHms(item.at)}
                   </Table.Cell>
 
                   {/* 액션 버튼 */}
-                  <Table.Cell className="px-4 flex justify-center w-1/12">
+                  <Table.Cell className="flex w-1/12 justify-center px-4">
                     <Button
                       color="tertiary"
                       iconLeading={SearchMd}
@@ -147,7 +147,7 @@ const HistoryTable = () => {
         onOpenChange={setDetailModalOpen}
       />
       {!isLoading && sortedItems.length === 0 && (
-        <div className="flex justify-center items-center h-48 text-gray-500">
+        <div className="flex h-48 items-center justify-center text-gray-500">
           현재 표시할 이력이 없습니다
         </div>
       )}

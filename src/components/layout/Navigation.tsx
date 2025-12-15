@@ -1,6 +1,6 @@
-import { NAV_ITEMS } from "@/constants/navigation";
 import type { FC } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { NAV_ITEMS } from "@/constants/navigation";
 
 interface NavigationItem {
   label: string;
@@ -23,7 +23,7 @@ export default function Navigation() {
           />
         </Link>
         <div className="flex flex-col">
-          <span className="text-xl font-bold leading-none text-gray-900">
+          <span className="text-xl leading-none font-bold text-gray-900">
             HR Bank
           </span>
           <span className="text-xs leading-4 text-gray-500">
@@ -35,7 +35,7 @@ export default function Navigation() {
       {/* 네비게이션 섹션들 */}
       <nav className="flex-1">
         <ul className="space-y-2">
-          {NAV_ITEMS.map((item) => (
+          {NAV_ITEMS.map((item: NavigationItem) => (
             <li key={item.path}>
               <NavLink
                 to={item.path}
@@ -45,7 +45,7 @@ export default function Navigation() {
                     "flex items-center gap-2 rounded-lg px-3 py-2 text-base transition",
                     isActive
                       ? "bg-brand-100 text-primary font-semibold"
-                      : "text-quaternary hover:bg-gray-50 font-normal",
+                      : "text-quaternary font-normal hover:bg-gray-50",
                   ].join(" ")
                 }
               >

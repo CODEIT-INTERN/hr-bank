@@ -1,8 +1,7 @@
+import { create } from "zustand";
 import { getChangeLogs } from "@/api/history/historyApi";
 import type { HistoryDto, HistoryListQuery } from "@/model/history";
 import type { CursorPageResponse } from "@/model/pagination";
-import type { HistoryType } from "@/types/enums";
-import { create } from "zustand";
 
 interface HistoryFilterState {
   employeeNumber?: string;

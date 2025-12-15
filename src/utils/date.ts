@@ -1,3 +1,4 @@
+import { CalendarDate, getLocalTimeZone } from "@internationalized/date";
 import type { DateValue } from "react-aria-components";
 import {
   CalendarDate,
@@ -43,7 +44,7 @@ export const formatDateRange = (
 
 // string 날짜를 CalenderDate 객체로 변환
 export const parseDateValue = (
-  date: string | null | undefined,
+  date: string | null | undefined
 ): DateValue | null => {
   if (!date) return null;
   try {
@@ -93,12 +94,12 @@ export const formatIsoToYmdHms = (isoString: string): string => {
   const minutes = pad(date.getMinutes());
   const seconds = pad(date.getSeconds());
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return `${year}년 ${month}월 ${day}일 ${hours}:${minutes}:${seconds}`;
 };
 
 // react-aria-components DateValue -> isoZ
 export function formatDateValueToIsoZ(
-  value: DateValue | Date | null | undefined,
+  value: DateValue | Date | null | undefined
 ): string | undefined {
   if (!value) return undefined;
 

@@ -124,7 +124,7 @@ export const DateRangePicker = ({
                         close();
                       }}
                     >
-                      등록하기
+                      적용하기
                     </Button>
                   </div>
                 </div>

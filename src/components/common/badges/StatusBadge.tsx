@@ -1,15 +1,18 @@
-import { Badge, BadgeWithDot } from "./Badges";
-import {
-  EmploymentState,
-  type EmploymentStateType,
-  BackupState,
-  type BackupStateType,
-  HistoryType,
-} from "@/types/enums";
-import { EmploymentStateLabels } from "@/constants/EmploymentStateLabels";
+import type {
+  BadgeColors,
+  BadgeTypes,
+} from "@/components/common/badges/badge-types";
 import { BackupStateLabels } from "@/constants/BackupStateLabels";
+import { EmploymentStateLabels } from "@/constants/EmploymentStateLabels";
 import { HistoryTypeLabels } from "@/constants/HistoryTypeLabels";
-import type { BadgeColors, BadgeTypes } from "@/components/common/badges/badge-types";
+import {
+  BackupState,
+  EmploymentState,
+  HistoryType,
+  type BackupStateType,
+  type EmploymentStateType,
+} from "@/types/enums";
+import { Badge, BadgeWithDot } from "./Badges";
 
 export type StatusKind = "employment" | "backup" | "history";
 export type StatusValue = EmploymentStateType | BackupStateType | HistoryType;
@@ -55,7 +58,16 @@ const backupConfig: Record<string, StatusConfig> = {
   },
 };
 
-const historyConfig: Record<HistoryType, { label: string; type: BadgeTypes; color: BadgeColors; withDot: boolean }> = {
+const historyConfig: Record<
+  HistoryType,
+  { label: string; type: BadgeTypes; color: BadgeColors; withDot: boolean }
+> = {
+  [HistoryType.ALL]: {
+    label: HistoryTypeLabels[HistoryType.ALL],
+    type: "pill-color",
+    color: "success",
+    withDot: true,
+  },
   [HistoryType.CREATED]: {
     label: HistoryTypeLabels[HistoryType.CREATED],
     type: "pill-color",

@@ -16,7 +16,7 @@ import { Button } from "../common/buttons/Button";
 import { DropdownButton } from "../common/dropdown/DropdownButton";
 import AddProfileImage from "../common/images/AddProfileImage";
 import { HintText } from "../common/input/HintText";
-import { Label } from "../common/input/Label";
+import { Label } from "../common/input/label";
 import EmployeeProfile from "./EmployeeProfile";
 
 interface CreateEmployeeModalProps {

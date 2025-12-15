@@ -1,18 +1,21 @@
-import { BaseModal } from "@/components/common/modals/BaseModal";
-import { Input } from "@/components/common/input/Input";
-import { DatePicker } from "@/components/common/date-picker/DatePicker";
-import { Form, type DateValue } from "react-aria-components";
 import { useState } from "react";
-import { Label } from "@/components/common/input/Label";
+import { Form, type DateValue } from "react-aria-components";
+import axios from "axios";
+import {
+  createDepartment,
+  updateDepartment,
+} from "@/api/department/departmentApi";
+import { DatePicker } from "@/components/common/date-picker/DatePicker";
+import { Input } from "@/components/common/input/Input";
+import { Label } from "@/components/common/input/label";
 import { TextArea } from "@/components/common/input/TextArea";
+import { BaseModal } from "@/components/common/modals/BaseModal";
 import type { DepartmentDto } from "@/model/department";
+import { useDepartmentListStore } from "@/store/departmentStore";
+import { useToastStore } from "@/store/toastStore";
 import { formatDateValue, parseDateValue } from "@/utils/date";
 import { Button } from "../common/buttons/Button";
-import { createDepartment, updateDepartment } from "@/api/department/departmentApi";
-import { useDepartmentListStore } from "@/store/departmentStore";
-import axios from "axios";
 import { HintText } from "../common/input/HintText";
-import { useToastStore } from "@/store/toastStore";
 
 interface DepartmentModalProps {
   isOpen: boolean;
@@ -51,14 +54,23 @@ const getInitialFormData = (department: DepartmentDto | null): FormData => {
   };
 };
 
-export default function DepartmentModal({ isOpen, onOpenChange, department }: DepartmentModalProps) {
-  const [formData, setFormData] = useState<FormData>(() => getInitialFormData(department));
+export default function DepartmentModal({
+  isOpen,
+  onOpenChange,
+  department,
+}: DepartmentModalProps) {
+  const [formData, setFormData] = useState<FormData>(() =>
+    getInitialFormData(department),
+  );
   const [errors, setErrors] = useState<FormErrors>({});
 
   const { loadFirstPage } = useDepartmentListStore();
   const { successToast } = useToastStore();
 
-  const handleChange = (field: keyof FormData, value: string | DateValue | null) => {
+  const handleChange = (
+    field: keyof FormData,
+    value: string | DateValue | null,
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
@@ -162,8 +174,16 @@ export default function DepartmentModal({ isOpen, onOpenChange, department }: De
   };
 
   return (
-    <BaseModal title={department ? "부서 수정하기" : "부서 추가하기"} isOpen={isOpen} onOpenChange={onOpenChange}>
-      <Form validationBehavior="aria" className="space-y-4" onSubmit={handleSubmit}>
+    <BaseModal
+      title={department ? "부서 수정하기" : "부서 추가하기"}
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+    >
+      <Form
+        validationBehavior="aria"
+        className="space-y-4"
+        onSubmit={handleSubmit}
+      >
         <Input
           label="부서명"
           placeholder="부서명을 입력해주세요"
@@ -185,7 +205,11 @@ export default function DepartmentModal({ isOpen, onOpenChange, department }: De
             onApply={handleApply}
             onCancel={handleCancel}
           />
-          {errors.establishedDate && <HintText isInvalid={!!errors.establishedDate}>{errors.establishedDate}</HintText>}
+          {errors.establishedDate && (
+            <HintText isInvalid={!!errors.establishedDate}>
+              {errors.establishedDate}
+            </HintText>
+          )}
         </div>
         <TextArea
           label="설명"
@@ -197,7 +221,7 @@ export default function DepartmentModal({ isOpen, onOpenChange, department }: De
           isInvalid={!!errors.description}
           hint={errors.description}
         />
-        <div className="flex gap-2 mt-6">
+        <div className="mt-6 flex gap-2">
           <Button color="secondary" className="w-full" onClick={handleClose}>
             취소
           </Button>

@@ -1,6 +1,6 @@
 import { Check, ChevronDown } from "@untitledui/icons";
 import { Button } from "../buttons/Button";
-import { Dropdown } from "./dropdown";
+import { Dropdown } from "./Dropdown";
 
 interface DropdownButtonProps {
   placeholder?: string;

@@ -11,13 +11,13 @@ import {
   TextField as AriaTextField,
 } from "react-aria-components";
 import { HintText } from "@/components/common/input/HintText";
-import { Label } from "@/components/common/input/Label";
+import { Label } from "@/components/common/input/label";
 import { cx } from "@/utils/cx";
 
 // Creates a data URL for an SVG resize handle with a given color.
 const getResizeHandleBg = (color: string) => {
   return `url(data:image/svg+xml;base64,${btoa(
-    `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 2L2 10" stroke="${color}" stroke-linecap="round"/><path d="M11 7L7 11" stroke="${color}" stroke-linecap="round"/></svg>`
+    `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 2L2 10" stroke="${color}" stroke-linecap="round"/><path d="M11 7L7 11" stroke="${color}" stroke-linecap="round"/></svg>`,
   )})`;
 };
 
@@ -37,18 +37,18 @@ export const TextAreaBase = ({ className, ...props }: TextAreaBaseProps) => {
       }
       className={(state) =>
         cx(
-          "w-full scroll-py-3 rounded-lg bg-primary px-3.5 py-3 text-md text-primary shadow-xs ring-1 ring-primary transition duration-100 ease-linear ring-inset placeholder:text-placeholder autofill:rounded-lg autofill:text-primary focus:outline-hidden",
+          "bg-primary text-md text-primary ring-primary placeholder:text-placeholder autofill:text-primary w-full scroll-py-3 rounded-lg px-3.5 py-3 shadow-xs ring-1 transition duration-100 ease-linear ring-inset autofill:rounded-lg focus:outline-hidden",
 
           // Resize handle
           "[&::-webkit-resizer]:bg-(image:--resize-handle-bg) [&::-webkit-resizer]:bg-contain dark:[&::-webkit-resizer]:bg-(image:--resize-handle-bg-dark)",
 
-          state.isFocused && !state.isDisabled && "ring-2 ring-brand",
+          state.isFocused && !state.isDisabled && "ring-brand ring-2",
           state.isDisabled &&
-            "cursor-not-allowed bg-disabled_subtle text-disabled ring-disabled",
+            "bg-disabled_subtle text-disabled ring-disabled cursor-not-allowed",
           state.isInvalid && "ring-error_subtle",
-          state.isInvalid && state.isFocused && "ring-2 ring-error",
+          state.isInvalid && state.isFocused && "ring-error ring-2",
 
-          typeof className === "function" ? className(state) : className
+          typeof className === "function" ? className(state) : className,
         )
       }
     />
@@ -99,7 +99,7 @@ export const TextArea = ({
       className={(state) =>
         cx(
           "group flex h-max w-full flex-col items-start justify-start gap-1.5",
-          typeof className === "function" ? className(state) : className
+          typeof className === "function" ? className(state) : className,
         )
       }
     >

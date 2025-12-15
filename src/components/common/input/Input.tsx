@@ -18,7 +18,7 @@ import {
 import { InfoCircle } from "@untitledui/icons";
 import { HintText } from "@/components/common/input/HintText";
 import { cx, sortCx } from "@/utils/cx";
-import { Label } from "./Label";
+import { Label } from "./label";
 
 export interface InputBaseProps extends TextFieldProps {
   /**

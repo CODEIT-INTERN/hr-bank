@@ -1,10 +1,10 @@
-import { BaseModal } from "../common/modals/BaseModal";
-import { AvatarLabelGroup } from "../common/avatar/AvatarLabelGroup";
-import { StatusBadge } from "../common/badges/StatusBadge";
+import { useEffect } from "react";
 import type { HistoryDetailDto } from "@/api/history/historyApi";
 import type { HistoryDto } from "@/model/history";
-import { useEffect } from "react";
 import { formatIsoToYmdHms } from "@/utils/date";
+import { AvatarLabelGroup } from "../common/avatar/AvatarLabelGroup";
+import { StatusBadge } from "../common/badges/StatusBadge";
+import { BaseModal } from "../common/modals/BaseModal";
 
 const TARGET_MAP = {
   hireDate: "입사일",
@@ -19,7 +19,7 @@ const TARGET_MAP = {
 interface HIstoryDetailModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  history: Array<HistoryDetailDto> | [];
+  history: Array<HistoryDetailDto> | [] | null;
   historyList: HistoryDto | null;
 }
 
@@ -39,7 +39,11 @@ const HistoryDetailModal = ({
 
   if (!history) return null;
 
-  const renderValue = (fieldName: string, value: any, isNewValue: boolean) => {
+  const renderValue = (
+    fieldName: string,
+    value: unknown,
+    _isNewValue: boolean,
+  ) => {
     // 값이 없거나 '-' 일 경우
     if (value === null || value === undefined || value === "-") {
       return <span>-</span>;
@@ -49,11 +53,15 @@ const HistoryDetailModal = ({
     if (fieldName === "status") {
       // isNewValue 여부에 따라 스타일을 다르게 줄 수 있습니다.
       // 여기서는 Badge를 사용하되, 새 값(변경 후)인 경우 굵게 표시합니다.
-      return <StatusBadge kind="employment" value={value} />;
+      if (typeof value === "string") {
+        return <StatusBadge kind="employment" value={value} />;
+      }
     }
 
     // 일반 텍스트의 경우
-    return <span>{value}</span>;
+    if (typeof value === "string") {
+      return <span>{value}</span>;
+    }
   };
   //   TODO: 임시 값으로 대체 백엔드 데이터 받아와야함
   const name = "김우디";
@@ -72,16 +80,12 @@ const HistoryDetailModal = ({
           size="md"
           src={`/api/files/${profileImageId}/download`}
           alt={`프로필`}
-          //   title={history.memo}
-          //   src={`/api/files/${history.profileImageId}/download`}
-          //   alt={`${history.name}의 프로필`}
-          //   subtitle={history.employeeNumber}
           title={name}
           subtitle={empNum}
         />
         <hr className="border-border-secondary" />
         {/* 2. 유형, 일시, IP 주소 그룹 */}
-        <div className="flex flex-col gap-3 mb-4 text-sm">
+        <div className="mb-4 flex flex-col gap-3 text-sm">
           {/* 유형 */}
           <div className="flex gap-1">
             <label className="text-quaternary w-14">유형</label>
@@ -90,7 +94,7 @@ const HistoryDetailModal = ({
 
               {historyList?.memo && historyList?.memo.trim() !== "" && (
                 <>
-                  <span className="text-gray-400 whitespace-nowrap">•</span>
+                  <span className="whitespace-nowrap text-gray-400">•</span>
                   <span className="text-primary-900 whitespace-nowrap">
                     {historyList?.memo}
                   </span>
@@ -101,7 +105,7 @@ const HistoryDetailModal = ({
           {/* 일시 */}
           <div className="flex gap-1">
             <label className="text-quaternary w-14">일시</label>
-            <p className="text-gray-900 whitespace-nowrap">
+            <p className="whitespace-nowrap text-gray-900">
               {/* {formatDateAsKorean(history.atFrom)} */}
               {formatIsoToYmdHms(historyList?.at || "")}
             </p>
@@ -109,20 +113,20 @@ const HistoryDetailModal = ({
           {/* IP 주소 */}
           <div className="flex gap-1">
             <label className="text-quaternary w-14">IP 주소</label>
-            <p className="text-gray-900 whitespace-nowrap">
+            <p className="whitespace-nowrap text-gray-900">
               {historyList?.ipAddress}
             </p>
           </div>
           <hr className="border-border-secondary" />
         </div>
         {/* 변경 상세 내용 컨테이너 (테이블) */}
-        <div className="flex flex-col w-full rounded-xl pt-3 gap-2 border border-border-secondary">
-          <h2 className="font-semibold text-md px-5">변경 상세 내용</h2>
+        <div className="border-border-secondary flex w-full flex-col gap-2 rounded-xl border pt-3">
+          <h2 className="text-md px-5 font-semibold">변경 상세 내용</h2>
           {history.length > 0 ? (
             // 데이터 있으면
             <div className="flex flex-col gap-5 p-5">
               {/* 테이블 헤더 */}
-              <div className="flex text-sm text-left text-quaternary items-center justify-end gap-5">
+              <div className="text-quaternary flex items-center justify-end gap-5 text-left text-sm">
                 <div className="w-1/5" />
                 <div className="w-2/5">변경 전</div>
                 <div className="w-2/5">변경 후</div>
@@ -131,10 +135,10 @@ const HistoryDetailModal = ({
               {history.map((diff, index) => (
                 <div
                   key={index}
-                  className="flex text-sm text-left items-center gap-5"
+                  className="flex items-center gap-5 text-left text-sm"
                 >
                   <div className="text-quaternary w-1/5">
-                    {TARGET_MAP[diff.propertyName]}
+                    {TARGET_MAP[diff.propertyName as keyof typeof TARGET_MAP]}
                   </div>
                   <div className="w-2/5">
                     {renderValue(diff.propertyName, diff.before, false)}

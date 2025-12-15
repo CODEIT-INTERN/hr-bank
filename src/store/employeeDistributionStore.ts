@@ -17,7 +17,7 @@ const initialFilters: EmployeeDistributionQuery = {
 };
 
 export const useEmployeeDistributionStore = create<EmployeeDistributionStore>(
-  (set, get) => ({
+  (set, _get) => ({
     departmentDistributions: [],
     positionDistributions: [],
     isLoading: false,

@@ -77,7 +77,7 @@ const CreateUpdateEmployeeModal = ({
   const { items: departmentItems, loadFirstPage: loadDepartments } =
     useDepartmentListStore();
   const { loadFirstPage } = useEmployeeListStore();
-  const { successToast } = useToastStore();
+  const { successToast, errorToast } = useToastStore();
 
   const [formData, setFormData] = useState<FormData>(() =>
     getInitialFormData(employee),
@@ -249,7 +249,9 @@ const CreateUpdateEmployeeModal = ({
       resetFormdata();
       onOpenChange(false);
       if (!employee) {
-        successToast("직원이 추가되었습니다.");
+        successToast("직원이 추가되었습니다");
+      } else {
+        successToast("직원 정보가 수정되었습니다");
       }
     } catch (error) {
       // 400 에러 → 중복 이메일 처리
@@ -265,7 +267,14 @@ const CreateUpdateEmployeeModal = ({
           return;
         }
       }
-      console.error("직원 등록/수정 실패:", error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("직원 등록/수정 실패:", error);
+      }
+      if (!employee) {
+        errorToast("직원 추가에 실패하였습니다");
+      } else {
+        errorToast("직원 정보 수정에 실패하였습니다");
+      }
     }
   };
 

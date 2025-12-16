@@ -5,6 +5,7 @@ import { deleteEmployee } from "@/api/employee/employeeApi";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { EmployeeDto } from "@/model/employee";
 import { useEmployeeListStore } from "@/store/employeeStore";
+import { useToastStore } from "@/store/toastStore";
 import { formatDateAsKorean } from "@/utils/date";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
 import { AvatarLabelGroup } from "../common/avatar/AvatarLabelGroup";
@@ -38,6 +39,7 @@ const EmployeeTable = () => {
   const [updatingEmployee, setUpdatingEmployee] = useState<EmployeeDto | null>(
     null,
   );
+  const { successToast, errorToast } = useToastStore();
 
   useEffect(() => {
     loadFirstPage();
@@ -73,8 +75,12 @@ const EmployeeTable = () => {
     try {
       await deleteEmployee(targetEmployeeId);
       await loadFirstPage();
+      successToast("직원이 삭제되었습니다");
     } catch (error) {
-      console.error("직원 삭제 실패", error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("직원 삭제 실패", error);
+      }
+      errorToast("직원 삭제에 실패하였습니다");
     } finally {
       setDeleteModalOpen(false);
       setTargetEmployeeId(null);

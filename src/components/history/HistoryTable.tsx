@@ -59,6 +59,8 @@ const HistoryTable = () => {
     }
   };
 
+  const hasNoData = !isLoading && !errorMessage && sortedItems.length === 0;
+
   return (
     <div className="flex h-full min-h-0 flex-col">
       {/* 테이블 영역 - 가로 스크롤 적용 */}
@@ -141,7 +143,7 @@ const HistoryTable = () => {
           {isLoading && <span>불러오는 중...</span>}
         </div>
       </div>
-      {!isLoading && sortedItems.length === 0 && (
+      {!hasNoData && (
         <div className="flex h-[calc(100%-80px)] flex-1 flex-col items-center justify-center text-center">
           <span className="text-gray-500">현재 표시할 이력이 없습니다</span>
         </div>

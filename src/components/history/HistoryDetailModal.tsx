@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import type { HistoryDto } from "@/model/history";
 import { formatIsoToYmdHms } from "@/utils/date";
 import { AvatarLabelGroup } from "../common/avatar/AvatarLabelGroup";
@@ -29,10 +28,6 @@ const HistoryDetailModal = ({
   const handleClose = (boolean: boolean) => {
     onOpenChange(boolean);
   };
-
-  useEffect(() => {
-    console.log("이력상세내용: ", history);
-  }, [history]);
 
   if (!history) return null;
   const diffs = history.diffs || [];

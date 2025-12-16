@@ -1,5 +1,4 @@
 import { create } from "zustand";
-
 import { getChangeLogs, getRecentChangeCount } from "@/api/history/historyApi";
 import type { HistoryDto, HistoryListQuery } from "@/model/history";
 import type { CursorPageResponse } from "@/model/pagination";
@@ -155,8 +154,6 @@ export const useHistoryListStore = create<HistoryListState>((set, get) => ({
       set({
         recentChangeCount: res,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   },
 }));

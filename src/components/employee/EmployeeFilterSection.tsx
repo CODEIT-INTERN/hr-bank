@@ -1,11 +1,11 @@
-import { useState } from "react";
-import type { DateRange, DateValue } from "react-aria-components";
-import type { RangeValue } from "@react-types/shared";
+import { useEffect, useState } from "react";
+import type { DateRange } from "react-aria-components";
 import { FilterLines, Plus, SearchMd } from "@untitledui/icons";
 import { EmploymentStateLabels } from "@/constants/EmploymentStateLabels";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useEmployeeListStore } from "@/store/employeeStore";
 import type { EmployeeStatus } from "@/types/enums";
-import { formatDateRange, formatDateValue, parseDateValue } from "@/utils/date";
+import { formatDateRange } from "@/utils/date";
 import { Button } from "../common/buttons/Button";
 import { DateRangePicker } from "../common/date-picker/DateRangePicker";
 import { DropdownButton } from "../common/dropdown/DropdownButton";
@@ -22,6 +22,34 @@ const EmployeeFilterSection = () => {
   } | null>(null);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
+
+  const [nameOrEmailInput, setNameOrEmailInput] = useState("");
+  const debouncedNameOrEmail = useDebouncedValue(nameOrEmailInput);
+
+  const [employeeNumberInput, setEmployeeNumberInput] = useState("");
+  const debouncedEmployeeNumber = useDebouncedValue(employeeNumberInput);
+
+  const [departmentNameInput, setDepartmentNameInput] = useState("");
+  const debouncedDepartmentName = useDebouncedValue(departmentNameInput);
+
+  const [positionInput, setPositionInput] = useState("");
+  const debouncedPosition = useDebouncedValue(positionInput);
+
+  useEffect(() => {
+    setFilters({ nameOrEmail: debouncedNameOrEmail });
+  }, [debouncedNameOrEmail, setFilters]);
+
+  useEffect(() => {
+    setFilters({ employeeNumber: debouncedEmployeeNumber });
+  }, [debouncedEmployeeNumber, setFilters]);
+
+  useEffect(() => {
+    setFilters({ departmentName: debouncedDepartmentName });
+  }, [debouncedDepartmentName, setFilters]);
+
+  useEffect(() => {
+    setFilters({ position: debouncedPosition });
+  }, [debouncedPosition, setFilters]);
 
   const handleToggleFilter = () => {
     setIsFilterActive((prev) => !prev);
@@ -63,9 +91,7 @@ const EmployeeFilterSection = () => {
             iconClassName="w-5 h-5 stroke-black"
             placeholder="이름 또는 이메일을 입력해주세요"
             className="w-80"
-            onChange={(value) => {
-              setFilters({ nameOrEmail: value });
-            }}
+            onChange={(value) => setNameOrEmailInput(value)}
           />
           <DropdownButton
             label={EmploymentStateLabels}
@@ -95,23 +121,17 @@ const EmployeeFilterSection = () => {
           <Input
             placeholder="사번을 입력해주세요"
             className="w-80"
-            onChange={(value) => {
-              setFilters({ employeeNumber: value });
-            }}
+            onChange={(value) => setEmployeeNumberInput(value)}
           />
           <Input
             placeholder="부서명을 입력해주세요"
             className="w-48"
-            onChange={(value) => {
-              setFilters({ departmentName: value });
-            }}
+            onChange={(value) => setDepartmentNameInput(value)}
           />
           <Input
             placeholder="직함을 입력해주세요"
             className="w-48"
-            onChange={(value) => {
-              setFilters({ position: value });
-            }}
+            onChange={(value) => setPositionInput(value)}
           />
           <DateRangePicker
             placeholder="입사일을 선택해주세요"

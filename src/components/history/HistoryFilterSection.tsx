@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import type { DateRange } from "react-aria-components";
 import { FilterLines, SearchMd } from "@untitledui/icons";
 import { HistoryTypeLabels } from "@/constants/HistoryTypeLabels";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useHistoryListStore } from "@/store/historyStore";
 import type { HistoryType } from "@/types/enums";
-import { formatDateRange, formatDateRangeISO } from "@/utils/date";
+import { formatDateRangeISO } from "@/utils/date";
 import { Button } from "../common/buttons/Button";
 import { DateRangePicker } from "../common/date-picker/DateRangePicker";
 import { DropdownButton } from "../common/dropdown/DropdownButton";
@@ -18,6 +19,27 @@ const HistoryFilterSection = () => {
     start: string | undefined;
     end: string | undefined;
   } | null>(null);
+
+  const [employeeNumberInput, setEmployeeNumberInput] = useState("");
+  const debouncedEmployeeNumber = useDebouncedValue(employeeNumberInput);
+
+  const [memoInput, setMemoInput] = useState("");
+  const debouncedMemo = useDebouncedValue(memoInput);
+
+  const [ipAddressInput, setIpAddressInput] = useState("");
+  const debouncedIpAddress = useDebouncedValue(ipAddressInput);
+
+  useEffect(() => {
+    setFilters({ employeeNumber: debouncedEmployeeNumber });
+  }, [debouncedEmployeeNumber, setFilters]);
+
+  useEffect(() => {
+    setFilters({ memo: debouncedMemo });
+  }, [debouncedMemo, setFilters]);
+
+  useEffect(() => {
+    setFilters({ ipAddress: debouncedIpAddress });
+  }, [debouncedIpAddress, setFilters]);
 
   const handleToggleFilter = () => {
     setIsFilterActive((prev) => !prev);
@@ -55,9 +77,7 @@ const HistoryFilterSection = () => {
             iconClassName="w-5 h-5 stroke-black"
             placeholder="사번을 입력해주세요"
             className="w-80"
-            onChange={(value) => {
-              setFilters({ employeeNumber: value });
-            }}
+            onChange={(value) => setEmployeeNumberInput(value)}
           />
           <DropdownButton
             label={HistoryTypeLabels}
@@ -81,16 +101,12 @@ const HistoryFilterSection = () => {
           <Input
             placeholder="내용을 입력해주세요"
             className="w-80"
-            onChange={(value) => {
-              setFilters({ memo: value });
-            }}
+            onChange={(value) => setMemoInput(value)}
           />
           <Input
             placeholder="IP 주소를 입력해주세요"
             className="w-80"
-            onChange={(value) => {
-              setFilters({ ipAddress: value });
-            }}
+            onChange={(value) => setIpAddressInput(value)}
           />
           <DateRangePicker
             placeholder="날짜를 선택해주세요"

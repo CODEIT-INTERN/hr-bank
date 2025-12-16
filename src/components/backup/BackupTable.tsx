@@ -115,12 +115,12 @@ export function BackupTable() {
         {hasNext && <div ref={loadMoreRef} className="h-4" />}
 
         {/* 메시지 영역 - 스크롤 영역 밖 */}
-        <div className="flex items-center justify-center text-center text-sm text-gray-600">
-          <div>{errorMessage && <span>{errorMessage}</span>}</div>
+        <div className="flex items-center justify-center py-2 text-center text-sm text-gray-600">
+          {errorMessage && <span className="text-red-500">{errorMessage}</span>}
           {isLoading && <span>불러오는 중...</span>}
         </div>
 
-        {!isLoading && sortedItems.length === 0 && (
+        {!errorMessage && !isLoading && sortedItems.length === 0 && (
           <div className="flex h-[calc(100%-80px)] flex-1 flex-col items-center justify-center text-center">
             <span className="text-disabled">데이터 백업 정보가 없어요</span>
           </div>

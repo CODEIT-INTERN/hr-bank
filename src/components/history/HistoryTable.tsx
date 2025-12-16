@@ -148,6 +148,11 @@ const HistoryTable = () => {
           {isLoading && <span>불러오는 중...</span>}
         </div>
       </div>
+      {!isLoading && sortedItems.length === 0 && (
+        <div className="flex h-[calc(100%-80px)] flex-1 flex-col items-center justify-center text-center">
+          <span className="text-gray-500">현재 표시할 이력이 없습니다</span>
+        </div>
+      )}
       <HistoryDetailModal
         history={selectedHistory}
         isOpen={isDetailModalOpen}

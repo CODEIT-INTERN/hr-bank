@@ -1,11 +1,17 @@
-import type { BackupDto, BackupListQuery, LatestBackupQuery } from "@/model/backup";
+import type {
+  BackupDto,
+  BackupListQuery,
+  LatestBackupQuery,
+} from "@/model/backup";
 import type { CursorPageResponse } from "@/model/pagination";
 import apiClient from "../client";
 
 /**
  * 데이터 백업 목록 조회
  */
-export function getBackups(query: BackupListQuery): Promise<CursorPageResponse<BackupDto>> {
+export function getBackups(
+  query: BackupListQuery,
+): Promise<CursorPageResponse<BackupDto>> {
   return apiClient.get<CursorPageResponse<BackupDto>>("/backups", query);
 }
 

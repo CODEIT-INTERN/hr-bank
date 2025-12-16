@@ -1,8 +1,9 @@
 // src/api/http/client.ts
 import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
 
-const BASE_URL = "/api";
+const isProduction = import.meta.env.MODE === "production";
 
+const BASE_URL = isProduction ? import.meta.env.VITE_APP_API_URL : "/api";
 /**
  * axios 인스턴스
  * - baseURL만 설정한 아주 얇은 래퍼
@@ -46,7 +47,7 @@ async function get<T>(url: string, params?: unknown): Promise<T> {
 async function post<T>(
   url: string,
   data?: unknown,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<T> {
   const response = await axiosInstance.post<T>(url, data, config);
   return response.data;
@@ -55,7 +56,7 @@ async function post<T>(
 async function multiPartPost<T>(
   url: string,
   data?: unknown,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<T> {
   const response = await axiosMultipartInstance.post<T>(url, data, config);
   return response.data;
@@ -67,7 +68,7 @@ async function multiPartPost<T>(
 async function patch<T>(
   url: string,
   data?: unknown,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<T> {
   const response = await axiosInstance.patch<T>(url, data, config);
   return response.data;
@@ -76,7 +77,7 @@ async function patch<T>(
 async function multiPartPatch<T>(
   url: string,
   data?: unknown,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<T> {
   const response = await axiosMultipartInstance.patch<T>(url, data, config);
   return response.data;
@@ -88,7 +89,7 @@ async function multiPartPatch<T>(
 async function put<T>(
   url: string,
   data?: unknown,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<T> {
   const response = await axiosInstance.put<T>(url, data, config);
   return response.data;

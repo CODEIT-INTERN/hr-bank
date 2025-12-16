@@ -24,8 +24,10 @@ export const useEmployeeCountStore = create<EmployeeCountStore>(
       set({ isLoading: true, errorMessage: null });
 
       try {
-        const data = await getEmployeeCount({ status: "ACTIVE" });
-        set({ count: data, isLoading: false });
+        const activeData = await getEmployeeCount({ status: "ACTIVE" });
+        const onLeaveData = await getEmployeeCount({ status: "ON_LEAVE" });
+        const total = activeData + onLeaveData;
+        set({ count: total, isLoading: false });
       } catch (error) {
         console.error(error);
         set({

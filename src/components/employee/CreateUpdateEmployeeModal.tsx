@@ -179,10 +179,6 @@ const CreateUpdateEmployeeModal = ({
       hireDate: parseDateValue(employee?.hireDate) || null,
     }));
   };
-  useEffect(() => {
-    console.log(formData);
-    console.log("employee,", employee);
-  }, [formData, employee]);
   // 프로필 이미지 프리뷰 핸들러
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;

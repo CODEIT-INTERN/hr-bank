@@ -36,6 +36,21 @@ export const formatDateRange = (
   };
 };
 
+// RangeDateValue → YYYY-MM-DD HH:mm:ss ISO 문자열 변환
+export const formatDateRangeISO = (
+  range: {
+    start: DateValue;
+    end: DateValue;
+  } | null,
+) => {
+  if (!range) return { start: "", end: "" };
+
+  return {
+    start: formatDateValueToIsoZ(range.start),
+    end: formatDateValueToIsoZ(range.end),
+  };
+};
+
 // string 날짜를 CalenderDate 객체로 변환
 export const parseDateValue = (
   date: string | null | undefined,

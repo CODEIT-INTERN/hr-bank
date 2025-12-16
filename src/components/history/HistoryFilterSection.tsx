@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { DateRange } from "react-aria-components";
 import { FilterLines, SearchMd } from "@untitledui/icons";
 import { HistoryTypeLabels } from "@/constants/HistoryTypeLabels";
 import { useHistoryListStore } from "@/store/historyStore";
 import type { HistoryType } from "@/types/enums";
-import { formatDateRange } from "@/utils/date";
+import { formatDateRange, formatDateRangeISO } from "@/utils/date";
 import { Button } from "../common/buttons/Button";
 import { DateRangePicker } from "../common/date-picker/DateRangePicker";
 import { DropdownButton } from "../common/dropdown/DropdownButton";
@@ -13,28 +13,36 @@ import { Input } from "../common/input/Input";
 const HistoryFilterSection = () => {
   const { setFilters, filters, totalElements } = useHistoryListStore();
   const [isFilterActive, setIsFilterActive] = useState(false);
-  const [_committedRange, setCommittedRange] = useState<DateRange | null>(null);
-  const [tempRange, setTempRange] = useState<DateRange | null>(null);
+  const [committedRange, setCommittedRange] = useState<DateRange | null>(null);
+  const [tempRange, setTempRange] = useState<{
+    start: string | undefined;
+    end: string | undefined;
+  } | null>(null);
 
   const handleToggleFilter = () => {
     setIsFilterActive((prev) => !prev);
   };
 
   const handleRangeChange = (value: DateRange | null) => {
-    const formattedDate = formatDateRange(value);
-    setFilters({
-      atFrom: formattedDate.start,
-      atTo: formattedDate.end,
-    });
+    const formattedDate = formatDateRangeISO(value);
+    setTempRange(formattedDate);
+    setCommittedRange(value);
   };
 
   const handleRangeApply = () => {
-    setCommittedRange(tempRange);
+    setFilters({
+      atFrom: tempRange?.start,
+      atTo: tempRange?.end,
+    });
   };
 
   const handleRangeCancel = () => {
     setTempRange(null);
     setCommittedRange(null);
+    setFilters({
+      atFrom: "",
+      atTo: "",
+    });
   };
 
   return (
@@ -86,7 +94,8 @@ const HistoryFilterSection = () => {
           />
           <DateRangePicker
             placeholder="날짜를 선택해주세요"
-            onChange={handleRangeChange}
+            value={committedRange}
+            onChange={(value) => handleRangeChange(value)}
             onApply={handleRangeApply}
             onCancel={handleRangeCancel}
           />

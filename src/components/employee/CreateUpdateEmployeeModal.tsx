@@ -174,9 +174,15 @@ const CreateUpdateEmployeeModal = ({
   };
   // 입사일 선택 취소 핸들러(기존값 유지)
   const handleCancel = () => {
-    setFormData((prev) => ({ ...prev, hireDate: prev.hireDate }));
+    setFormData((prev) => ({
+      ...prev,
+      hireDate: parseDateValue(employee?.hireDate) || null,
+    }));
   };
-
+  useEffect(() => {
+    console.log(formData);
+    console.log("employee,", employee);
+  }, [formData, employee]);
   // 프로필 이미지 프리뷰 핸들러
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;

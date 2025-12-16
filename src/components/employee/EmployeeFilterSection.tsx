@@ -1,10 +1,11 @@
 import { useState } from "react";
-import type { DateRange } from "react-aria-components";
+import type { DateRange, DateValue } from "react-aria-components";
+import type { RangeValue } from "@react-types/shared";
 import { FilterLines, Plus, SearchMd } from "@untitledui/icons";
 import { EmploymentStateLabels } from "@/constants/EmploymentStateLabels";
 import { useEmployeeListStore } from "@/store/employeeStore";
 import type { EmployeeStatus } from "@/types/enums";
-import { formatDateRange } from "@/utils/date";
+import { formatDateRange, formatDateValue, parseDateValue } from "@/utils/date";
 import { Button } from "../common/buttons/Button";
 import { DateRangePicker } from "../common/date-picker/DateRangePicker";
 import { DropdownButton } from "../common/dropdown/DropdownButton";
@@ -14,8 +15,11 @@ import CreateUpdateEmployeeModal from "./CreateUpdateEmployeeModal";
 const EmployeeFilterSection = () => {
   const { setFilters, filters, totalElements } = useEmployeeListStore();
   const [isFilterActive, setIsFilterActive] = useState(false);
-  const [_committedRange, setCommittedRange] = useState<DateRange | null>(null);
-  const [tempRange, setTempRange] = useState<DateRange | null>(null);
+  const [committedRange, setCommittedRange] = useState<DateRange | null>(null);
+  const [tempRange, setTempRange] = useState<{
+    start: string;
+    end: string;
+  } | null>(null);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
 
@@ -25,19 +29,24 @@ const EmployeeFilterSection = () => {
 
   const handleRangeChange = (value: DateRange | null) => {
     const formattedDate = formatDateRange(value);
-    setFilters({
-      hireDateFrom: formattedDate.start,
-      hireDateTo: formattedDate.end,
-    });
+    setTempRange(formattedDate);
+    setCommittedRange(value);
   };
 
   const handleRangeApply = () => {
-    setCommittedRange(tempRange);
+    setFilters({
+      hireDateFrom: tempRange?.start,
+      hireDateTo: tempRange?.end,
+    });
   };
 
   const handleRangeCancel = () => {
     setTempRange(null);
     setCommittedRange(null);
+    setFilters({
+      hireDateFrom: undefined,
+      hireDateTo: undefined,
+    });
   };
 
   const handleClickCreateButton = () => {
@@ -106,7 +115,8 @@ const EmployeeFilterSection = () => {
           />
           <DateRangePicker
             placeholder="입사일을 선택해주세요"
-            onChange={handleRangeChange}
+            value={committedRange}
+            onChange={(value) => handleRangeChange(value)}
             onApply={handleRangeApply}
             onCancel={handleRangeCancel}
           />

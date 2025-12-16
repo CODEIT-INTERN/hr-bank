@@ -9,15 +9,12 @@ import { Button } from "../common/buttons/Button";
 import { DateRangePicker } from "../common/date-picker/DateRangePicker";
 import { DropdownButton } from "../common/dropdown/DropdownButton";
 import { Input } from "../common/input/Input";
-import CreateUpdateEmployeeModal from "../employee/CreateUpdateEmployeeModal";
 
 const HistoryFilterSection = () => {
   const { setFilters, filters, totalElements } = useHistoryListStore();
   const [isFilterActive, setIsFilterActive] = useState(false);
   const [_committedRange, setCommittedRange] = useState<DateRange | null>(null);
   const [tempRange, setTempRange] = useState<DateRange | null>(null);
-
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
 
   const handleToggleFilter = () => {
     setIsFilterActive((prev) => !prev);
@@ -96,11 +93,6 @@ const HistoryFilterSection = () => {
           />
         </div>
       )}
-      <CreateUpdateEmployeeModal
-        employee={null}
-        isOpen={isCreateModalOpen}
-        onOpenChange={setIsCreateModalOpen}
-      />
     </div>
   );
 };

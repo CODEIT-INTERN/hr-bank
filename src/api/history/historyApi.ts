@@ -27,11 +27,9 @@ export function getChangeLogs(
 //  직원 정보 수정 이력의 상세 정보를 조회합니다.
 export async function getChangeLogDetails({
   id,
-}: HistoryDetailRequest): Promise<HistoryDetailDto[]> {
+}: HistoryDetailRequest): Promise<HistoryDetailDto> {
   // Path Parameter는 URL에 직접 삽입됩니다.
-  const response = await apiClient.get<HistoryDetailDto[]>(
-    `/change-logs/${id}/diffs`,
-  );
+  const response = await apiClient.get<HistoryDetailDto>(`/change-logs/${id}`);
 
   return response;
 }

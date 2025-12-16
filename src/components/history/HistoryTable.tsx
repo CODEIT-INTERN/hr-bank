@@ -22,6 +22,7 @@ const HistoryTable = () => {
     filters,
     loadFirstPage,
     loadNextPage,
+    isFiltering,
   } = useHistoryListStore();
 
   const [selectedHistory, setSelectedHistory] = useState<HistoryDto | null>(
@@ -47,13 +48,15 @@ const HistoryTable = () => {
   }, [loadFirstPage, filters]);
 
   const sortedItems = useMemo(() => {
-    return sortByDescriptor<HistoryDto>(items, sortDescriptor);
+    // null 또는 undefined 항목을 제거 (선택 사항이지만 안전성 확보)
+    const safeItems = items.filter((item) => !!item && !!item.id);
+    return sortByDescriptor<HistoryDto>(safeItems, sortDescriptor);
   }, [items, sortDescriptor]);
 
   const { errorToast } = useToastStore();
   const { loadMoreRef } = useInfiniteScroll({
     hasNext,
-    isLoading,
+    isLoading: isLoading || isFiltering,
     onLoadMore: loadNextPage,
     rootMargin: "0px 0px 200px 0px",
   });
@@ -113,7 +116,7 @@ const HistoryTable = () => {
           <Table.Body items={sortedItems}>
             {(item: HistoryDto) => {
               return (
-                <Table.Row id={item.id} key={item.id}>
+                <Table.Row key={item.id}>
                   {/* 유형 */}
                   <Table.Cell className="w-1/12">
                     <StatusBadge kind="history" value={item.type} />

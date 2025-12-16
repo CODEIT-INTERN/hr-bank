@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { DateRange } from "react-aria-components";
 import { FilterLines, Plus, SearchMd } from "@untitledui/icons";
 import { EmploymentStateLabels } from "@/constants/EmploymentStateLabels";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useEmployeeListStore } from "@/store/employeeStore";
 import type { EmployeeStatus } from "@/types/enums";
 import { formatDateRange } from "@/utils/date";
@@ -14,10 +15,41 @@ import CreateUpdateEmployeeModal from "./CreateUpdateEmployeeModal";
 const EmployeeFilterSection = () => {
   const { setFilters, filters, totalElements } = useEmployeeListStore();
   const [isFilterActive, setIsFilterActive] = useState(false);
-  const [_committedRange, setCommittedRange] = useState<DateRange | null>(null);
-  const [tempRange, setTempRange] = useState<DateRange | null>(null);
+  const [committedRange, setCommittedRange] = useState<DateRange | null>(null);
+  const [tempRange, setTempRange] = useState<{
+    start: string;
+    end: string;
+  } | null>(null);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
+
+  const [nameOrEmailInput, setNameOrEmailInput] = useState("");
+  const debouncedNameOrEmail = useDebouncedValue(nameOrEmailInput);
+
+  const [employeeNumberInput, setEmployeeNumberInput] = useState("");
+  const debouncedEmployeeNumber = useDebouncedValue(employeeNumberInput);
+
+  const [departmentNameInput, setDepartmentNameInput] = useState("");
+  const debouncedDepartmentName = useDebouncedValue(departmentNameInput);
+
+  const [positionInput, setPositionInput] = useState("");
+  const debouncedPosition = useDebouncedValue(positionInput);
+
+  useEffect(() => {
+    setFilters({ nameOrEmail: debouncedNameOrEmail });
+  }, [debouncedNameOrEmail, setFilters]);
+
+  useEffect(() => {
+    setFilters({ employeeNumber: debouncedEmployeeNumber });
+  }, [debouncedEmployeeNumber, setFilters]);
+
+  useEffect(() => {
+    setFilters({ departmentName: debouncedDepartmentName });
+  }, [debouncedDepartmentName, setFilters]);
+
+  useEffect(() => {
+    setFilters({ position: debouncedPosition });
+  }, [debouncedPosition, setFilters]);
 
   const handleToggleFilter = () => {
     setIsFilterActive((prev) => !prev);
@@ -25,19 +57,24 @@ const EmployeeFilterSection = () => {
 
   const handleRangeChange = (value: DateRange | null) => {
     const formattedDate = formatDateRange(value);
-    setFilters({
-      hireDateFrom: formattedDate.start,
-      hireDateTo: formattedDate.end,
-    });
+    setTempRange(formattedDate);
+    setCommittedRange(value);
   };
 
   const handleRangeApply = () => {
-    setCommittedRange(tempRange);
+    setFilters({
+      hireDateFrom: tempRange?.start,
+      hireDateTo: tempRange?.end,
+    });
   };
 
   const handleRangeCancel = () => {
     setTempRange(null);
     setCommittedRange(null);
+    setFilters({
+      hireDateFrom: undefined,
+      hireDateTo: undefined,
+    });
   };
 
   const handleClickCreateButton = () => {
@@ -54,9 +91,7 @@ const EmployeeFilterSection = () => {
             iconClassName="w-5 h-5 stroke-black"
             placeholder="이름 또는 이메일을 입력해주세요"
             className="w-80"
-            onChange={(value) => {
-              setFilters({ nameOrEmail: value });
-            }}
+            onChange={(value) => setNameOrEmailInput(value)}
           />
           <DropdownButton
             label={EmploymentStateLabels}
@@ -86,29 +121,22 @@ const EmployeeFilterSection = () => {
           <Input
             placeholder="사번을 입력해주세요"
             className="w-80"
-            onChange={(value) => {
-              setFilters({ employeeNumber: value });
-            }}
+            onChange={(value) => setEmployeeNumberInput(value)}
           />
           <Input
             placeholder="부서명을 입력해주세요"
             className="w-48"
-            onChange={(value) => {
-              // TODO:
-              setFilters({ departmentName: value });
-            }}
+            onChange={(value) => setDepartmentNameInput(value)}
           />
           <Input
             placeholder="직함을 입력해주세요"
             className="w-48"
-            onChange={(value) => {
-              // TODO:
-              setFilters({ position: value });
-            }}
+            onChange={(value) => setPositionInput(value)}
           />
           <DateRangePicker
             placeholder="입사일을 선택해주세요"
-            onChange={handleRangeChange}
+            value={committedRange}
+            onChange={(value) => handleRangeChange(value)}
             onApply={handleRangeApply}
             onCancel={handleRangeCancel}
           />

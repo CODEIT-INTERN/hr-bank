@@ -1,7 +1,6 @@
 import type { DateValue } from "react-aria-components";
 import { CalendarDate, getLocalTimeZone } from "@internationalized/date";
 
-// TODO: 백엔드 요청 데이터 형식이랑 같은 지 확인해봐야 함
 // DateValue → YYYY-MM-DD 문자열 변환
 export const formatDateValue = (dateValue: DateValue | null) => {
   if (!dateValue) return "";
@@ -34,6 +33,21 @@ export const formatDateRange = (
   return {
     start: formatDateValue(range.start),
     end: formatDateValue(range.end),
+  };
+};
+
+// RangeDateValue → YYYY-MM-DD HH:mm:ss ISO 문자열 변환
+export const formatDateRangeISO = (
+  range: {
+    start: DateValue;
+    end: DateValue;
+  } | null,
+) => {
+  if (!range) return { start: "", end: "" };
+
+  return {
+    start: formatDateValueToIsoZ(range.start),
+    end: formatDateValueToIsoZ(range.end),
   };
 };
 

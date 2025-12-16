@@ -28,7 +28,11 @@ const EmployeeProfile = ({ employee }: ProfileAvatarProps) => {
           onError={() => setImgLoadError(true)}
         />
       )}
-      {showDefaultAvatar && employee.name.charAt(0)}
+      {showDefaultAvatar && (
+        <div className="bg-secondary flex h-full w-full items-center justify-center">
+          {employee.name.charAt(0)}
+        </div>
+      )}
     </>
   );
 };

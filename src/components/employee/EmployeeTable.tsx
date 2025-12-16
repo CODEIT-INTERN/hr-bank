@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
 import { Edit01, Trash01 } from "@untitledui/icons";
 import { deleteEmployee } from "@/api/employee/employeeApi";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { EmployeeDto } from "@/model/employee";
 import { useEmployeeListStore } from "@/store/employeeStore";
+import { useToastStore } from "@/store/toastStore";
 import { formatDateAsKorean } from "@/utils/date";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
 import { AvatarLabelGroup } from "../common/avatar/AvatarLabelGroup";
@@ -30,6 +31,14 @@ const EmployeeTable = () => {
     column: "hireDate",
     direction: "descending",
   });
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 필터 변경을 감지할 때 실행
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  }, [filters]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [targetEmployeeName, setTargetEmployeeName] = useState<string>("");
   const [targetEmployeeId, setTargetEmployeeId] = useState<number | null>(null);
@@ -38,6 +47,7 @@ const EmployeeTable = () => {
   const [updatingEmployee, setUpdatingEmployee] = useState<EmployeeDto | null>(
     null,
   );
+  const { successToast, errorToast } = useToastStore();
 
   useEffect(() => {
     loadFirstPage();
@@ -73,9 +83,12 @@ const EmployeeTable = () => {
     try {
       await deleteEmployee(targetEmployeeId);
       await loadFirstPage();
+      successToast("직원이 삭제되었습니다");
     } catch (error) {
-      // TODO: 토스트 추가
-      console.error("직원 삭제 실패", error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("직원 삭제 실패", error);
+      }
+      errorToast("직원 삭제에 실패하였습니다");
     } finally {
       setDeleteModalOpen(false);
       setTargetEmployeeId(null);
@@ -87,7 +100,10 @@ const EmployeeTable = () => {
   return (
     <div className="flex h-full min-h-0 flex-col">
       {/* 테이블 영역 - 가로 스크롤 적용 */}
-      <div className="border-border-secondary scrollbar-thin flex-1 overflow-auto rounded-2xl border">
+      <div
+        className="border-border-secondary scrollbar-thin flex-1 overflow-auto rounded-2xl border"
+        ref={scrollContainerRef}
+      >
         <Table
           aria-label="직원 목록"
           sortDescriptor={sortDescriptor}

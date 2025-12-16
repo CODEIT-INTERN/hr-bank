@@ -18,6 +18,8 @@ interface HistoryFilterState {
 interface HistoryListState {
   items: HistoryDto[];
   isLoading: boolean;
+  // 필터링(loadFirstPage) 중인지 나타내는 상태
+  isFiltering: boolean;
   errorMessage?: string;
   idAfter: number;
   hasNext: boolean;
@@ -50,6 +52,7 @@ const initialFilters: HistoryFilterState = {
 export const useHistoryListStore = create<HistoryListState>((set, get) => ({
   items: [],
   isLoading: false,
+  isFiltering: false,
   errorMessage: undefined,
   hasNext: false,
   idAfter: 0,
@@ -75,7 +78,14 @@ export const useHistoryListStore = create<HistoryListState>((set, get) => ({
   loadFirstPage: async () => {
     const { filters } = get();
 
-    set({ isLoading: true, errorMessage: undefined });
+    set({
+      isLoading: true,
+      isFiltering: true,
+      errorMessage: undefined,
+      items: [],
+      hasNext: false,
+      nextCursor: null,
+    });
 
     try {
       const page: CursorPageResponse<HistoryDto> = await getChangeLogs({
@@ -97,6 +107,7 @@ export const useHistoryListStore = create<HistoryListState>((set, get) => ({
         totalElements: page.totalElements ?? 0,
         // nextIdAfter: page.nextIdAfter ?? null,
         isLoading: false,
+        isFiltering: false,
       });
     } catch (error) {
       const message = "변경 이력 불러오기 중 오류";
@@ -104,6 +115,7 @@ export const useHistoryListStore = create<HistoryListState>((set, get) => ({
 
       set({
         isLoading: false,
+        isFiltering: false,
         errorMessage: message,
       });
     }
@@ -111,9 +123,19 @@ export const useHistoryListStore = create<HistoryListState>((set, get) => ({
 
   // 다음 페이지 로딩 (현재 커서 정보 사용)
   loadNextPage: async () => {
-    const { filters, idAfter, hasNext, nextCursor, items } = get();
-
-    if (!hasNext || !nextCursor) return; // 다음 페이지가 없거나 커서가 없으면 종료
+    const {
+      filters,
+      idAfter,
+      hasNext,
+      nextCursor,
+      items,
+      isLoading,
+      isFiltering,
+    } = get();
+    // 이미 로딩 중이거나 필터중이라면 바로 종료 (동시 호출 방지)
+    if (isLoading || isFiltering) return;
+    // 다음 페이지가 없거나 커서가 없으면 종료
+    if (!hasNext || !nextCursor) return;
 
     set({ isLoading: true, errorMessage: undefined });
 
@@ -123,19 +145,26 @@ export const useHistoryListStore = create<HistoryListState>((set, get) => ({
         // 다음 페이지 로딩 시 현재 커서 값을 쿼리에 추가
         cursor: nextCursor,
         idAfter: idAfter,
-        // idAfter: get().nextIdAfter ?? undefined, // nextIdAfter 사용 시
       };
-
       const page: CursorPageResponse<HistoryDto> = await getChangeLogs(query);
+      // 유효성 검사 (null/undefined 제거)
+      const validNewContent = page.content.filter(
+        (item) => !!item && !!item.id,
+      );
 
-      set({
-        items: [...items, ...page.content], // 기존 데이터에 새 데이터 추가
+      // 키 중복 제거
+      const existingIds = new Set(items.map((item) => item.id));
+      const deduplicatedNewContent = validNewContent.filter(
+        (item) => !existingIds.has(item.id),
+      );
+      set((state) => ({
+        items: [...state.items, ...deduplicatedNewContent], // 기존 데이터에 새 데이터 추가
         hasNext: page.hasNext,
         nextCursor: page.nextCursor ?? null,
         totalElements: page.totalElements ?? 0,
         idAfter: page.nextIdAfter,
         isLoading: false,
-      });
+      }));
     } catch (error) {
       const message = "다음 이력 페이지 불러오기 중 오류";
       console.error(error);
@@ -143,6 +172,9 @@ export const useHistoryListStore = create<HistoryListState>((set, get) => ({
       set({
         isLoading: false,
         errorMessage: message,
+        nextCursor: null,
+        idAfter: 0,
+        hasNext: false,
       });
     }
   },

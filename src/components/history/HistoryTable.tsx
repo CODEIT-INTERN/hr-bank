@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
 import { SearchMd } from "@untitledui/icons";
 import { getChangeLogDetails } from "@/api/history/historyApi";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { HistoryDto } from "@/model/history";
 import { useHistoryListStore } from "@/store/historyStore";
+import { useToastStore } from "@/store/toastStore";
 import { formatIsoToYmdHms } from "@/utils/date";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
 import { StatusBadge } from "../common/badges/StatusBadge";
@@ -21,6 +22,7 @@ const HistoryTable = () => {
     filters,
     loadFirstPage,
     loadNextPage,
+    isFiltering,
   } = useHistoryListStore();
 
   const [selectedHistory, setSelectedHistory] = useState<HistoryDto | null>(
@@ -32,17 +34,29 @@ const HistoryTable = () => {
     direction: "descending",
   });
 
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 필터 변경을 감지할 때 실행
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  }, [filters]);
+
   useEffect(() => {
     loadFirstPage();
   }, [loadFirstPage, filters]);
 
   const sortedItems = useMemo(() => {
-    return sortByDescriptor<HistoryDto>(items, sortDescriptor);
+    // null 또는 undefined 항목을 제거 (선택 사항이지만 안전성 확보)
+    const safeItems = items.filter((item) => !!item && !!item.id);
+    return sortByDescriptor<HistoryDto>(safeItems, sortDescriptor);
   }, [items, sortDescriptor]);
 
+  const { errorToast } = useToastStore();
   const { loadMoreRef } = useInfiniteScroll({
     hasNext,
-    isLoading,
+    isLoading: isLoading || isFiltering,
     onLoadMore: loadNextPage,
     rootMargin: "0px 0px 200px 0px",
   });
@@ -57,6 +71,7 @@ const HistoryTable = () => {
       setDetailModalOpen(true);
     } catch (error) {
       console.error("상세 이력을 불러오는 데 실패했습니다", error);
+      errorToast("상세 이력을 불러오는 데 실패했습니다");
     }
   };
 
@@ -65,7 +80,10 @@ const HistoryTable = () => {
   return (
     <div className="flex h-full min-h-0 flex-col">
       {/* 테이블 영역 - 가로 스크롤 적용 */}
-      <div className="border-border-secondary scrollbar-thin flex-1 overflow-auto rounded-2xl border">
+      <div
+        className="border-border-secondary scrollbar-thin flex-1 overflow-auto rounded-2xl border"
+        ref={scrollContainerRef}
+      >
         <Table
           aria-label="직원 수정 이력 목록"
           sortDescriptor={sortDescriptor}
@@ -98,7 +116,7 @@ const HistoryTable = () => {
           <Table.Body items={sortedItems}>
             {(item: HistoryDto) => {
               return (
-                <Table.Row id={item.id} key={item.id}>
+                <Table.Row key={item.id}>
                   {/* 유형 */}
                   <Table.Cell className="w-1/12">
                     <StatusBadge kind="history" value={item.type} />
@@ -125,7 +143,7 @@ const HistoryTable = () => {
                   </Table.Cell>
 
                   {/* 액션 버튼 */}
-                  <Table.Cell className="flex w-1/12 justify-center px-4">
+                  <Table.Cell className="w-1/12 text-center align-middle">
                     <Button
                       color="tertiary"
                       iconLeading={SearchMd}
@@ -151,11 +169,7 @@ const HistoryTable = () => {
           </div>
         )}
       </div>
-      {!isLoading && sortedItems.length === 0 && (
-        <div className="flex h-[calc(100%-80px)] flex-1 flex-col items-center justify-center text-center">
-          <span className="text-gray-500">현재 표시할 이력이 없습니다</span>
-        </div>
-      )}
+
       <HistoryDetailModal
         history={selectedHistory}
         isOpen={isDetailModalOpen}

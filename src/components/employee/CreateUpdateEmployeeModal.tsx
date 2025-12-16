@@ -31,7 +31,6 @@ interface FormData {
   departmentId: number;
   position: string;
   hireDate: DateValue | null;
-  // TODO: status 타입 백엔드 한글 or 영어 확인후 변경
   status?: string | "재직중";
   memo: string;
 }
@@ -39,7 +38,6 @@ interface FormData {
 interface FormErrors {
   name?: string;
   email?: string;
-  // TODO: 부서 선택 필수인지 확인 필요
   departmentId?: string;
   position?: string;
   hireDate?: string;
@@ -79,7 +77,7 @@ const CreateUpdateEmployeeModal = ({
   const { items: departmentItems, loadFirstPage: loadDepartments } =
     useDepartmentListStore();
   const { loadFirstPage } = useEmployeeListStore();
-  const { successToast } = useToastStore();
+  const { successToast, errorToast } = useToastStore();
 
   const [formData, setFormData] = useState<FormData>(() =>
     getInitialFormData(employee),
@@ -176,9 +174,11 @@ const CreateUpdateEmployeeModal = ({
   };
   // 입사일 선택 취소 핸들러(기존값 유지)
   const handleCancel = () => {
-    setFormData((prev) => ({ ...prev, hireDate: prev.hireDate }));
+    setFormData((prev) => ({
+      ...prev,
+      hireDate: parseDateValue(employee?.hireDate) || null,
+    }));
   };
-
   // 프로필 이미지 프리뷰 핸들러
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
@@ -251,7 +251,9 @@ const CreateUpdateEmployeeModal = ({
       resetFormdata();
       onOpenChange(false);
       if (!employee) {
-        successToast("직원이 추가되었습니다.");
+        successToast("직원이 추가되었습니다");
+      } else {
+        successToast("직원 정보가 수정되었습니다");
       }
     } catch (error) {
       // 400 에러 → 중복 이메일 처리
@@ -267,7 +269,14 @@ const CreateUpdateEmployeeModal = ({
           return;
         }
       }
-      console.error("직원 등록/수정 실패:", error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("직원 등록/수정 실패:", error);
+      }
+      if (!employee) {
+        errorToast("직원 추가에 실패하였습니다");
+      } else {
+        errorToast("직원 정보 수정에 실패하였습니다");
+      }
     }
   };
 
@@ -351,7 +360,6 @@ const CreateUpdateEmployeeModal = ({
               <div className="flex justify-between gap-4">
                 <div className="flex min-w-36 flex-col gap-1.5">
                   <Label>부서</Label>
-                  {/* TODO: placeholder값 지정 */}
                   <DropdownButton
                     placeholder={String(formData.departmentId)}
                     label={departments}

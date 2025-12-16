@@ -31,7 +31,6 @@ interface FormData {
   departmentId: number;
   position: string;
   hireDate: DateValue | null;
-  // TODO: status 타입 백엔드 한글 or 영어 확인후 변경
   status?: string | "재직중";
   memo: string;
 }
@@ -39,7 +38,6 @@ interface FormData {
 interface FormErrors {
   name?: string;
   email?: string;
-  // TODO: 부서 선택 필수인지 확인 필요
   departmentId?: string;
   position?: string;
   hireDate?: string;
@@ -351,7 +349,6 @@ const CreateUpdateEmployeeModal = ({
               <div className="flex justify-between gap-4">
                 <div className="flex min-w-36 flex-col gap-1.5">
                   <Label>부서</Label>
-                  {/* TODO: placeholder값 지정 */}
                   <DropdownButton
                     placeholder={String(formData.departmentId)}
                     label={departments}

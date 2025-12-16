@@ -74,7 +74,6 @@ const EmployeeTable = () => {
       await deleteEmployee(targetEmployeeId);
       await loadFirstPage();
     } catch (error) {
-      // TODO: 토스트 추가
       console.error("직원 삭제 실패", error);
     } finally {
       setDeleteModalOpen(false);

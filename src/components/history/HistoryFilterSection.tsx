@@ -81,7 +81,6 @@ const HistoryFilterSection = () => {
             placeholder="IP 주소를 입력해주세요"
             className="w-80"
             onChange={(value) => {
-              // TODO:
               setFilters({ ipAddress: value });
             }}
           />

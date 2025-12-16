@@ -94,7 +94,6 @@ const EmployeeFilterSection = () => {
             placeholder="부서명을 입력해주세요"
             className="w-48"
             onChange={(value) => {
-              // TODO:
               setFilters({ departmentName: value });
             }}
           />
@@ -102,7 +101,6 @@ const EmployeeFilterSection = () => {
             placeholder="직함을 입력해주세요"
             className="w-48"
             onChange={(value) => {
-              // TODO:
               setFilters({ position: value });
             }}
           />

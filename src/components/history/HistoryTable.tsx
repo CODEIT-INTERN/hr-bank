@@ -143,7 +143,7 @@ const HistoryTable = () => {
                   </Table.Cell>
 
                   {/* 액션 버튼 */}
-                  <Table.Cell className="w-1/12">
+                  <Table.Cell className="w-1/12 text-center align-middle">
                     <Button
                       color="tertiary"
                       iconLeading={SearchMd}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Check, ChevronDown } from "@untitledui/icons";
 import { Button } from "../buttons/Button";
 import { Dropdown } from "./Dropdown";

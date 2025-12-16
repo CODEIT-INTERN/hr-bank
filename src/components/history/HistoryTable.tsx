@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
 import { SearchMd } from "@untitledui/icons";
 import { getChangeLogDetails } from "@/api/history/historyApi";
@@ -32,6 +32,15 @@ const HistoryTable = () => {
     column: "at",
     direction: "descending",
   });
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 필터 변경을 감지할 때 실행
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  }, [filters]);
 
   useEffect(() => {
     loadFirstPage();
@@ -68,7 +77,10 @@ const HistoryTable = () => {
   return (
     <div className="flex h-full min-h-0 flex-col">
       {/* 테이블 영역 - 가로 스크롤 적용 */}
-      <div className="border-border-secondary scrollbar-thin flex-1 overflow-auto rounded-2xl border">
+      <div
+        className="border-border-secondary scrollbar-thin flex-1 overflow-auto rounded-2xl border"
+        ref={scrollContainerRef}
+      >
         <Table
           aria-label="직원 수정 이력 목록"
           sortDescriptor={sortDescriptor}

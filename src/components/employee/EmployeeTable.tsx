@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
 import { Edit01, Trash01 } from "@untitledui/icons";
 import { deleteEmployee } from "@/api/employee/employeeApi";
@@ -31,6 +31,14 @@ const EmployeeTable = () => {
     column: "hireDate",
     direction: "descending",
   });
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 필터 변경을 감지할 때 실행
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  }, [filters]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [targetEmployeeName, setTargetEmployeeName] = useState<string>("");
   const [targetEmployeeId, setTargetEmployeeId] = useState<number | null>(null);
@@ -92,7 +100,10 @@ const EmployeeTable = () => {
   return (
     <div className="flex h-full min-h-0 flex-col">
       {/* 테이블 영역 - 가로 스크롤 적용 */}
-      <div className="border-border-secondary scrollbar-thin flex-1 overflow-auto rounded-2xl border">
+      <div
+        className="border-border-secondary scrollbar-thin flex-1 overflow-auto rounded-2xl border"
+        ref={scrollContainerRef}
+      >
         <Table
           aria-label="직원 목록"
           sortDescriptor={sortDescriptor}

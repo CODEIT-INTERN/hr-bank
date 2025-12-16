@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import type { FC } from "react";
-import { Briefcase01, Building05 } from "@untitledui/icons";
+import { Link } from "react-router-dom";
+import { ArrowRight, Briefcase01, Building05 } from "@untitledui/icons";
 import type { EmployeeDistributionDto } from "@/model/employee";
 import { useEmployeeDistributionStore } from "@/store/employeeDistributionStore";
 
@@ -65,56 +66,67 @@ export function EmployeeDistributionCard({
         <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
       </div>
 
-      {/* 상단 분포 바 (가로 막대) */}
-      <div className="mb-4 flex h-10 w-full gap-1 rounded-xl bg-gray-100 p-1">
-        {segments.length === 0 && (
-          <div className="h-full w-full rounded-lg bg-gray-200" />
+      <div className="rounded-lg bg-white px-5 py-6">
+        {/* 상단 분포 바 (가로 막대) */}
+        {segments.length !== 0 && (
+          <div className="mb-4 flex h-10 w-full gap-1 rounded-xl p-1">
+            {segments.map((seg) => (
+              <div
+                key={seg.groupKey}
+                className={`h-full rounded-lg ${seg.colorClass}`}
+                style={{ flex: Math.max(seg.ratio, 0.06) }} // 최소 너비 확보
+                title={`${seg.groupKey} ${seg.percentage?.toFixed?.(1) ?? ""}%`}
+              />
+            ))}
+          </div>
         )}
 
-        {segments.map((seg) => (
-          <div
-            key={seg.groupKey}
-            className={`h-full rounded-lg ${seg.colorClass}`}
-            style={{ flex: Math.max(seg.ratio, 0.06) }} // 최소 너비 확보
-            title={`${seg.groupKey} ${seg.percentage?.toFixed?.(1) ?? ""}%`}
-          />
-        ))}
-      </div>
-
-      {/* 하단 리스트 (스크롤 가능) */}
-      <div className="scrollbar-thin max-h-44 flex-1 space-y-1 overflow-y-auto pr-1">
-        {segments.map(
-          (
-            seg: EmployeeDistributionDto & {
-              ratio: number;
-              colorClass: string;
-            },
-          ) => (
-            <div
-              key={seg.groupKey}
-              className="flex items-center justify-between gap-3 py-1 text-xs sm:text-sm"
-            >
-              <div className="flex min-w-0 items-center gap-2">
-                <span
-                  className={`h-6 w-6 rounded-lg ${seg.colorClass}`}
-                  aria-hidden="true"
-                />
-                <span className="text-tertiary text-md truncate font-semibold">
-                  {seg.groupKey || "-"}
+        {/* 하단 리스트 (스크롤 가능) */}
+        <div className="scrollbar-thin h-44 flex-1 space-y-1 overflow-y-auto pr-1">
+          {segments.map(
+            (
+              seg: EmployeeDistributionDto & {
+                ratio: number;
+                colorClass: string;
+              },
+            ) => (
+              <div
+                key={seg.groupKey}
+                className="flex items-center justify-between gap-3 py-1 text-xs sm:text-sm"
+              >
+                <div className="flex min-w-0 items-center gap-2">
+                  <span
+                    className={`h-6 w-6 rounded-lg ${seg.colorClass}`}
+                    aria-hidden="true"
+                  />
+                  <span className="text-tertiary text-md truncate font-semibold">
+                    {seg.groupKey || "-"}
+                  </span>
+                </div>
+                <span className="text-secondary text-md font-semibold whitespace-nowrap">
+                  {seg.count.toLocaleString()}명
                 </span>
               </div>
-              <span className="text-secondary text-md font-semibold whitespace-nowrap">
-                {seg.count.toLocaleString()}명
-              </span>
-            </div>
-          ),
-        )}
+            ),
+          )}
 
-        {!isLoading && segments.length === 0 && (
-          <p className="py-4 text-center text-xs text-gray-400">
-            직원 분포 데이터가 없어요
-          </p>
-        )}
+          {!isLoading && segments.length === 0 && (
+            <div className="flex h-full flex-col items-center justify-center gap-3 p-3">
+              <p className="text-center text-sm text-gray-500">
+                {`아직 등록된 ${type === "department" ? "부서가" : "직원이"} 없어요`}
+              </p>
+              <Link
+                to={`/${type === "department" ? "departments" : "employees"}`}
+                className="text-secondary border-primary flex items-center gap-1 rounded-lg border px-7 py-2.5 text-sm font-semibold"
+              >
+                {type === "department"
+                  ? "부서 등록하러 가기"
+                  : "직원 등록하러 가기"}
+                <ArrowRight size={20} />
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );

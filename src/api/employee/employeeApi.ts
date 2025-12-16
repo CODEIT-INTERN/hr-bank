@@ -1,23 +1,23 @@
 import type {
+  EmployeeCountQuery,
+  EmployeeCreateRequest,
+  EmployeeDistributionDto,
+  EmployeeDistributionQuery,
   EmployeeDto,
   EmployeeListQuery,
-  EmployeeCreateRequest,
-  EmployeeUpdateRequest,
-  EmployeeTrendQuery,
   EmployeeTrendDto,
-  EmployeeDistributionQuery,
-  EmployeeDistributionDto,
-  EmployeeCountQuery,
+  EmployeeTrendQuery,
+  EmployeeUpdateRequest,
 } from "@/model/employee";
 import type { CursorPageResponse } from "@/model/pagination";
-import apiClient from "../client";
 import { EmploymentState } from "@/types/enums";
+import apiClient from "../client";
 
 /**
  * 직원 목록 조회
  */
 export function getEmployees(
-  query: EmployeeListQuery
+  query: EmployeeListQuery,
 ): Promise<CursorPageResponse<EmployeeDto>> {
   if (query.status === EmploymentState.ALL) {
     query.status = "";
@@ -35,9 +35,15 @@ export function getEmployeeById(id: number): Promise<EmployeeDto> {
 /**
  * 직원 등록
  */
-export function createEmployee(request: EmployeeCreateRequest, profileFile?: File | null): Promise<EmployeeDto> {
+export function createEmployee(
+  request: EmployeeCreateRequest,
+  profileFile?: File | null,
+): Promise<EmployeeDto> {
   const formData = new FormData();
-  formData.append("employee", new Blob([JSON.stringify(request)], { type: "application/json" }));
+  formData.append(
+    "employee",
+    new Blob([JSON.stringify(request)], { type: "application/json" }),
+  );
   if (profileFile) {
     formData.append("profile", profileFile);
   }
@@ -51,10 +57,13 @@ export function createEmployee(request: EmployeeCreateRequest, profileFile?: Fil
 export function updateEmployee(
   id: number,
   request: EmployeeUpdateRequest,
-  profileFile?: File | null
+  profileFile?: File | null,
 ): Promise<EmployeeDto> {
   const formData = new FormData();
-  formData.append("employee", new Blob([JSON.stringify(request)], { type: "application/json" }));
+  formData.append(
+    "employee",
+    new Blob([JSON.stringify(request)], { type: "application/json" }),
+  );
 
   if (profileFile !== undefined && profileFile !== null) {
     formData.append("profile", profileFile);
@@ -73,15 +82,22 @@ export function deleteEmployee(id: number): Promise<void> {
 /**
  * 직원 수 추이 조회
  */
-export function getEmployeeTrend(query?: EmployeeTrendQuery): Promise<EmployeeTrendDto[]> {
+export function getEmployeeTrend(
+  query?: EmployeeTrendQuery,
+): Promise<EmployeeTrendDto[]> {
   return apiClient.get<EmployeeTrendDto[]>("/employees/stats/trend", query);
 }
 
 /**
  * 직원 분포 조회 (부서별/직무별)
  */
-export function getEmployeeDistribution(query?: EmployeeDistributionQuery): Promise<EmployeeDistributionDto[]> {
-  return apiClient.get<EmployeeDistributionDto[]>("/employees/stats/distribution", query);
+export function getEmployeeDistribution(
+  query?: EmployeeDistributionQuery,
+): Promise<EmployeeDistributionDto[]> {
+  return apiClient.get<EmployeeDistributionDto[]>(
+    "/employees/stat/distribution",
+    query,
+  );
 }
 
 /**

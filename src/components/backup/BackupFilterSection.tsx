@@ -56,6 +56,15 @@ export function BackupFilterSection() {
     });
   };
 
+  // 취소 버튼 클릭 시 tempDateRange 초기화
+  const handleDateCancel = () => {
+    setTempDateRange(null);
+    setFilters({
+      startedAtFrom: "",
+      startedAtTo: "",
+    });
+  };
+
   const onBackupClick = async () => {
     try {
       await createBackup();
@@ -106,6 +115,7 @@ export function BackupFilterSection() {
             value={tempDateRange}
             onChange={(value) => handleDateChange(value)}
             onApply={handleDateApply}
+            onCancel={handleDateCancel}
           />
         </div>
 

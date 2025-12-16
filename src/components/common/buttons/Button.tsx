@@ -1,4 +1,9 @@
-import type { ButtonHTMLAttributes, DetailedHTMLProps, FC, ReactNode } from "react";
+import type {
+  ButtonHTMLAttributes,
+  DetailedHTMLProps,
+  FC,
+  ReactNode,
+} from "react";
 import { isValidElement } from "react";
 import type { ButtonProps as AriaButtonProps } from "react-aria-components";
 import { Button as AriaButton, Link as AriaLink } from "react-aria-components";
@@ -120,8 +125,12 @@ export interface CommonProps {
  * Props for the button variant (non-link)
  */
 export interface ButtonProps
-  extends CommonProps,
-    DetailedHTMLProps<Omit<ButtonHTMLAttributes<HTMLButtonElement>, "color" | "slot">, HTMLButtonElement> {
+  extends
+    CommonProps,
+    DetailedHTMLProps<
+      Omit<ButtonHTMLAttributes<HTMLButtonElement>, "color" | "slot">,
+      HTMLButtonElement
+    > {
   /** Slot name for react-aria component */
   slot?: AriaButtonProps["slot"];
 }
@@ -185,12 +194,14 @@ export const Button = ({
           (showTextWhileLoading
             ? "[&>*:not([data-icon=loading]):not([data-text])]:hidden"
             : "[&>*:not([data-icon=loading])]:invisible"),
-        className
+        className,
       )}
     >
       {/* Leading icon */}
       {isValidElement(IconLeading) && IconLeading}
-      {isReactComponent(IconLeading) && <IconLeading data-icon="leading" className={styles.common.icon} />}
+      {isReactComponent(IconLeading) && (
+        <IconLeading data-icon="leading" className={styles.common.icon} />
+      )}
 
       {loading && (
         <svg
@@ -199,11 +210,19 @@ export const Button = ({
           viewBox="0 0 20 20"
           className={cx(
             styles.common.icon,
-            !showTextWhileLoading && "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            !showTextWhileLoading &&
+              "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
           )}
         >
           {/* Background circle */}
-          <circle className="stroke-current opacity-30" cx="10" cy="10" r="8" fill="none" strokeWidth="2" />
+          <circle
+            className="stroke-current opacity-30"
+            cx="10"
+            cy="10"
+            r="8"
+            fill="none"
+            strokeWidth="2"
+          />
           {/* Spinning circle */}
           <circle
             className="origin-center animate-spin stroke-current"
@@ -219,14 +238,19 @@ export const Button = ({
       )}
 
       {children && (
-        <span data-text className={cx("transition-inherit-all", !noTextPadding && "px-0.5")}>
+        <span
+          data-text
+          className={cx("transition-inherit-all", !noTextPadding && "px-0.5")}
+        >
           {children}
         </span>
       )}
 
       {/* Trailing icon */}
       {isValidElement(IconTrailing) && IconTrailing}
-      {isReactComponent(IconTrailing) && <IconTrailing data-icon="trailing" className={styles.common.icon} />}
+      {isReactComponent(IconTrailing) && (
+        <IconTrailing data-icon="trailing" className={styles.common.icon} />
+      )}
     </Component>
   );
 };

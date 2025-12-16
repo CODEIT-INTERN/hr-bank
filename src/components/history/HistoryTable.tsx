@@ -5,6 +5,7 @@ import { getChangeLogDetails } from "@/api/history/historyApi";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { HistoryDto } from "@/model/history";
 import { useHistoryListStore } from "@/store/historyStore";
+import { useToastStore } from "@/store/toastStore";
 import { formatIsoToYmdHms } from "@/utils/date";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
 import { StatusBadge } from "../common/badges/StatusBadge";
@@ -40,6 +41,7 @@ const HistoryTable = () => {
     return sortByDescriptor<HistoryDto>(items, sortDescriptor);
   }, [items, sortDescriptor]);
 
+  const { errorToast } = useToastStore();
   const { loadMoreRef } = useInfiniteScroll({
     hasNext,
     isLoading,
@@ -57,6 +59,7 @@ const HistoryTable = () => {
       setDetailModalOpen(true);
     } catch (error) {
       console.error("상세 이력을 불러오는 데 실패했습니다", error);
+      errorToast("상세 이력을 불러오는 데 실패했습니다");
     }
   };
 
@@ -125,7 +128,7 @@ const HistoryTable = () => {
                   </Table.Cell>
 
                   {/* 액션 버튼 */}
-                  <Table.Cell className="flex w-1/12 justify-center px-4">
+                  <Table.Cell className="w-1/12">
                     <Button
                       color="tertiary"
                       iconLeading={SearchMd}

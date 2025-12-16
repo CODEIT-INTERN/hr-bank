@@ -70,7 +70,7 @@ const EmployeeFilterSection = () => {
           <Button
             iconLeading={<FilterLines className="stroke-black" size={20} />}
             color="secondary"
-            className="h-8 w-8 data-icon-only:p-0"
+            className="hover:bg-primary_hover h-8 w-8 data-icon-only:p-0"
             onClick={handleToggleFilter}
           />
         </div>

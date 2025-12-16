@@ -1,8 +1,8 @@
+import { create } from "zustand";
 import { getEmployees } from "@/api/employee/employeeApi";
 import type { EmployeeDto } from "@/model/employee";
 import type { CursorPageResponse } from "@/model/pagination";
 import type { EmployeeStatus } from "@/types/enums";
-import { create } from "zustand";
 
 interface EmployeeFilterState {
   nameOrEmail: string;
@@ -90,7 +90,6 @@ export const useEmployeeListStore = create<EmployeeListState>((set, get) => ({
       });
     } catch (error) {
       const message = "직원 불러오기 중 오류";
-      console.log(error);
 
       set({
         isLoading: false,
@@ -131,7 +130,6 @@ export const useEmployeeListStore = create<EmployeeListState>((set, get) => ({
       });
     } catch (error) {
       const message = "직원 불러오기 중 오류";
-      console.log(error);
 
       set({
         isLoading: false,

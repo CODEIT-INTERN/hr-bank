@@ -48,10 +48,7 @@ interface FormErrors {
 
 const getInitialFormData = (employee: EmployeeDto | null): FormData => {
   if (employee) {
-    console.log("hireDate: ", employee.hireDate);
-
     const dateValue = parseDateValue(employee.hireDate);
-    console.log("dateValue: ", dateValue);
 
     return {
       name: employee.name || "",

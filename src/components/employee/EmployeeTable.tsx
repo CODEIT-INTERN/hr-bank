@@ -88,7 +88,6 @@ const EmployeeTable = () => {
     <div className="flex h-full min-h-0 flex-col">
       {/* 테이블 영역 - 가로 스크롤 적용 */}
       <div className="border-border-secondary scrollbar-thin flex-1 overflow-auto rounded-2xl border">
-        {" "}
         <Table
           aria-label="직원 목록"
           sortDescriptor={sortDescriptor}
@@ -191,6 +190,11 @@ const EmployeeTable = () => {
           {errorMessage && <span className="text-red-500">{errorMessage}</span>}
           {isLoading && <span>불러오는 중...</span>}
         </div>
+        {hasNoData && (
+          <div className="flex h-[calc(100%-80px)] flex-1 flex-col items-center justify-center text-center">
+            <span className="text-gray-500">현재 표시할 직원이 없습니다</span>
+          </div>
+        )}
       </div>
 
       {/* 수정 모달 */}

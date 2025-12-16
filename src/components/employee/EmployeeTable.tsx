@@ -15,8 +15,15 @@ import { Table } from "../common/table/Table";
 import CreateUpdateEmployeeModal from "./CreateUpdateEmployeeModal";
 
 const EmployeeTable = () => {
-  const { items, isLoading, filters, hasNext, loadFirstPage, loadNextPage } =
-    useEmployeeListStore();
+  const {
+    items,
+    isLoading,
+    errorMessage,
+    filters,
+    hasNext,
+    loadFirstPage,
+    loadNextPage,
+  } = useEmployeeListStore();
 
   // 기본 정렬값(입사일)
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
@@ -172,8 +179,18 @@ const EmployeeTable = () => {
             }}
           </Table.Body>
         </Table>
-        <div ref={loadMoreRef} className="h-4" />
+        {hasNext && <div ref={loadMoreRef} className="h-4" />}
+        <div className="flex flex-col items-center justify-center gap-1 py-2 text-center text-sm text-gray-600">
+          {errorMessage && <span className="text-red-500">{errorMessage}</span>}
+          {isLoading && <span>불러오는 중...</span>}
+        </div>
       </div>
+
+      {!isLoading && sortedItems.length === 0 && (
+        <div className="flex h-[calc(100%-80px)] flex-1 flex-col items-center justify-center text-center">
+          <span className="text-gray-500">현재 표시할 직원이 없습니다</span>
+        </div>
+      )}
       {/* 수정 모달 */}
       <CreateUpdateEmployeeModal
         employee={updatingEmployee}
@@ -192,16 +209,6 @@ const EmployeeTable = () => {
           삭제 후에는 되돌릴 수 없어요
         </p>
       </ConfirmModal>
-      {!isLoading && sortedItems.length === 0 && (
-        <div className="flex h-48 items-center justify-center text-gray-500">
-          현재 표시할 직원이 없습니다
-        </div>
-      )}
-      <div className="flex items-center justify-center text-xs text-gray-500">
-        {/* TODO: 에러처리, 로딩상태 */}
-        {/* <div>{errorMessage && <span className="text-red-500">{errorMessage}</span>}</div> */}
-        {/* {isLoading && <span>불러오는 중...</span>} */}
-      </div>
     </div>
   );
 };

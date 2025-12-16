@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components";
 import { SearchMd } from "@untitledui/icons";
-import {
-  getChangeLogDetails,
-  type HistoryDetailDto,
-} from "@/api/history/historyApi";
+import { getChangeLogDetails } from "@/api/history/historyApi";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import type { HistoryDto } from "@/model/history";
 import { useHistoryListStore } from "@/store/historyStore";
@@ -16,12 +13,18 @@ import { Table } from "../common/table/Table";
 import HistoryDetailModal from "./HistoryDetailModal";
 
 const HistoryTable = () => {
-  const { items, isLoading, hasNext, filters, loadFirstPage, loadNextPage } =
-    useHistoryListStore();
-  const [selectedHistory, setSelectedHistory] =
-    useState<Array<HistoryDetailDto> | null>(null);
-  const [selectedHistoryList, setSelectedHistoryList] =
-    useState<HistoryDto | null>(null);
+  const {
+    items,
+    isLoading,
+    errorMessage,
+    hasNext,
+    filters,
+    loadFirstPage,
+    loadNextPage,
+  } = useHistoryListStore();
+  const [selectedHistory, setSelectedHistory] = useState<HistoryDto | null>(
+    null,
+  );
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "at",
@@ -45,10 +48,11 @@ const HistoryTable = () => {
 
   const handleOpenDetailModal = async (history: HistoryDto) => {
     try {
-      const detailData = await getChangeLogDetails({ id: history.id });
+      const detailData: HistoryDto = await getChangeLogDetails({
+        id: history.id,
+      });
 
       setSelectedHistory(detailData);
-      setSelectedHistoryList(history);
       setDetailModalOpen(true);
     } catch (error) {
       console.error("상세 이력을 불러오는 데 실패했습니다", error);
@@ -59,7 +63,6 @@ const HistoryTable = () => {
     <div className="flex h-full min-h-0 flex-col">
       {/* 테이블 영역 - 가로 스크롤 적용 */}
       <div className="border-border-secondary scrollbar-thin flex-1 overflow-auto rounded-2xl border">
-        {" "}
         <Table
           aria-label="직원 수정 이력 목록"
           sortDescriptor={sortDescriptor}
@@ -131,24 +134,23 @@ const HistoryTable = () => {
             }}
           </Table.Body>
         </Table>
-        <div ref={loadMoreRef} className="h-4" />
+        {hasNext && <div ref={loadMoreRef} className="h-4" />}
+
+        <div className="flex flex-col items-center justify-center gap-1 py-2 text-center text-sm text-gray-600">
+          {errorMessage && <span className="text-red-500">{errorMessage}</span>}
+          {isLoading && <span>불러오는 중...</span>}
+        </div>
       </div>
+      {!isLoading && sortedItems.length === 0 && (
+        <div className="flex h-[calc(100%-80px)] flex-1 flex-col items-center justify-center text-center">
+          <span className="text-gray-500">현재 표시할 이력이 없습니다</span>
+        </div>
+      )}
       <HistoryDetailModal
         history={selectedHistory}
-        historyList={selectedHistoryList}
         isOpen={isDetailModalOpen}
         onOpenChange={setDetailModalOpen}
       />
-      {!isLoading && sortedItems.length === 0 && (
-        <div className="flex h-48 items-center justify-center text-gray-500">
-          현재 표시할 이력이 없습니다
-        </div>
-      )}
-      <div className="flex items-center justify-center text-xs text-gray-500">
-        {/* TODO: 데이터 없을 때, 에러처리, 로딩상태 */}
-        {/* <div>{errorMessage && <span className="text-red-500">{errorMessage}</span>}</div> */}
-        {/* {isLoading && <span>불러오는 중...</span>} */}
-      </div>
     </div>
   );
 };

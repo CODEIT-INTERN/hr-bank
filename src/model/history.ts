@@ -5,9 +5,16 @@ export interface HistoryDto {
   id: number;
   type: HistoryType;
   employeeNumber: string;
-  memo: string;
+  memo: string | null;
   ipAddress: string;
   at: string;
+  employeeName?: string;
+  profileImageId?: number | null;
+  diffs?: Array<{
+    propertyName: string;
+    before: string | null;
+    after: string | null;
+  }>;
 }
 
 // 직원 정보 수정 이력 목록 조회

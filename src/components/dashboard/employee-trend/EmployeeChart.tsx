@@ -37,11 +37,11 @@ export function EmployeeChart() {
           onChange={(value) => setFilters({ unit: value as EmployeeTrendUnit })}
         />
       </div>
-      <div className="h-[300px] rounded-lg bg-white pr-5">
+      <div className="custom-chart-focus-fix h-[300px] rounded-lg bg-white pr-5">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={items}
-            className="text-tertiary [&_.recharts-text]:text-xs"
+            className="text-tertiary outline-none [&_.recharts-text]:text-xs"
             margin={{
               top: 25,
               bottom: 16,

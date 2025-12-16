@@ -38,7 +38,7 @@ export default function StatSection() {
     latestBackup?.endedAt != null
       ? hoursAgoFromNow(latestBackup.endedAt)
       : null;
-
+  console.log(backupHoursAgo);
   return (
     <section className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-3">
       <StatCard icon={Users01} label="총 직원 수" value={count} unit="명" />

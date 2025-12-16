@@ -8,7 +8,8 @@ interface StatCardProps {
 }
 
 export function StatCard({ icon: Icon, label, value, unit }: StatCardProps) {
-  const display = !value ? "-" : value.toLocaleString();
+  const display =
+    value === null || value === undefined ? "-" : value.toLocaleString();
 
   return (
     <div className="border-secondary flex min-w-0 gap-4 rounded-xl border bg-white p-5 shadow-xs">

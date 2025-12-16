@@ -70,3 +70,14 @@ body {
 .scrollbar-thin::-webkit-scrollbar-button {
   display: none;
 }
+
+/* 차트의 포커스 아웃라인을 강제로 제거하는 스타일 */
+.custom-chart-focus-fix svg:focus {
+  outline: none !important; /* 브라우저 기본 포커스 아웃라인 제거 */
+  box-shadow: none !important; /* Tailwind ring/shadow 제거 */
+}
+
+/* 추가적으로, SVG 내부의 path, g 요소에 아웃라인이 생길 수도 있어 함께 제거합니다. */
+.custom-chart-focus-fix svg * {
+  outline: none !important;
+}

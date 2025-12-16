@@ -124,13 +124,12 @@ export function formatDateValueToIsoZ(
 }
 
 // isoZ -> 시간 전
-export const hoursAgoFromNow = (
-  isoString?: string,
-  now: Date = new Date(),
-): number | null => {
+export const hoursAgoFromNow = (isoString?: string): number | null => {
   if (!isoString) return null;
 
+  const now = new Date();
   const ts = Date.parse(isoString);
+
   if (Number.isNaN(ts)) return null;
 
   const diffMs = now.getTime() - ts;

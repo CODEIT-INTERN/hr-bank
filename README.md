@@ -19,6 +19,19 @@ Spring 백엔드 과정 수강생들이 사용할 **인사 관리 어드민 프�
 - **차트**: Recharts
 - **배포**: Vercel
 
+## 환경 설정 (Environment Variables)
+
+이 프로젝트는 외부 API 통신을 위해 환경 변수 설정이 필요합니다. 
+루트 디렉토리에 `.env` 파일을 생성하고 아래 내용을 입력해 주세요.
+
+| 변수명 | 필수 여부 | 설명 |
+| :--- | :---: | :--- |
+| `API_PROXY_TARGET` | **필수** | API 요청을 전달할 타겟 서버 주소 |
+
+**설정 예시:**
+```env
+API_PROXY_TARGET=http://sprint-project-...com/sb/hrbank
+```
 ---
 
 ## 주요 기능

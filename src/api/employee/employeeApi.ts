@@ -95,7 +95,7 @@ export function getEmployeeDistribution(
   query?: EmployeeDistributionQuery,
 ): Promise<EmployeeDistributionDto[]> {
   return apiClient.get<EmployeeDistributionDto[]>(
-    "/employees/stat/distribution",
+    "/employees/stats/distribution",
     query,
   );
 }

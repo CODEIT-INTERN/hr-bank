@@ -37,6 +37,7 @@ API_PROXY_TARGET=http://sprint-project-...com/sb/hrbank
 ## 주요 기능
 
 ### 1. 대시보드
+<img width="1887" height="912" alt="스크린샷 2025-12-26 오후 3 51 08" src="https://github.com/user-attachments/assets/7bf82ea4-0285-49c8-9301-2f22da1dfb3f" />
 
 - 총 직원 수
 - 최근 일주일 수정 이력 건수
@@ -46,11 +47,15 @@ API_PROXY_TARGET=http://sprint-project-...com/sb/hrbank
 - 부서별 / 직무별 직원 분포 차트
 
 ### 2. 부서 관리
+<img width="1873" height="905" alt="스크린샷 2025-12-26 오후 3 52 24" src="https://github.com/user-attachments/assets/e43733bf-6724-4276-87c4-45d8e639c5de" />
 
 - 부서 목록 조회
   - 이름/설명 검색 (디바운스)
   - 설립일 기준 정렬
   - 커서 기반 페이지네이션 + 무한 스크롤
+  
+<img width="1884" height="901" alt="스크린샷 2025-12-26 오후 4 00 09" src="https://github.com/user-attachments/assets/9e6b220f-0310-4236-b6dd-aeb157905ad2" />
+
 - 부서 추가 / 수정 모달
   - 이름, 설명, 설립일 입력
   - 필수값 검증
@@ -60,18 +65,24 @@ API_PROXY_TARGET=http://sprint-project-...com/sb/hrbank
   - 삭제 전 Confirm 모달
 
 ### 3. 직원 관리
+<img width="1890" height="909" alt="스크린샷 2025-12-26 오후 3 54 19" src="https://github.com/user-attachments/assets/5932c539-cda8-43f7-8c8d-347290b0b51a" />
 
 - 직원 목록 조회 (검색 + 정렬 + 무한 스크롤)
+
+<img width="1888" height="908" alt="스크린샷 2025-12-26 오후 3 55 32" src="https://github.com/user-attachments/assets/a904d3b2-1835-4ab5-a497-5652298813b6" />
+
 - 직원 등록 / 수정 (프로필 이미지 업로드 포함)
 - 상태(재직/휴직/퇴사) 변경
 - 직원 상세 정보 조회
   
 ### 4. 수정 이력 관리
+<img width="1872" height="899" alt="스크린샷 2025-12-26 오후 3 56 20" src="https://github.com/user-attachments/assets/7b33745b-2e04-46ee-8011-c45a193503b5" />
 
 - 직원 정보 수정 이력 목록 조회 (검색 + 유형 + 정렬 + 무한 스크롤)
 - 상세 diff 조회 (수정 정보 + 변경 전 + 변경 후)
 
 ### 5. 데이터 백업 관리
+<img width="1873" height="898" alt="스크린샷 2025-12-26 오후 3 58 15" src="https://github.com/user-attachments/assets/770f6412-d946-41e3-b394-f029c452bb09" />
 
 - 데이터 백업 이력 목록
   - 작업자 / 상태 / 기간으로 필터링

@@ -1,12 +1,6 @@
 import { useState } from "react";
 import type { EmployeeDto } from "@/model/employee";
-
-const buildProfileUrl = (
-  fileId: number | null | undefined,
-): string | undefined => {
-  if (!fileId) return undefined;
-  return `/api/files/${fileId}/download`;
-};
+import { buildProfileUrl } from "@/utils/profileUrl";
 
 interface ProfileAvatarProps {
   employee: EmployeeDto;

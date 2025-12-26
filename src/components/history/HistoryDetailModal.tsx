@@ -1,5 +1,6 @@
 import type { HistoryDto } from "@/model/history";
 import { formatIsoToYmdHms } from "@/utils/date";
+import { buildProfileUrl } from "@/utils/profileUrl";
 import { AvatarLabelGroup } from "../common/avatar/AvatarLabelGroup";
 import { StatusBadge } from "../common/badges/StatusBadge";
 import { BaseModal } from "../common/modals/BaseModal";
@@ -61,7 +62,7 @@ const HistoryDetailModal = ({
   };
 
   const profileImageSrc = history.profileImageId
-    ? `/api/files/${history.profileImageId}/download`
+    ? buildProfileUrl(history.profileImageId)
     : undefined;
 
   return (

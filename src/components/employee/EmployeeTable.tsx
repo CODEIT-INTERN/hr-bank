@@ -7,6 +7,7 @@ import type { EmployeeDto } from "@/model/employee";
 import { useEmployeeListStore } from "@/store/employeeStore";
 import { useToastStore } from "@/store/toastStore";
 import { formatDateAsKorean } from "@/utils/date";
+import { buildProfileUrl } from "@/utils/profileUrl";
 import { isActiveSortColumn, sortByDescriptor } from "@/utils/sort";
 import { AvatarLabelGroup } from "../common/avatar/AvatarLabelGroup";
 import { StatusBadge } from "../common/badges/StatusBadge";
@@ -142,7 +143,7 @@ const EmployeeTable = () => {
                   <Table.Cell>
                     <AvatarLabelGroup
                       size="md"
-                      src={`/api/files/${item.profileImageId}/download`}
+                      src={buildProfileUrl(item.profileImageId)}
                       alt={`${item.name}의 프로필`}
                       title={item.name}
                       subtitle={item.email}
